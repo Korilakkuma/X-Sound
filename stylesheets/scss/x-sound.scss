@@ -1,0 +1,2045 @@
+@charset "UTF-8";
+/*!
+ * x-sound.scss
+ *
+ * This Sass file is "X Sound" application.
+ *
+ * Copyright 2014@Tomohiro IKEDA
+ */
+
+@import "partial/_reset.scss";
+@import "partial/_utility.scss";
+
+// Base font-size (for Responsive)
+$baseFontSize : 16px;
+
+// Define colors
+$accentColor1 : #cc00cc;
+$accentColor2 : #800080;
+$black        : #000000;
+$baseColor1   : #333333;
+$baseColor2   : #666666;
+$baseColor3   : #999999;
+$baseColor4   : #cccccc;
+$white        : #ffffff;
+
+// Text Gradient (Webkit only)
+%textGradient {
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(#cc00cc, 1.0)), color-stop(55%, rgba(#b200b2, 1.0)), color-stop(50%, rgba(#a000a0, 1.0)), to(rgba(#b700b7, 1.0)));
+    background-image:-webkit-linear-gradient(top, rgba(#cc00cc, 1.0), rgba(#b200b2, 1.0) 55%, rgba(#a000a0, 1.0) 50%, rgba(#b700b7, 1.0));
+}
+
+/**
+ * This function returns true in the case of "-webkit-", otherwise, false.
+ * @param string $prefix This argument is vendor prefix;
+ * @return boolean If vendor prefix is "-webkit-", this value is true. Otherwise, this value is false.
+ */
+@function isWebKit($prefix) {
+    @if ($prefix == -webkit-) {
+        @return true;
+    } @else {
+        @return false;
+    }
+}
+
+
+
+/**
+ * for Layout
+ */
+
+// for page loading or JavaScript OFF*/
+html, body {
+    height:auto !important;
+    font-size:$baseFontSize * 0.75;
+
+    &.loading {
+        height:100% !important;
+    }
+}
+
+body {
+    position:relative;
+    z-index:1;
+
+    font-family:Helvetica, Arial, sans-serif;
+    // font-family:"Racing Sans One", cursive;
+    line-height:1.6;
+
+    background-color:rgba($black, 1.0);
+
+    &.radial-gradient {
+        @each $prefix in $prefixLists {
+            @if (isWebKit($prefix)) {
+                background-image:-webkit-gradient(radial, 50% 50%, 0, 50% 50%, 700, from(rgba($baseColor4, 1.0)), to(rgba($baseColor4, 0.0)));
+            }
+
+            background-image:#{$prefix}radial-gradient(50% 50%, circle contain, rgba($baseColor4, 1.0), rgba($baseColor4, 0.0));
+        }
+    }
+
+    &.linear-gradient {
+        @each $prefix in $prefixLists {
+            @if (isWebKit($prefix)) {
+                background-image:-webkit-gradient(linear, left top, right bottom,
+                                 from($black),
+                                 color-stop(15%, $baseColor1),
+                                 color-stop(25%, $baseColor4),
+                                 color-stop(30%, $baseColor3),
+                                 color-stop(40%, $black),
+                                 color-stop(50%, $black),
+                                 to($baseColor1));
+            }
+
+            background-image:#{$prefix}linear-gradient(-45deg,
+                             $black,
+                             $baseColor1 15%,
+                             $baseColor4 25%,
+                             $baseColor3 30%,
+                             $black 40%,
+                             $black 50%,
+                             $black);
+        }
+    }
+}
+
+noscript {
+    display:block;
+    margin:0px auto;
+    padding-top:10rem;
+    font-family:"Alike", serif;
+    font-size:16px;
+    color:rgba(204, 0, 204, 1.0);
+    text-align:center;
+}
+
+#page {
+    margin:0px auto;
+    width:98%;
+    max-width:1400px;
+    min-width:1280px;  // for Piano width
+}
+
+#page-loading {
+    padding:18% 0px;
+    // background-color:rgba($black, 1.0);
+
+    p {
+        font-family:"Neuton", serif;
+        font-size:22px;
+        color:$accentColor1;
+        text-align:center;
+    }
+}
+
+ui-modal-progress {
+    section {
+        margin:0rem auto;
+        width:300px;
+        background-color:$black;
+
+        h1, p {
+            padding:0.5rem 0rem 0.5rem 1rem;
+            font-family:"Neuton", serif;
+            font-size:22px;
+            font-weight:lighter;
+            color:$white;
+            background-color:$accentColor1;
+        }
+
+        p {
+            text-align:center;
+        }
+
+        > div {
+            padding:3rem 0rem;
+            text-align:center;
+        }
+    }
+}
+
+header {
+    color:$accentColor1;
+
+    // WebKit only
+    // @extend %textGradient;
+
+    .opening {
+        position:absolute;
+        // top: by JavaScript
+        left:0px;
+        z-index:20;
+
+        margin:0px auto;
+        width:100%;
+    }
+
+    div {
+        #logo {
+            // for animation
+            position:relative;
+            z-index:1;
+            margin:auto;
+
+            // size of logo
+            width:200px;
+            height:100px;
+
+            font-size:36px;
+            text-align:center;
+
+            // Wait for completing layout
+            opacity:0;
+
+            // @each $prefix in $prefixLists {
+            //    #{$prefix}animation:fade-in-animation 3s ease-in 1 normal 0s;
+            // }
+
+            img {
+                position:absolute;
+                top:0px;
+                left:0px;
+                z-index:2;
+            }
+        }
+
+        #intro {
+            margin:12px auto 24px auto;
+            width:950px;
+            font-size:18px;
+            text-align:center;
+
+            p {
+                // font-family:"Buenard", serif;
+                // font-family:"Arapey", serif;
+                // font-family:"Trykker", serif;
+                font-family:"Alike", serif;
+                // font-family:"Gilda Display", serif;
+                text-align:left !important;
+                text-shadow:-1px -1px 1px rgba($black, 1.0);
+
+                span {
+                   // for animation
+                   display:block;
+                }
+            }
+        }
+
+        // Start Button
+        nav {
+            // Wait for loading one-shot audio
+            opacity:0;
+
+            text-align:center;
+
+            #button-start-application {
+                display:block;
+                margin:auto;
+                @include offLeft(136px, 50px);
+
+                // for Retina Display
+                @include backgroundsize(136px 150px);
+
+                // CSS Sprite
+                background-image:url(../../images/illust/png/button-start-application.png);
+                background-position:left top;
+                background-repeat:no-repeat;
+
+                // Shining Animation
+                @include setAnimation(shining-animation 3s ease infinite alternate 0s);
+
+                &:hover  {background-position:left center;}
+                &:active {background-position:left bottom;}
+            }
+        }
+    }
+}
+
+#overlayer {
+    width:100%;
+    height:100%;
+    background-color:rgba($black, 0.6);
+}
+
+fieldset {
+    border:none;
+
+    legend {
+        // position:relative;
+
+        // font-family:"Lustria", serif;
+        font-family:"Neuton", serif;
+        // font-family:"Playfair Display SC", serif;
+        // font-family:"Sancreek", cursive;
+        // font-family:"Metal Mania", cursive;
+        font-size:22px;
+        font-weight:lighter;
+        color:rgba($accentColor1, 1.0);
+
+        //-moz-text-shadow:-1px -1px 1px rgba(0, 0, 0, 0.2), 1px 1px 1px rgba(255, 255, 255, 0.2);
+
+        /*WebKit only*/
+        @extend %textGradient;
+
+        &.margin-bottom {margin-bottom:12px;}
+    }
+}
+
+#page {
+
+    .container {
+        margin:0px auto;
+        width:100%;
+
+        // Wait for completing layout
+        opacity:0;
+
+        .controller-panel {
+            background-color:rgba($white, 0.05);
+
+            // @each $prefix in $prefixLists {
+            //    @if (isWebKit($prefix)) {
+            //        background-image:-webkit-gradient(linear, left top, right bottom,
+            //                                          from(rgba($white, 0.25)),
+            //                                          color-stop(50%, rgba($black, 0.05)),
+            //                                          to(rgba($white, 0.25)));
+            //    }
+
+            //    background-image:#{$prefix}linear-gradient(135deg,
+            //                     rgba($white, 0.25),
+            //                     rgba($black, 0.05) 50%,
+            //                     rgba($white, 0.25));
+            // }
+
+            // @include boxshadow(0px 0px 3px rgba($white, 0.5));
+
+            &:not(#piano) [id*="-controllers"],  // This style is not applied to "ui-slider", "select2"
+            #visualization-of-sound,
+            #mml-player {
+                margin:0px auto;
+                width:94%;
+            }
+        }
+
+        &:nth-of-type(1) .controller-panel {
+            float:left;
+            padding:15px 0px;
+            width:20%;
+            height:340px;
+
+            #envelope-generator-controllers legend {margin-bottom:15px;}
+            #audio-controllers              legend {margin-bottom: 6px;}
+        }
+
+        &:nth-of-type(2) .controller-panel {
+            padding:15px 0px;
+        }
+
+        &:nth-of-type(2) .controller-panel #visualization-of-sound {
+
+            > div:first-child {
+                dl {
+                    float:left;
+                    margin-left:3%;
+                    width:30%;
+
+                    dt {height:22px;}
+                    dd {margin-top:8px;}
+                }
+            }
+
+            > div:last-child {
+                margin-top:8px;
+                margin-left:3%;
+            }
+
+            #mml-player dl {
+                margin-top:8px;
+                margin-left:3%;
+            }
+        }
+
+        &:nth-of-type(4) .controller-panel {
+            float:left;
+            padding-top:15px;
+            width:16.6%;
+            // width:16.66%; // Division into 6 panels
+            height:780px;
+
+            legend {width:100%;}
+        }
+
+        &:nth-of-type(5) .controller-panel {
+            float:left;
+            padding-top:15px;
+            width:16.6%;
+            // width:16.66%; // Division into 6 panels
+            height:740px;
+        }
+
+        dl dt {
+            // font-family:"Alike", serif;
+            // font-family:"Trykker", serif;
+            font-size:12px;
+            color:rgba(255, 255, 255, 1.0);
+            // text-shadow:-1px -1px 1px rgba(0, 0, 0, 1.0), 1px 1px 1px rgba(255, 255, 255, 0.2);
+        }
+
+        dl dd:not(.select-parent) {
+            margin:1rem 0rem;
+        }
+
+        &:nth-of-type(1) .controller-panel,
+        &:nth-of-type(2) .controller-panel,
+        &:nth-of-type(4) .controller-panel {
+            div p {
+                // font-family:"Alike", serif;
+                // font-family:"Trykker", serif;
+                font-size:12px;
+                color:rgba(255, 255, 255, 1.0);
+                // text-shadow:-1px -1px 1px rgba(0, 0, 0, 1.0), 1px 1px 1px rgba(255, 255, 255, 0.2);
+            }
+        }
+    }
+}
+
+// legend:before {
+//    content:" ";
+//    position:absolute;
+//    top:0px;
+//    left:0px;
+//    width:100%;
+//    height:100%;
+
+//    background-image:url(../../images/illust/png/text-gradient.png);
+//    background-repeat:repeat-x;
+//    background-position:left top;
+// }
+
+canvas, svg {
+    border:2px solid rgba($white, 0.05);
+    background-color:rgba($black, 1.0);
+
+    @include boxshadow((0px 0px 0px 2px rgba($black, 1.0), 0px -1px 1px 5px rgba($black, 0.5)));
+}
+
+footer {
+    margin-top:50px;
+    // border-top:1px solid rgba(0, 0, 0, 1);
+    padding:18px 15px;
+    height:100%;
+
+    font-size:12px;
+    color:rgba($white, 1.0);
+    text-align:right;
+    // text-shadow:-1px -1px 0px rgba($black, 1.0), 1px 1px 0px rgba($black, 1.0);
+
+    background-color:rgba($black, 0.05);
+
+    @include boxshadow(0px 0px 3px rgba($white, 0.5));
+
+    // Wait for completing layout
+    opacity:0;
+
+    ul {
+        margin:12px 0px;
+
+        li {
+            display:inline-block;
+            margin-left:6px;
+
+            a {
+                display:inline-block;
+                width:32px;
+                height:32px;
+
+                @include borderradius(16px);
+                @include boxshadow((0px 0px 0px 3px rgba(0, 0, 0, 1.0) inset, 0px -1px 1px 3px rgba(0, 0, 0, 0.5)));
+            }
+        }
+    }
+
+    div {
+        small, span {
+            display:inline-block;
+            margin-left:18px;
+            height:22px;
+
+            /*List marker*/
+            background-image:url(../../images/illust/png/list-marker.png);
+            background-position:left top;
+            background-repeat:no-repeat;
+            padding-left:24px;
+            padding-top:0.2em;
+        }
+
+        small a {font-size:12px;}
+        // small span {vertical-align:0.35em;}
+    }
+}
+
+.kerning {letter-spacing:-2px;}
+
+a {
+    text-decoration:none;
+
+    &:link    {color:rgba($accentColor1, 1.0);}
+    &:visited {color:rgba(#0000ff, 1.0);}
+
+    &:hover,
+    &:focus,
+    &:active {
+        text-decoration:underline;
+    }
+
+    &.image-link:hover,
+    &.image-link:focus,
+    &.image-link:active {
+        text-decoration:none;
+    }
+}
+
+strong {font-weight:normal;}
+
+b {
+    font-weight:normal;
+    font-style:italic;
+    color:rgba($accentColor1, 1.0);
+    text-shadow:-1px -1px 1px rgba($black, 1.0), 1px 1px 1px rgba($white, 0.2);
+}
+
+// jQuery UI dialog
+
+// Modal
+.ui-widget-overlay {
+    background-color:rgba($black, 0.6);
+    background-image:none;
+    opacity:1.0;
+}
+
+// Dialog
+.ui-dialog {
+    // Dialog Body
+    /*Reset default style*/
+    border:none;
+    background:none;
+
+    background-color:rgba($black, 1.0);
+
+    // @each $prefix in $prefixLists {
+    //    @if (isWebKit($prefix)) {
+    //        background-image:-webkit-gradient(linear, left bottom, right top, from($black), color-stop(50%, $baseColor1), to($black));
+    //    }
+    //
+    //    background-image:#{$prefix}linear-gradient(135deg, $black, $baseColor1 50%, $black);
+    // }
+
+    // @include boxshadow(0px 0px 10px rgba($white, 1.0));
+
+    @include borderradius(0px);
+
+    // Title
+    .ui-dialog-title {
+        // font-family:"Alike", serif;
+        // font-family:"Neuton", serif;
+        // font-family:"Racing Sans One", cursive;
+        font-weight:lighter;
+        color:rgba($white, 1.0);
+        // color:rgba(51, 51, 51, 1.0);
+        // text-shadow:-1px -1px 1px rgba($black, 0.2);
+    }
+
+    // Button
+    .ui-button-text {
+        padding:8px 0px;
+        width:120px;
+        // font-family:"Alike", serif;
+        // font-family:"Neuton", serif;
+        // font-family:"Racing Sans One", cursive;
+        font-size:13px;
+        font-weight:normal;
+        color:rgba($white, 1.0);
+        // color:rgba(51, 51, 51, 1.0);
+        // text-shadow:-1px -1px 1px rgba($black, 0.2);
+    }
+
+    .ui-button {
+        // Reset default style
+        border:none;
+        background:none;
+
+        background-color:rgba($accentColor2, 1.0);
+
+        @each $prefix in $prefixLists {
+            #{$prefix}transition:background-color 0.8s ease 0s;
+        }
+
+        // border:2px solid rgba($baseColor3, 0.25);
+        // background-color:rgba($baseColor4, 1.0);
+
+        // @each $prefix in $prefixLists {
+        //    @if (isWebKit($prefix)) {
+        //        background-image:-webkit-gradient(linear, left bottom, right top,
+        //                                          from($baseColor3),
+        //                                          color-stop(25%, $baseColor4),
+        //                                          color-stop(50%, $white),
+        //                                          color-stop(75%, $baseColor4),
+        //                                          to($baseColor3));
+        //    }
+
+        //    background-image:#{$prefix}linear-gradient(135deg,
+        //                     $baseColor3,
+        //                     $baseColor4 25%,
+        //                     $white 50%,
+        //                     $baseColor4 75%,
+        //                     $baseColor3);
+        // }
+
+        // @include boxshadow(0px);
+
+        &:hover {background-color:rgba($accentColor1, 1.0);}
+        &:focus,
+        &:active {
+            outline:none !important;
+            // @include boxshadow(0px -1px 1px 3px rgba($black, 0.6));
+        }
+    }
+
+    // Button panel
+    .ui-widget-content {
+        border:none;
+        background:none;
+        padding:1.5rem 0rem 1rem 0.5rem;
+    }
+
+    // Dialog Border
+    .ui-corner-all {
+        @include borderradius(0px);
+    }
+
+    // Header
+    .ui-widget-header {
+        // Reset default style
+        border:none;
+        background:none;
+        background-color:rgba($accentColor1, 1.0);
+
+        // Close Button
+        .ui-state-hover {
+            right:0.6em;
+
+            border:none;
+            width:16px;
+            height:16px;
+
+            background-color:rgba($accentColor2, 1.0);
+            background-image:none !important;
+
+            @include borderradius(0px);
+        }
+    }
+}
+
+// Dialog for Progress Bar
+#dialog-decode-audio, #dialog-wait-for-change {
+    text-align:center;
+
+    img {
+        padding:48px 0px;
+    }
+}
+
+[id*="dialog-"], [class*="dialog-"] {
+    p {
+        margin:0rem 1rem;
+        // font-family:"Alike", serif;
+        font-size:16px;
+    }
+}
+
+#dialog-read-file p {
+    margin:8% 0px;
+    text-align:center;
+}
+
+// jQuery UI Tooltip
+.ui-tooltip-custom {
+    border:none;
+    background-color:rgba($black, 0.7);
+    background-image:none;
+    font-size:12px;
+    font-weight:lighter;
+    color:rgba($white, 1.0);
+
+    @include borderradius(0px);
+}
+
+// jQuery UI Sortable
+.sortable-placeholder {background-color:rgba($black, 0.05);}
+
+///--- for Layout ---///
+
+
+
+/**
+ * for Controllers
+ */
+
+// Forms for parameters (jQuery UI slider, input[type="number"])
+[id*="slider-"] {
+    cursor:pointer;
+    position:relative;
+    margin:10px auto;
+    width:94%;
+}
+
+label {
+    cursor:pointer;
+
+    &[for="select-filter-type"] {
+        display:inline-block;
+        width:60%;
+    }
+}
+
+.select-parent                  {margin:1rem 0rem;}
+.select-parent + .select-parent {margin-top:0rem; margin-bottom:1rem;}
+
+#record-controllers, #reverb-controllers {
+    .select-parent {margin-top:0rem; margin-bottom:1rem;}
+}
+
+/*!
+ * Aristo.css (https://github.com/taitems/Aristo-jQuery-UI-Theme)
+ *
+ * The "Aristo" theme for Cappuccino ported to a jQuery UI Theme, with permission by 280North and Pinvoke.
+ * Distributed under an MIT license.
+ */
+.ui-slider {
+    position: relative;
+    text-align: left;
+    // background: #d7d7d7;
+    background:rgba(#999, 1.0);
+    z-index: 1;
+
+    border:2px solid rgba(#FFF, 0.3);
+    background-color:rgba(#000, 1.0);
+
+    @each $prefix in $prefixLists {
+        $from : rgba(#999, 1.0);
+        $to   : rgba(#000, 1.0);
+
+        @if (isWebKit($prefix)) {
+            background-image:-webkit-gradient(linear, left top, left bottom, from($from), to($to));
+        }
+
+        background-image:#{$prefix}linear-gradient(top, $from, $to);
+    }
+
+    .ui-slider-handle {
+        // for Retina Display
+        @include backgroundsize(23px 46px);
+
+        background-color:$transparent;
+
+        // CSS Sprite
+        background-image:url(../../images/illust/png/slider-handles.png);
+        background-repeat:no-repeat;
+        background-position:0px -23px;
+
+        position:absolute;
+        z-index:2;
+
+        cursor:pointer;
+        border:none;
+        outline:none;
+        width:23px;
+        height:23px;
+
+        @include boxshadow(none);
+
+        &:active {
+            cursor:ew-resize;
+            background-position:0px 0px;  // CSS Sprite
+        }
+    }
+
+    //.ui-state-hover, .ui-state-active {background-position: 0px 0px;}
+
+    .ui-slider-range {
+        // background: #a3cae0;
+        position:absolute;
+        z-index:1;
+        font-size:0.7em;
+        display:block;
+        border:0;
+        background-position:0px 0px;
+
+        background:rgba(#d7d7d7, 1.0);
+
+        // @include boxshadow(0 1px 2px rgba(#11232d, 0.6) inset);
+        @include boxshadow(0 1px 2px rgba(#000, 0.5) inset);
+        @include borderradius(0px 3px 3px 0px);
+    }
+}
+
+.ui-slider-horizontal {
+    height:5px;
+
+    .ui-slider-handle    {top   :-8px; margin-left:-13px;}
+    .ui-slider-range     {top   : 0px; height:100%;}
+    .ui-slider-range-min {left  : 0px;}
+    .ui-slider-range-max {right : 0px;}
+}
+
+.ui-slider-vertical {
+    width:5px;
+    height:100px;
+
+    .ui-slider-handle    {left   :-8px; margin-left: 0px; margin-bottom: -13px;}
+    .ui-slider-range     {left   : 0px; width:100%;}
+    .ui-slider-range-min {bottom : 0px;}
+    .ui-slider-range-max {top    : 0px;}
+}
+/*! //Aristo.css */
+
+ui-spinner, ui-spinner-time {
+    float:right;
+    width:40%;
+}
+
+.ui-spinner {
+    cursor:pointer;
+
+    display:inline-block;
+    border:2px solid rgba($white, 0.05);
+    width:90%;
+
+    color:rgba($white, 1.0);
+    text-align:right;
+    // text-shadow:-1px -1px 1px rgba($black, 1.0), 1px 1px 1px rgba($white, 0.2);
+
+    background-color:rgba($black, 1.0);
+
+    @each $prefix in $prefixLists {
+        @if (isWebKit($prefix)) {
+            background-image:-webkit-gradient(linear, left top, left bottom, from(rgba($baseColor2, 1.0)), to(rgba($black, 1.0)));
+        }
+
+        background-image:#{$prefix}linear-gradient(top, rgba($baseColor2, 1.0), rgba($black, 1.0));
+    }
+
+    @include borderradius(0px);
+    @include boxshadow((5px 5px 3px     rgba($black, 0.8) inset, 3px -3px 3px     rgba($black, 0.5) inset,  // inner
+                        0px 0px 0px 2px rgba($black, 1.0) inset, 0px -1px 1px 2px rgba($black, 0.5)));      // outer (for emboss)
+
+    &:focus, &:active {
+        outline-color:rgba($accentColor2, 1.0) !important;
+        background-color:rgba($accentColor2, 1.0);
+
+        @each $prefix in $prefixLists {
+            @if ($prefix == '-webkit-') {
+                background-image:-webkit-gradient(linear, left top, left bottom, from(rgba($accentColor1, 1.0)), to(rgba($accentColor2, 1.0)));
+            }
+
+            background-image:#{$prefix}linear-gradient(top, rgba($accentColor1, 1.0), rgba($accentColor2, 1.0));
+        }
+
+        @include boxshadow((5px  5px 3px     rgba($black, 0.4) inset, 3px -3px 3px rgba($black, 0.2) inset,  // inner
+                            0px -1px 5px 1px rgba(17, 17, 17, 0.75)));  // outer (for emboss)
+    }
+
+    .ui-spinner-input {
+        &:focus, &:active {
+            // outline-color:rgba($accentColor2, 1.0) !important;
+        }
+    }
+
+    .ui-icon {cursor:pointer;}
+}
+
+.ui-spinner-button {@include borderradius(0px);}
+.ui-spinner-input  {margin-left:0.8em;}
+
+// Spin button
+// [type="number"] {
+//    &::-webkit-outer-spin-button {}
+//    &::-webkit-inner-spin-button {
+//        cursor:pointer;
+
+//        -webkit-appearance:none;
+//        width:14px;
+//        height:18px;
+
+//        background-image:url(../../images/illust/png/spinner.png);
+//        background-position:left top;
+//        background-repeat:no-repeat;
+//    }
+// }
+
+// Checkbox, Radio Button (Toggle Audio Wave, Oscillator, and Select Wave-Type)
+[type="checkbox"],
+[type="radio"] {
+    // Invisibility for CSS Sprite
+    display:none;
+    // position:absolute;
+    // z-index:-1;
+}
+
+[for*="checkbox-oscillator-"],
+[for*="checkbox-is-"] {
+    span {
+        cursor:pointer;
+        display:inline-block;
+        margin-left:12px;
+        @include offLeft(58px, 34px);
+
+        vertical-align:-0.5em;
+
+        // for Retina Display
+        @include backgroundsize(58px 68px);
+
+        // CSS Sprite
+        background-image:url(../../images/illust/png/flip-switch.png);
+        background-position:left top;
+        background-repeat:no-repeat;
+
+        &.check-on {background-position:left bottom;}
+    }
+}
+
+#page .container:nth-of-type(4) .controller-panel legend [for*="checkbox-is-"] span {
+    float:right;
+    margin-top:2px;
+}
+
+[name*="form-wave-type"] {
+    margin:10px auto 18px auto;
+    width:238px;
+
+    [for*="radio-"] {
+        display:block;
+        float:left;
+        height:40px;
+        text-indent:-9999px;
+        overflow:hidden;
+
+        // for Retina Display
+        @include backgroundsize(238px 120px);
+
+        // CSS Sprite
+        background-image:url(../../images/illust/png/radio-wave-type.png);
+        background-repeat:no-repeat;
+    }
+
+    // CSS Sprite
+    [for*="radio-sine"] {
+        width:63px; background-position:0px bottom;
+
+        &:hover            {background-position:0px top;}
+        &:active, &.active {background-position:0px center;}
+    }
+
+    [for*="radio-square"] {
+        width:56px; background-position:-63px bottom;
+
+        &:hover            {background-position:-63px top;}
+        &:active, &.active {background-position:-63px center;}
+    }
+
+    [for*="radio-saw"] {
+        width:56px; background-position:-119px bottom;
+
+        &:hover            {background-position:-119px top;}
+        &:active, &.active {background-position:-119px center;}
+    }
+
+    [for*="radio-triangle"] {
+        width:63px; background-position:-175px bottom;
+
+        &:hover            {background-position:-175px top;}
+        &:active, &.active {background-position:-175px center;}
+    }
+}
+
+// Toggle channel (Left channel or Right channel ?)
+[href*="#wave-time-all-"].selected {
+    display:inline-block;
+    margin-right:5px;
+    margin-bottom:2px;
+    @include offLeft(50px, 22px);
+    vertical-align:-0.75em;
+
+    // @extend backgroundclip;
+
+    // for Retina Display
+    @include backgroundsize(50px 44px);
+
+    // CSS Sprite
+    background-image:url(../../images/illust/png/flip-switch-channel.png);
+    background-repeat:no-repeat;
+}
+
+[href="#wave-time-all-L"].selected {background-position:left top;}
+[href="#wave-time-all-R"].selected {background-position:left bottom;}
+
+// Audio Controllers
+#audio-controllers {
+    span {display:inline-block;}
+
+    #audio-control {
+        display:inline-block;
+        margin-bottom:-14px;
+        // border:1px solid rgba($white, 0.05);
+        @include offLeft(70px, 33px);
+
+        // @extend backgroundclip;
+
+        // for Retina Display
+        @include backgroundsize(70px 99px);
+
+        // CSS Sprite
+        background-image:url(../../images/illust/png/button-audio.png);
+        background-position:left bottom;
+        background-repeat:no-repeat;
+
+        // @include boxshadow(0px 0px 0px 2px rgba($black, 1.0) inset);
+
+        &:hover            {background-position:left top;}
+        &:active, &.active {background-position:left center;}
+        &.active:active    {background-position:left bottom;}
+    }
+}
+
+// Record Controllers
+#record-controllers {
+    fieldset {
+        dl {
+            dd {
+                ul {
+                    margin:10px auto;
+                    width:238px;
+
+                    li {
+                        display:block;
+                        float:left;
+
+                        a {
+                            display:block;
+                            float:left;
+                            height:40px;
+                            text-indent:-9999px;
+                            overflow:hidden;
+
+                            // for Retina Display
+                            @include backgroundsize(238px 120px);
+
+                            // CSS Sprite
+                            background-image:url(../../images/illust/png/buttons-record.png);
+                            background-repeat:no-repeat;
+                        }
+
+                        // CSS Sprite
+                        #rec-control {
+                            width:63px; background-position:0px bottom;
+
+                            &:hover            {background-position:0px top;}
+                            &:active, &.active {background-position:0px center;}
+                        }
+
+                        #rec-wave {
+                            width:56px; background-position:-63px bottom;
+
+                            &:hover  {background-position:-63px top;}
+                            &:active {background-position:-63px center;}
+                        }
+
+                        #rec-download {
+                            width:56px; background-position:-119px bottom;
+
+                            &:hover  {background-position:-119px top;}
+                            &:active {background-position:-119px center;}
+                        }
+
+                        #rec-clear {
+                            width:63px; background-position:-175px bottom;
+
+                            &:hover  {background-position:-175px top;}
+                            &:active {background-position:-175px center;}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// for audio tag
+#append-audio {
+    margin-top:12px;
+
+    audio {
+        width:95%;
+        height:auto;
+    }
+}
+
+// Uploader
+#file-upload-impulse-response,
+#file-upload-audio,
+#file-upload-mml {
+    display:none;
+}
+
+#text-mask-upload-impulse-response,
+#text-mask-upload-audio,
+#text-mask-upload-mml,
+#text-session-name {
+    @extend %borderbox;
+
+    cursor:pointer;
+    margin:10px auto;
+    padding:6px;
+    color:rgba($white, 1.0);
+    font-size:9px;
+
+    @extend .text-ellipsis;
+
+    // @include borderradius(4px);
+
+    &.drag-off {
+        border:2px solid rgba($white, 0.05);
+        background-color:rgba($black, 1.0);
+
+        @each $prefix in $prefixLists {
+            @if (isWebKit($prefix)) {
+                background-image:-webkit-gradient(linear, left top, left bottom, from(rgba($baseColor2, 1.0)), to(rgba($black, 1.0)));
+            }
+
+            background-image:#{$prefix}linear-gradient(top, rgba($baseColor2, 1.0), rgba($black, 1.0));
+        }
+
+        @include boxshadow((0px 0px 7px     rgba($white, 1.0) inset,  // inner
+                            0px 0px 0px 2px rgba($black, 1.0) inset, 0px 0px 1px 3px rgba($black, 0.3)));  // outer (for emboss)
+    }
+
+    &:focus, &:active,
+    &.drag-on {
+        border:2px solid rgba($white, 0.05);
+        background-color:rgba($accentColor2, 1.0);
+
+        @each $prefix in $prefixLists {
+            @if (isWebKit($prefix)) {
+                background-image:-webkit-gradient(linear, left top, left bottom, from(rgba($accentColor1, 1.0)), to(rgba($accentColor2, 1.0)));
+            }
+
+            background-image:-webkit-linear-gradient(top, rgba($accentColor1, 1.0), rgba($accentColor2, 1.0));
+        }
+
+        @include boxshadow((0px  0px 10px     rgba($white, 1.0) inset, 0px 0px 0px 2px rgba($accentColor2, 1.0) inset,  // inner
+                            0px  0px  1px 3px rgba($black, 0.3)));  // outer (for emboss)
+    }
+}
+
+#text-mask-upload-impulse-response {width:97%;}
+#text-mask-upload-audio            {width:67%;}
+#text-mask-upload-mml              {width:100%}
+#text-session-name                 {width:97%;}
+
+#text-mask-upload-impulse-response:hover, #text-mask-upload-audio:hover {/*hover animation*/}
+
+.select2-container {margin-top:3px;}
+
+#visualization-of-sound {
+    margin-top:3px;
+
+    > div:last-child {
+        dl {
+            display:block;
+            float:right;
+
+            &:nth-child(1) {
+                margin-left:14px;
+                margin-right:2%;
+            }
+
+            &:nth-child(2) {
+                margin-top:2px;
+                margin-left:24px;
+            }
+        }
+    }
+}
+
+#mml-player {
+    dl {
+        &:first-child dd {margin-top:8px;}
+
+        &:last-child {
+            dd {
+                ul {
+                    li {
+                        &:first-child {width:160px;}
+
+                        &:not(:first-child) {margin-top:2px;}
+
+                        a {
+                            display:block;
+                            float:left;
+                            height:40px;
+                            text-indent:-9999px;
+                            overflow:hidden;
+
+                            // for Retina Display
+                            @include backgroundsize(238px 120px);
+
+                            // CSS Sprite
+                            background-image:url(../../images/illust/png/buttons-mml.png);
+                            background-repeat:no-repeat;
+                        }
+
+                        #mml-control {
+                            width:63px;
+                            background-position:0px bottom;
+
+                            &:hover            {background-position:0px top;}
+                            &.active:active    {background-position:0px bottom;}
+                            &:active, &.active {background-position:0px center;}
+                        }
+
+                        #mml-stop {
+                            width:56px; background-position:-63px bottom;
+
+                            &:hover  {background-position:-63px top;}
+                            &:active {background-position:-63px center;}
+                        }
+
+                        #mml-download {
+                            width:63px; background-position:-175px bottom;
+
+                            &:hover  {background-position:-175px top;}
+                            &:active {background-position:-175px center;}
+                        }
+
+                        #mml-clear {
+                            width:63px; background-position:-175px bottom;
+
+                            &:hover  {background-position:-175px top;}
+                            &:active {background-position:-175px center;}
+                        }
+                    }
+                }
+            }
+        }
+
+        dd {
+            ul {
+                li {
+                    display:block;
+                    float:right;
+
+                    &:first-child {
+                        margin-top:-2px;
+                        margin-left:14px;
+                        margin-right:2%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#notice-mml-is-invalid {margin-left:12px;}
+
+#textarea-mml {
+    @extend %borderbox;
+
+    resize:none;
+    overflow:auto;  // for IE
+
+    font-size:1rem;
+    color:rgba($white, 1.0);
+
+    border:2px solid rgba($white, 0.05);
+    padding:1rem;
+    width:98%;
+    height:10rem;
+
+    background-color:rgba($black, 1.0);
+
+    @include boxshadow((0px 0px 0px 2px rgba(0, 0, 0, 1.0), 0px -1px 1px 5px rgba(0, 0, 0, 0.5)));
+
+    &:focus {
+        outline:none;
+        @include boxshadow((0px 0px 0px 2px rgba(0, 0, 0, 1.0), 0px -1px 1px 5px rgba(0, 0, 0, 0.5), 0px 0px 15px 3px rgba(255, 255, 255, 0.6) inset));
+    }
+}
+
+///--- for Controllers ---///
+
+
+
+/**
+ * for Piano
+ */
+
+#piano {
+    position:relative;
+    z-index:1;
+
+    margin:30px auto;
+    width:1256px;
+    height:240px;
+
+    // for Retina Display
+    // @include backgroundsize(1256px 240px);
+
+    background-image:url(../../images/illust/png/piano-frame-normal.png);
+    background-position:left top;
+    background-repeat:no-repeat;
+
+    // emboss
+    // @include boxshadow((0px 0px 0px 3px rgba($black, 1.0) inset, 0px -1px 5px 9px rgba(17, 17, 17, 0.4)));
+
+    .ui-spinner {width:90%;}
+}
+
+#master-volume-controllers,
+#glide-controllers {
+    position:absolute;
+    top:13px;
+    z-index:2;
+    width:230px;
+}
+
+#master-volume-controllers {left:30px;}
+#glide-controllers         {left:280px;}
+
+#slider-master-volume,
+#slider-glide {
+    margin:10px 0px;
+    width:195px;
+    height:5px;
+}
+
+#sound-source-controllers,
+#visualization-controllers,
+#mml-controllers,
+#session-controllers,
+#patch-controllers {
+    position:absolute;
+    top:9px;
+    z-index:2;
+
+    width:140px;
+    font-size:12px;
+    color:rgba($white, 1.0);
+    text-align:center;
+    // text-shadow:-1px -1px 1px rgba($black, 1.0), 1px 1px 1px rgba($white, 0.2);
+}
+
+#sound-source-controllers  {left: 530px;}
+#visualization-controllers {left: 670px;}
+#mml-controllers           {left: 810px;}
+#session-controllers       {left: 950px;}
+#patch-controllers         {left:1090px;}
+
+#sound-source-controllers {
+    > fieldset {
+        > .select2-container {
+            margin-top:3px;
+            margin-left:-22px;
+            width:140px;
+        }
+    }
+}
+
+/*label[for="checkbox-is-sound-source"]  span,*/
+[for="checkbox-is-visualization"],
+[for="checkbox-is-mml"],
+[for="checkbox-is-session"],
+[for="checkbox-is-patch"] {
+    span {
+        cursor:pointer;
+        display:inline-block;
+        margin-left:12px;
+        @include offLeft(58px, 34px);
+
+        vertical-align:-1em;
+
+        // for Retina Display
+        @include backgroundsize(58px 68px);
+
+        // CSS Sprite
+        background-image:url(../../images/illust/png/flip-switch.png);
+        background-position:left top;
+        background-repeat:no-repeat;
+
+        .check-on {
+            background-position:left bottom;
+        }
+    }
+
+}
+
+/*Reference | Size of piano keyboard (black)*/
+/*width : height -> 23 : 150*/
+#white {
+    position:absolute;
+    top:73px;
+    left:30px;
+    z-index:2;
+    background-color:rgba($white, 1.0);
+
+    li {
+        @extend %borderbox;
+
+        cursor:pointer;
+        display:block;
+        float:left;
+        width:23px;
+        height:150px;
+
+        // for Retina Display
+        @include backgroundsize(23px 300px);
+
+        background-color:$white;
+
+        // CSS Sprite
+        background-image:url(../../images/illust/png/piano-keyboard-white.png);
+        background-repeat:no-repeat;
+
+        &.keyboard-off {background-position:left bottom;}
+        &.keyboard-on  {background-position:left top;}
+    }
+}
+
+/*Reference | Size of piano keyboard (black)*/
+/*width : height -> 11 : 95*/
+#black {
+    position:absolute;
+    top:73px;
+    left:35px;
+    z-index:3;
+    height:95px;  /*Enable to click keyboard*/
+
+    li {
+        @extend %borderbox;
+
+        cursor:pointer;
+        display:block;
+        float:left;
+        margin-left:12px;
+        width:11px;
+        height:95px;
+
+        // for Retina Display
+        @include backgroundsize(11px 190px);
+
+        background-color:$black;
+
+        // CSS Sprite
+        background-image:url(../../images/illust/png/piano-keyboard-black.png);
+        background-repeat:no-repeat;
+
+        &.keyboard-off {background-position:left bottom;}
+        &.keyboard-on  {background-position:left top;}
+
+        &.skip {
+            background-color:$transparent !important;
+            background:none !important;
+            height:1px;
+            visibility:hidden;
+        }
+    }
+}
+
+///---  for Piano ---///
+
+
+
+/**
+ * for Patch Controllers
+ */
+
+#cboxTopLeft,
+#cboxTopCenter, 
+#cboxTopRight,
+#cboxMiddleLeft,
+#cboxMiddleRight,
+#cboxBottomLeft,
+#cboxBottomCenter,
+#cboxBottomRight {
+    width:0px;
+    height:0px;
+    background-image:none;
+}
+
+#cboxLoadingOverlay {
+    background-color:$transparent;
+    background-image:none;
+}
+
+#cboxLoadedContent {overflow:hidden !important;}
+
+#cboxClose {
+    outline:none;
+
+    position:absolute;
+    bottom:0px;
+    right:0px;
+    z-index:2;
+
+    @include offLeft(24px, 24px);
+
+    background-color:rgba($accentColor2, 1.0);
+    background-image:none;
+
+    @include borderradius(12px);
+
+    @each $prefix in $prefixLists {
+        #{$prefix}transition:background-color 0.8s ease;
+    }
+
+    &:hover {background-color:rgba($accentColor1, 1.0);}
+
+    &:before {
+        content:"x";
+        display:block;
+        margin:0px auto;
+        width:18px;
+        height:18px;
+
+        position:absolute;
+        top:2px;
+        left:3px;
+        z-index:9999;
+
+        font-size:16px;
+        color:rgba($white, 1.0);
+        text-indent:0px;
+    }
+}
+
+#cboxContent {background-color:$transparent;}
+
+#patch-container {
+    background-color:$transparent;
+
+    > ul {
+        > li {
+            display:block;
+            float:left;
+
+            > a {
+                display:block;
+                border:none;
+                padding:6px 24px;
+
+                font-size:14px;
+                color:rgba($white, 1.0);
+                text-decoration:none;
+                // text-shadow:-1px -1px 1px rgba($black, 0.2);
+
+                background-color:rgba($accentColor2, 1.0);
+
+                @include borderradius(12px 12px 0px 0px);
+
+                @each $prefix in $prefixLists {
+                    #{$prefix}transition:background-color 0.8s ease;
+                }
+
+                &.selected,
+                &:hover {
+                    background-color:rgba($accentColor1, 1.0);
+                }
+            }
+        }
+    }
+}
+
+#patch-form-area {
+    /*border:2px solid rgba(210, 210, 210, 1.0);*/
+    padding:12px 24px;
+    height:420px;
+    overflow-y:scroll;
+    background-color:rgba($black, 1.0);
+
+    dl {
+        margin:12px 0px;
+
+        dt {
+            margin:3px 0px;
+            font-size:16px;
+            color:rgba($accentColor1, 1.0);
+
+            /*List marker*/
+            background-image:url(../../images/illust/png/list-marker.png);
+            background-position:left top;
+            background-repeat:no-repeat;
+            padding-left:24px;
+        }
+
+        dd {margin-left:24px;}
+    }
+
+    div {
+        form {
+            > ul {
+                margin:6px 0px 0px 32px;
+                width:260px;
+                text-align:right;
+
+                > li {
+                    display:inline-block;
+                    margin-left:6px;
+                }
+            }
+
+            &#signout > ul {
+                margin:18px 0px;
+                width:50%;
+                text-align:center;
+            }
+
+            &#signout > fieldset {
+                > ul {
+                    @extend .invisibility;
+                }
+
+                dl {
+                    dt {
+                        label + span {color:rgba($accentColor1, 1.0);}
+                    }
+                }
+            }
+
+            [type="text"], [type="password"] {
+                padding:0.5em 1em;
+                width:20em;
+                font-size:12px;
+
+                &:focus {
+                    outline:none;
+                    background-color:rgba(250, 250, 250, 1.0);
+
+                    @include boxshadow(0px 0px 2px rgba($black, 0.2) inset);
+                }
+            }
+
+            button {
+                cursor:pointer;
+                border:none;
+                padding:8px 0px;
+                width:120px;
+                height:auto;
+
+                font-size:13px;
+                color:rgba($white, 1.0);
+                text-align:center;
+                // text-shadow:-1px -1px 1px rgba($black, 0.2);
+
+                background-color:rgba($accentColor2, 1.0);
+
+                @each $prefix in $prefixLists {
+                    #{$prefix}transition:background-color 0.8s ease;
+                }
+
+                &:hover {background-color:rgba($accentColor1, 1.0);}
+            }
+        }
+    }
+
+    #patch-list {
+        dt {}
+
+        dd {
+            @extend %borderbox;
+
+            cursor:pointer;
+            display:block;
+            margin:0px 0px 0px 24px;
+            padding:5px 0px 5px 12px;
+
+            font-size:16px;
+            color:rgba($white, 1.0);
+            background-color:rgba($accentColor2, 1.0);
+
+            &:not(:first-of-type) {border-top:1px solid rgba($accentColor1, 1.0);}
+
+            &:hover {background-color:rgba($accentColor1, 1.0);}
+        }
+    }
+
+    #patch-save {
+        dl {float:left;}
+        ul {float:left; margin:44px 0px 0px 3px; width:auto;}
+    }
+}
+
+b.dangerous {color:rgba(255, 0, 0, 1.0);}
+
+#dialog-operate-patch,
+#patch-save {
+    table {
+        @extend %borderbox;
+
+        margin:16px auto;
+        border:2px solid rgba($accentColor2, 1.0);
+        width:91.5%;
+
+        font-family:"Neuton", serif;
+        font-weight:lighter;
+        color:rgba(255, 255, 255, 1.0);
+
+        caption {@extend .invisibility;}
+
+        tr {
+            th {
+                @extend %borderbox;
+                border:2px solid rgba($accentColor2, 1.0);
+                font-size:16px;
+                font-weight:lighter;
+                // text-shadow:-1px -1px 1px rgba($black, 0.2);
+                background-color:rgba($accentColor1, 1.0);
+            }
+
+            td {
+                @extend %borderbox;
+                border:2px solid rgba($accentColor2, 1.0);
+                padding-left:6px;
+                width:50%;
+                font-size:14px;
+            }
+        }
+
+        tbody {
+            tr {
+                @each $prefix in $prefixLists {
+                    #{$prefix}transition:background-color 0.4s ease 0s;
+                }
+
+                &:hover {background-color:rgba($accentColor1, 1.0);}
+            }
+        }
+
+        &:first-child tbody tr td {width:33.33%;}
+    }
+
+    &#patch-save div table:last-child {margin-bottom:60px;}
+}
+
+.cookie-help-list {
+    margin-top:1em;
+
+    li {
+        display:block;
+        float:left;
+        margin-left:1em;
+
+        /*List marker*/
+        background-image:url(../../images/illust/png/list-marker.png);
+        background-position:left top;
+        background-repeat:no-repeat;
+        padding-left:24px;
+
+        a {
+            display:block;
+            font-size:14px;
+            color:rgba($accentColor1, 1.0);
+
+            @each $prefix in $prefixLists {
+                #{$prefix}transition:color 1s ease 0s;
+            }
+
+            &:hover {
+                color:rgba($accentColor2, 1.0);
+                text-decoration:none;
+            }
+        }
+    }
+}
+
+///---  for Patch Controllers ---///
+
+
+
+/**
+ * for animations
+ */
+
+footer ul li a,
+.select2-container .select2-choice {
+    @extend .hover;
+}
+
+.button-hover {
+    background-color:rgba($accentColor2, 1.0);
+
+    @include setTransition(background-color 0.8s ease 0s);
+
+    &:hover {background-color:rgba($accentColor1, 1.0);}
+}
+
+// Opening animation
+@include defineKeyframes(fade-in-animation) {
+      0% {opacity:0}
+    100% {opacity:1}
+}
+
+
+
+// Intro string animation
+//#intro-line-2 {
+//    display:block;
+//
+//    @include setAnimation(line-2-animation 1s ease-out 1 normal 0s);
+// }
+
+//#intro-line-3 {
+//    display:block;
+//
+//    @include setAnimation(line-3-animation 1s ease-out 1 normal 0s);
+// }
+
+@include defineKeyframes(line-2-animation) {
+      0% {-webkit-transform:translateX(2500px); -moz-transform:translateX(2500px); transform:translateX(2500px);}
+    100% {-webkit-transform:translateX(   0px); -moz-transform:translateX(   0px); transform:translateX(   0px);}
+}
+
+@include defineKeyframes(line-3-animation) {
+      0% {-webkit-transform:translateX(-2500px); -moz-transform:translateX(-2500px); transform:translateX(-2500px);}
+    100% {-webkit-transform:translateX(    0px); -moz-transform:translateX(    0px); transform:translateX(    0px);}
+}
+
+// Intro fade in animation
+#logo.fade-in {
+    @include setAnimation(fade-in-logo-animation 3s ease-in 1 normal 0s forwards);
+}
+
+@include defineKeyframes(fade-in-logo-animation) {
+      0% {opacity:0;}
+    100% {opacity:1;}
+}
+
+header nav.fade-in {
+    @include setAnimation(fade-in-button-start-application-animation 1.5s ease-in 1 normal 0s forwards);
+}
+
+@include defineKeyframes(fade-in-button-start-application-animation) {
+      0% {opacity:0;}
+    100% {opacity:1;}
+}
+
+.container.fade-to, footer.fade-to {
+    @include setAnimation(fade-to-animation 4s ease-in 1 normal 0s forwards);
+}
+
+.container.fade-in, footer.fade-in {
+    @include setAnimation(fade-in-animation 2s ease-in 1 normal 0s forwards);
+}
+
+@include defineKeyframes(fade-to-animation) {
+      0% {opacity:0.00;}
+    100% {opacity:0.25;}
+}
+
+@include defineKeyframes(fade-in-animation) {
+      0% {opacity:0.25;}
+    100% {opacity:1.00;}
+}
+
+header.fade-out {
+    @include setAnimation(fade-out-header-animation 1.5s ease 1 normal 0s forwards);
+}
+
+@include defineKeyframes(fade-out-header-animation) {
+       0% {opacity:1;}
+     100% {opacity:0;}
+}
+
+.disabled {
+    @include setAnimation(disabled-animation 1s ease 1 normal 0s forwards);
+}
+
+.enabled {
+    @include setAnimation(enabled-animation 1s ease 1 normal 0s forwards);
+}
+
+@include defineKeyframes(disabled-animation) {
+      0% {opacity:1;}
+    100% {opacity:0;}
+}
+
+@include defineKeyframes(enabled-animation) {
+      0% {opacity:0;}
+    100% {opactiy:1;}
+}
+
+/*
+.slide-up {
+    @include setAnimation(slide-up-animation 1s ease 1 normal 0s forwards);
+}
+
+.slide-up * {
+    height:0% !important;
+}
+
+@include defineKeyframes(slide-up-animation) {
+      0% {height:100% !important;}
+    100% {height:  0% !important;}
+}
+
+.slide-down {
+    @include setAnimation(slide-down-animation 1s ease 1 normal 0s forwards);
+}
+
+.slide-down * {
+    height:100% !important;
+}
+
+@include defineKeyframes(slide-down-animation) {
+      0% {height:  0% !important;}
+    100% {height:100% !important;}
+}
+*/
+
+// Logo animation
+$startIndex : 1;
+$endIndex   : 6;
+
+@for $i from $startIndex through $endIndex {
+    @if ($i < 4) {
+        .logo-move:nth-child(#{$i}) {
+            $delay : ($i - 1) * 0.125;
+
+            @include setAnimation(unquote("logo-move-left 3s linear 1 normal " + $delay + "s"));
+        }
+    } @else {
+        .logo-move:nth-child(#{$i}) {
+            $delay : ($i - 4) * 0.125;
+
+            @include setAnimation(unquote("logo-move-right 3s linear 1 normal " + $delay + "s"));
+        }
+    }
+}
+
+@include defineKeyframes(logo-move-left) {
+      0% {opacity:0.5; -webkit-transform:translateX(     0px); -moz-transform:translateX(     0px); transform:translateX(     0px);}
+    100% {opacity:0.0; -webkit-transform:translateX(-12000px); -moz-transform:translateX(-12000px); transform:translateX(-12000px);}
+}
+
+@include defineKeyframes(logo-move-right) {
+      0% {opacity:0.5; -webkit-transform:translateX(    0px); -moz-transform:translateX(    0px); transform:translateX(    0px);}
+    100% {opacity:0.0; -webkit-transform:translateX(12000px); -moz-transform:translateX(12000px); transform:translateX(12000px);}
+}
+
+
+
+// Intro statement animation
+.line-out-left {
+    @each $prefix in $prefixLists {
+        @include setAnimation(line-out-left-animation 3s linear 1 normal 0s);
+    }
+}
+
+.line-out-right {
+    @each $prefix in $prefixLists {
+        @include setAnimation(line-out-right-animation 3s linear 1 normal 0s);
+    }
+}
+
+@include defineKeyframes(line-out-left-animation) {
+      0% {opacity:1.0; -webkit-transform:translateX(    0px); -moz-transform:translateX(    0px); transform:translateX(    0px);}
+    100% {opacity:0.0; -webkit-transform:translateX(-6000px); -moz-transform:translateX(-6000px); transform:translateX(-6000px);}
+}
+
+@include defineKeyframes(line-out-right-animation) {
+      0% {opacity:1.0; -webkit-transform:translateX(   0px); -moz-transform:translateX(   0px); transform:translateX(   0px);}
+    100% {opacity:0.0; -webkit-transform:translateX(6000px); -moz-transform:translateX(6000px); transform:translateX(6000px);}
+}
+
+
+
+// Start button
+@include defineKeyframes(shining-animation) {
+      0% {box-shadow:0px 0px  3px rgba(255, 255, 255, 1.0);}
+    100% {box-shadow:0px 0px 30px rgba(255, 255, 255, 1.0);}
+}
+
+
+
+// Progress Bar
+.progress-wrap {
+    position:relative;
+    z-index:1;
+
+    margin:12px auto;
+    width:204px;
+    height:12px;
+
+    background-color:rgba($accentColor2, 1.0);
+
+    @each $prefix in $prefixLists {
+        @if (isWebKit($prefix)) {
+            background-image:-webkit-gradient(linear, left top, left bottom, from(rgba($accentColor2, 1.0)), to(rgba(192, 0, 192, 1.0)));
+        }
+
+        background-image:#{$prefix}linear-gradient(top, rgba($accentColor2, 1.0), rgba(192, 0, 192, 1.0));
+    }
+}
+
+.progress-mask {
+    position:absolute;
+    top:0px;
+    left:0px;
+    z-index:3;
+
+    width:204px;
+    height:6px;
+
+    background-color:rgba($white, 0.15);
+
+    @each $prefix in $prefixLists {
+        @if (isWebKit($prefix)) {
+            background-image:-webkit-gradient(linear, left top, left bottom, from(rgba($white, 0.2)), to(rgba($white, 0.0)));
+        }
+
+        background-image:#{$prefix}linear-gradient(top, rgba($white, 0.2), rgba($white, 0.0));
+    }
+}
+
+.progress-bar {
+    position:absolute;
+    top:0px;
+    left:0px;
+    z-index:2;
+
+    width:0%;
+    height:12px;
+
+    background-color:rgba($accentColor1, 1.0);
+}
+
+.auto-progress {
+    @include setAnimation(auto-progress-animation 1s ease-in-out infinite normal 0s);
+}
+
+@include defineKeyframes(auto-progress-animation) {
+      0% {width:  0%;}
+    100% {width:100%;}
+}
+
+///--- for animations ---///
+
+
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    html, body {font-size:$baseFontSize * 0.875;}
+}
+
+@media only screen and (min-width: 1024px) {
+    html, body {font-size:$baseFontSize;}
+}
