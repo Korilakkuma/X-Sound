@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="ja" ng-app="xsound" ng-controller="XSoundController" ng-class="{'loading' : !isReady}">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<title>X Sound</title>
+<meta name="application-name" content="X Sound" />
+<meta name="description" content="HTML5 Web Audio APIを利用したサウンドクリエイトアプリケーション" />
+<meta name="keywords" content="HTML5, Web Audio API, HTMLAudioElement, JavaScript, Node.js, MongoDB, X Sound, XSound.js, xsound.js, Web Audio API ライブラリ, Web Audio API library" />
+<meta name="author" content="池田友洋, Tomohiro IKEDA, rilakkuma3xjapan" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="apple-touch-icon-precomposed" href="images/illust/png/icon.png" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Alike" type="text/css" media="all" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton" type="text/css" media="all" />
+<link rel="stylesheet" href="lib/css/jquery-ui/jquery-ui-1.10.3.custom.min.css" type="text/css" media="all" />
+<link rel="stylesheet" href="lib/js/select2/select2.css" type="text/css" media="all" />
+<link rel="stylesheet" href="stylesheets/css/x-sound.css" type="text/css" media="all" />
+<link rel="stylesheet" href="stylesheets/css/mac.css" type="text/css" media="all" ng-if="isSafari" />
+<!--[if IE]>
+<link rel="stylesheet" href="stylesheets/css/ie.css" type="text/css" media="all" />
+<![endif]-->
+<script type="text/javascript" src="lib/js/angularjs/angular.min.js"></script>
+<script type="text/javascript" src="lib/js/jquery/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="lib/js/jquery-ui/jquery-ui-1.9.2.custom.min.js"></script>
+<script type="text/javascript" src="lib/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="javascripts/xsound.min.js"></script>
+<script type="text/javascript" src="javascripts/controller.min.js"></script>
+<!-- Google Analytics -->
+<script type="text/javascript">
+<!--
+    (function() {
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    })();
+//-->
+</script>
+<script type="text/javascript">
+<!--
+    (function() {
+        try {
+            var pageTracker = _gat._getTracker("UA-41390233-1");
+            pageTracker._trackPageview();
+        } catch(err) {}
+    })();
+//-->
+</script>
+<style ng-if="false" type="text/css">
+
+    body {
+        background-image:none !important;
+        background-color:rgba(0, 0, 0, 1.0);
+    }
+
+    #page {
+        display:none;
+    }
+
+</style>
+</head>
+
+
+<body class="radial-gradient" ng-class="{'loading' : !isReady}" ui-tooltip>
+    <noscript>Please enable JavaScript to use this application.</noscript>
+    <div id="page">
+        <header ng-if="!isEndOpening" ng-class="{'fade-out' : isStart}">
+            <div ng-if="isReady">
+                <!-- Fork me on GitHub -->
+                <div>
+                    <a href="https://github.com/Korilakkuma/X-Sound" target="_blank">
+                        <img style="position: absolute; top: 0; right: 0; z-index: 10; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub">
+                    </a>
+                </div>
+                <div ng-class="{'opening' : isReady}" ng-style="headerStyle">
+                    <h1 ng-class="{'fade-in' : isReady}" id="logo">
+                        <!-- Logo Animation -->
+                        <img src="images/illust/png/logo-v09.png" alt="X Sound" width="200" height="100" ng-repeat="index in [0, 1, 2, 3, 4, 5]" ng-if="$first || isStart" ng-class="{'logo-move' : isStart}" />
+                    </h1>
+                    <div id="intro">
+                        <p ng-show="isReady">
+                            <span ng-class="{'line-out-left'  : isStart}" id="intro-line-1">This application is created by <strong>Web Audio API</strong>. You can create sound or listen to audio or record sound or session.</span>
+                            <span ng-class="{'line-out-right' : isStart}" id="intro-line-2">The sound that can be created corresponds to 88 keyboards of Piano, and you can play the 2 sounds at the same time.</span>
+                            <span ng-class="{'line-out-left'  : isStart}" id="intro-line-3">Moreover, you can make effects to sound. Other, you can watch sound waves on time and frequency domain.</span>
+                        </p>
+                    </div>
+                    <nav ng-class="{'fade-in' : isReady}"><a href="#" id="button-start-application" ng-click="startApplication($event)">START</a></nav>
+                </div>
+            </div>
+            <div id="page-loading" ng-if="!isReady">
+                <p>Now Loading ... (<span ng-cloak>{{ progress }} %</span>)</p>
+                <!-- Progress Bar -->
+                <div class="progress-wrap">
+                    <div class="progress-mask"></div>
+                    <div class="progress-bar" ng-style="progressStyle"></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container clearfix" ng-show="isReady" ng-class="{'fade-to' : isReady, 'fade-in' : isStart}" ui-sortable>
+            <div class="controller-panel">
+                <div id="oscillator-0-controllers">
+                    <fieldset>
+                        <legend>
+                            <label for="checkbox-oscillator-0">OSCILLATOR - 1<span ng-class="{'check-on' : oscillators.oscillator0.isActive}"></span></label>
+                            <input type="checkbox" id="checkbox-oscillator-0" name="checkbox-oscillator-0" checked ng-click="toggleOscillatorState($event, 0)" />
+                        </legend>
+                        <dl>
+                            <dt class="invisibility">Oscillator - 1</dt>
+                            <dd>
+                                <form name="form-wave-type-0" class="clearfix">
+                                    <label for="radio-sine-0"     ng-class="{'active' : oscillators.oscillator0.type === 'sine'}"    ><input type="radio" id="radio-sine-0"     name="radio-wave-type-0" value="sine" checked ng-click="changeWaveType($event, 0, 'sine')" />SINE</label>
+                                    <label for="radio-square-0"   ng-class="{'active' : oscillators.oscillator0.type === 'square'}"  ><input type="radio" id="radio-square-0"   name="radio-wave-type-0" value="square"       ng-click="changeWaveType($event, 0, 'square')" />SQUARE</label>
+                                    <label for="radio-saw-0"      ng-class="{'active' : oscillators.oscillator0.type === 'sawtooth'}"><input type="radio" id="radio-saw-0"      name="radio-wave-type-0" value="sawtooth"     ng-click="changeWaveType($event, 0, 'sawtooth')" />SAW</label>
+                                    <label for="radio-triangle-0" ng-class="{'active' : oscillators.oscillator0.type === 'triangle'}"><input type="radio" id="radio-triangle-0" name="radio-wave-type-0" value="triangle"     ng-click="changeWaveType($event, 0, 'triangle')" />TRIANGLE</label>
+                                </form>
+                            </dd>
+                            <dt>GAIN<ui-spinner source="oscillator0" module="" param="volume" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider source="oscillator0" module="" param="volume" value="1" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>OCTAVE<ui-spinner source="oscillator0" module="" param="octave" value="0" min="-4" max="4" step="1"></ui-spinner></dt>
+                            <dd><ui-slider source="oscillator0" module="" param="octave" value="0" min="-4" max="4" step="1"></ui-slider></dd>
+                            <dt>FINE<ui-spinner source="oscillator0" module="" param="fine" value="0" min="-1200" max="1200" step="10"></ui-spinner></dt>
+                            <dd><ui-slider source="oscillator0" module="" param="fine" value="0" min="-1200" max="1200" step="10"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /oscillator-1-controllers -->
+            </div>
+            <!-- /controller-panel -->
+            <div class="controller-panel">
+                <div id="oscillator-1-controllers">
+                    <fieldset>
+                        <legend>
+                            <label for="checkbox-oscillator-1">OSCILLATOR - 2<span ng-class="{'check-on' : oscillators.oscillator1.isActive}"></span></label>
+                            <input type="checkbox" id="checkbox-oscillator-1" name="checkbox-oscillator-1" ng-click="toggleOscillatorState($event, 1)" />
+                        </legend>
+                        <dl>
+                            <dt class="invisibility">Oscillator - 2</dt>
+                            <dd>
+                                <form name="form-wave-type-1" class="clearfix">
+                                    <label for="radio-sine-1"     ng-class="{'active' : oscillators.oscillator1.type === 'sine'}"    ><input type="radio" id="radio-sine-1"     name="radio-wave-type-1" value="sine" checked ng-click="changeWaveType($event, 1, 'sine')" />SINE</label>
+                                    <label for="radio-square-1"   ng-class="{'active' : oscillators.oscillator1.type === 'square'}"  ><input type="radio" id="radio-square-1"   name="radio-wave-type-1" value="square"       ng-click="changeWaveType($event, 1, 'square')" />SQUARE</label>
+                                    <label for="radio-saw-1"      ng-class="{'active' : oscillators.oscillator1.type === 'sawtooth'}"><input type="radio" id="radio-saw-1"      name="radio-wave-type-1" value="sawtooth"     ng-click="changeWaveType($event, 1, 'sawtooth')" />SAW</label>
+                                    <label for="radio-triangle-1" ng-class="{'active' : oscillators.oscillator1.type === 'triangle'}"><input type="radio" id="radio-triangle-1" name="radio-wave-type-1" value="triangle"     ng-click="changeWaveType($event, 1, 'triangle')" />TRIANGLE</label>
+                                </form>
+                            </dd>
+                            <dt>GAIN<ui-spinner source="oscillator1" module="" param="volume" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider source="oscillator1" module="" param="volume" value="1" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>OCTAVE<ui-spinner source="oscillator1" module="" param="octave" value="0" min="-4" max="4" step="1"></ui-spinner></dt>
+                            <dd><ui-slider source="oscillator1" module="" param="octave" value="0" min="-4" max="4" step="1"></ui-slider></dd>
+                            <dt>FINE<ui-spinner source="oscillator1" module="" param="fine" value="0" min="-1200" max="1200" step="10"></ui-spinner></dt>
+                            <dd><ui-slider source="oscillator1" module="" param="fine" value="0" min="-1200" max="1200" step="10"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /oscillator-2-controllers -->
+            </div>
+            <!-- /controller-panel -->
+            <div class="controller-panel">
+                <div id="envelope-generator-controllers">
+                    <fieldset>
+                         <legend>ENVELOPE GENERATOR</legend>
+                         <dl>
+                             <dt>ATTACK<ui-spinner source="mixer oscillator oneshot" module="eg" param="attack" value="0.01" min="0" max="1" step="0.01"></ui-spinner></dt>
+                             <dd><ui-slider source="mixer oscillator oneshot" module="eg" param="attack" value="0.01" min="0" max="1" step="0.01"></ui-slider></dd>
+                             <dt>DECAY<ui-spinner source="mixer oscillator oneshot" module="eg" param="decay" value="0.3" min="0" max="1" step="0.01"></ui-spinner></dt>
+                             <dd><ui-slider source="mixer oscillator oneshot" module="eg" param="decay" value="0.3" min="0" max="1" step="0.01"></ui-slider></dd>
+                             <dt>SUSTAIN<ui-spinner source="mixer oscillator oneshot" module="eg" param="sustain" value="0.5" min="0" max="1" step="0.01"></ui-spinner></dt>
+                             <dd><ui-slider source="mixer oscillator oneshot" module="eg" param="sustain" value="0.5" min="0" max="1" step="0.01"></ui-slider></dd>
+                             <dt>RELEASE<ui-spinner source="mixer oscillator oneshot" module="eg" param="release" value="1" min="0" max="1" step="0.01"></ui-spinner></dt>
+                             <dd><ui-slider source="mixer oscillator oneshot" module="eg" param="release" value=1 min="0" max="1" step="0.01"></ui-slider></dd>
+                         </dl>
+                     </fieldset>
+                 </div>
+                 <!-- envelope-generator-controllers -->
+            </div>
+            <!-- /controller-panel -->
+            <div class="controller-panel" ng-controller="RecordController">
+                <div id="record-controllers">
+                    <fieldset>
+                        <legend>RECORD SOUND</legend>
+                        <dl>
+                            <dt class="invisibility">RECORD CONTROLLER</dt>
+                            <dd>
+                                <ul class="clearfix">
+                                    <li><a href="#" id="rec-control"  ng-click="controlRecord($event)" ng-class="{'active' : isActive}">REC.</a></li>
+                                    <li><a href="#" id="rec-wave"     ng-click="createWAVE($event)" ng-class="{'disabled' : isActive, 'enabled' : !isActive}">WAVE</a></li>
+                                    <li><a          id="rec-download" ng-click="downloadWAVE($event)" ng-href="{{ objectURL }}" download="{{ filename }}" ng-class="{'disabled' : isActive, 'enabled' : !isActive}">DOWNLOAD</a></li>
+                                    <li><a href="#" id="rec-clear"    ng-click="clearTrack($event)" ng-class="{'disabled' : isActive, 'enabled' : !isActive}">CLEAR</a></li>
+                                </ul>
+                            </dd>
+                            <dt class="invisibility"><label for="select-rec-track">TRACK</label></dt>
+                            <dd class="select-parent" ng-class="{'disabled' : isActive, 'enabled' : !isActive}">
+                                <select id="select-rec-track" name="select-rec-track" ui-select>
+                                    <option value="0" selected>TRACK 1</option>
+                                    <option ng-repeat="track in tracks.slice(1)" ng-value="{{ track - 1 }}" ng-cloak>TRACK {{ track }}</option>
+                                </select>
+                            </dd>
+                            <dt>LEFT CHANNEL<ui-spinner module="recorder" param="gainL" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="recorder" param="gainL" value="1" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>RIGHT CHANNEL<ui-spinner module="recorder" param="gainR" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="recorder" param="gainR" value="1" min="0" max="1" step="0.05"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /record-controllers -->
+            </div>
+            <!-- /controller-panel -->
+            <div class="controller-panel" ng-controller="AudioController">
+                <div id="audio-controllers">
+                    <fieldset>
+                        <legend>AUDIO</legend>
+                        <form name="form-upload-audio">
+                            <input type="file" id="file-upload-audio" accept="audio/*" audio-uploader />
+                            <input type="text" id="text-mask-upload-audio" class="drag-off hover" placeholder="Audio File (wav, ogg, mp3)" readonly ng-click="triggerFileUploader($event)" />
+                            <span><a href="#"  id="audio-control" ng-click="controlAudio($event)" ng-class="{'active' : isActive}">START / PAUSE</a></span>
+                        </form>
+                        <dl>
+                            <dt>
+                                <span ng-bind="currentTimeText">00 : 00.00</span> / <span ng-bind="durationText">00 : 00.00</span>
+                                <ui-spinner-time value="{{ currentTime }}" max="{{ duration }}" step="1"></ui-spinner-time>
+                            </dt>
+                            <dd><ui-slider-time value="{{ currentTime }}" max="{{ duration }}" step="1"></ui-slider-time></dd>
+                            <dt>VOLUME<ui-spinner source="audio" module="" param="masterVolume" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider source="audio" module="" param="masterVolume" value="1" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>PLAYBACK RATE<ui-spinner source="audio oneshot" module="" param="playbackRate" value="1" min="0.05" max="2" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider source="audio oneshot" module="" param="playbackRate" value="1" min="0.05" max="2" step="0.05"></ui-slider></dd>
+                            <dt>VOCAL CANCELER <ui-spinner source="audio" module="vocalcanceler" param="depth" value="0" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider source="audio" module="vocalcanceler" param="depth" value="0" min="0" max="1" step="0.05"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /audio-controllers -->
+            </div>
+            <!-- /controller-panel -->
+        </div>
+        <!-- /up-container -->
+        <div class="container clearfix" ng-show="isReady" ng-class="{'fade-to' : isReady, 'fade-in' : isStart}">
+            <div class="controller-panel" ng-controller="VisualizationController" slide-block model="visualization">
+                <div id="visualization-of-sound">  <!-- for Slide Panel -->
+                    <div class="clearfix">
+                        <dl id="wave-time-all-L" ng-show="channel === 'left'">
+                            <dt><a href="#wave-time-all-R" ng-click="toggleAnalyserChannel($event, 'right')" ng-class="{'selected' : channel === 'left'}">RIGHT</a> TIME DOMAIN [ LEFT ]</dt>
+                            <dd ng-show="api === 'canvas'"><canvas id="canvas-time-all-L" width="360" height="120"></canvas></dd>
+                            <dd id="svg-parent-L" ng-show="api === 'svg'"><svg id="svg-time-all-L" width="360" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg></dd>
+                        </dl>
+                        <dl id="wave-time-all-R" ng-show="channel === 'right'">
+                            <dt><a href="#wave-time-all-L" ng-click="toggleAnalyserChannel($event, 'left')" ng-class="{'selected' : channel === 'right'}">LEFT</a> TIME DOMAIN [ RIGHT ]</dt>
+                            <dd ng-show="api === 'canvas'"><canvas id="canvas-time-all-R" width="360" height="120"></canvas></dd>
+                            <dd id="svg-parent-R" ng-show="api === 'svg'"><svg id="svg-time-all-R" width="360" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg></dd>
+                        </dl>
+                        <dl id="wave-time">
+                            <dt>TIME DOMAIN</dt>
+                            <dd ng-show="api === 'canvas'"><canvas id="canvas-time" width="360" height="120"></canvas></dd>
+                            <dd id="svg-parent-time" ng-show="api === 'svg'"><svg id="svg-time" width="360" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg></dd>
+                        </dl>
+                        <dl id="wave-spectrum">
+                            <dt>FREQUENCY DOMAIN</dt>
+                            <dd ng-show="api === 'canvas'"><canvas id="canvas-spectrum" width="360" height="120"></canvas></dd>
+                            <dd id="svg-parent-spectrum" ng-show="api === 'svg'"><svg id="svg-spectrum" width="360" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg></dd>
+                        </dl>
+                    </div>
+                    <div class="clearfix">
+                        <!-- "li" order is reverse because of "float : right" -->
+                        <dl>
+                            <dt>SMOOTHING<ui-spinner module="analyser" param="smoothingTimeConstant" value="0.8" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="analyser" param="smoothingTimeConstant" value="0.8" min="0" max="1" step="0.05"></ui-slider></dd>
+                        </dl>
+                        <dl>
+                            <dt>INTERVAL<ui-spinner module="analyser" param="interval" value="500" min="0" max="1000" step="10"></ui-spinner></dt>
+                            <dd><ui-slider module="analyser" param="interval" value="500" min="0" max="1000" step="10"></ui-slider></dd>
+                        </dl>
+                        <dl>
+                            <dt class="invisibility"><label for="select-visualization-api">SELECT DRAW API</label></dt>
+                            <dd>
+                                <select id="select-visualization-api" name="select-visualization-api" ui-select>
+                                    <option value="canvas" selected>Canvas</option>
+                                    <option value="svg">SVG</option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <!-- /visualization-of-sound -->
+            </div>
+            <!-- /controller-panel -->
+            <div class="controller-panel clearfix" ng-controller="MMLController" slide-block model="mml">
+                <div id="mml-player">
+                    <dl>
+                        <dt>MML TEXT <span><b ng-bind="error"></b></span></dt>
+                        <dd>
+                            <form name="form-input-mml">
+                                <textarea id="textarea-mml" name="textarea-mml" placeholder="Type MML Text" ng-model="mml" ng-keyup="typeMML($event)"></textarea>
+                            </form>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt class="invisibility">MML CONTROLLERS</dt>
+                        <dd>
+                            <!-- "li" order is reverse because of "float : right" -->
+                            <ul class="clearfix">
+                                <li>
+                                    <input type="file" id="file-upload-mml" accept="text/plain" mml-uploader />
+                                    <input type="text" id="text-mask-upload-mml" class="drag-off hover" placeholder="MML Text File" readonly ng-click="triggerFileUploader($event)" />
+                                </li>
+                                <li><a id="mml-download" ng-href="{{ dataURL }}" ng-click="downloadMML($event)" download="{{ filename }}">DOWNLOAD</a></li>
+                                <li><a href="#" id="mml-stop" ng-click="stopMML($event)">STOP</a></li>
+                                <li><a href="#" id="mml-control" ng-click="controlMML($event)" ng-class="{'active' : !paused}">START / PAUSE</a></li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </div>
+                <!-- /mml-player -->
+            </div>
+            <!-- /controller-panel -->
+        </div>
+        <!-- /container -->
+        <div class="container" ng-show="isReady" ng-class="{'fade-to' : isReady, 'fade-in' : isStart}">
+            <div id="piano" class="controller-panel">
+                <div id="master-volume-controllers">
+                    <fieldset>
+                        <legend class="invisibility">MASTER VOLUME</legend>
+                        <dl>
+                            <dt>MASTER VOLUME<ui-spinner source="mixer oscillator oneshot stream" module="" param="masterVolume" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider source="mixer oscillator oneshot stream" module="" param="masterVolume" value="1" min="0" max="1" step="0.05"></ui-slider></dd>
+                        </dl>
+                     </fieldset>
+                </div>
+                <!-- /master-volume-controllers -->
+                <div id="glide-controllers">
+                    <fieldset>
+                        <legend class="invisibility">GLIDE</legend>
+                        <dl>
+                            <dt>GLIDE<ui-spinner source="oscillator" module="glide" param="time" value="0" min="0" max="2" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider source="oscillator" module="glide" param="time" value="0" min="0" max="2" step="0.05"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /glide-controllers -->
+                <div id="sound-source-controllers">
+                    <fieldset>
+                        <legend class="invisibility">SELECT SOUND SOURCE</legend>
+                        <select id="select-sound-source" name="select-sound-source" ui-select>
+                            <option value="oscillator" selected>OSCILLATOR</option>
+                            <option value="one-shot" ng-if="isEnableOneshot">PIANO</option>
+                            <option value="microphone">MICROPHONE</option>
+                            <!-- <option value="midi">MIDI</option> -->
+                        </select>
+                    </fieldset>
+                </div>
+                <!-- /sound-source-controllers -->
+                <div id="visualization-controllers">
+                    <fieldset>
+                        <legend class="invisibility">ANALYSER</legend>
+                        <dl>
+                            <dt><label for="checkbox-is-visualization">ANALYSER<span ng-class="{'check-on' : isActives.visualization}"></span></label></dt>
+                            <dd><input type="checkbox" id="checkbox-is-visualization" name="checkbox-is-visualization" ng-click="toggleAnalyserState($event)" /></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /visualization-controllers -->
+                <div id="mml-controllers">
+                    <fieldset>
+                        <legend class="invisibility">MML</legend>
+                        <dl>
+                            <dt><label for="checkbox-is-mml">MML<span ng-class="{'check-on' : isActives.mml}"></span></label></dt>
+                            <dd><input type="checkbox" id="checkbox-is-mml" name="checkbox-is-mml" ng-click="toggleMMLState($event)" /></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /mml-controllers -->
+                <div id="session-controllers" ng-controller="SessionController">
+                    <fieldset>
+                        <legend class="invisibility">SESSION</legend>
+                        <dl>
+                            <dt><label for="checkbox-is-session">SESSION<span ng-class="{'check-on' : isActive}"></span></label></dt>
+                            <dd><input type="checkbox" id="checkbox-is-session" name="checkbox-is-session" ng-click="toggleSessionState($event)" /></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /session-controllers -->
+                <!--
+                <div id="patch-controllers">
+                    <fieldset>
+                        <legend class="invisibility">PATCH</legend>
+                        <dl>
+                            <dt><label for="checkbox-is-patch">PATCH<span><a href="#patch-container"></a></span></label></dt>
+                            <dd><input type="checkbox" id="checkbox-is-patch" name="checkbox-is-patch" /></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                -->
+                <!-- /patch-controllers -->
+                <ul id="white" class="clearfix">
+                    <li ng-repeat="keyboard in pianoKeyboards.whites" ng-mousedown="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseup="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-class="{'keyboard-off' : isSoundStops[pianoKeyboards.keyboards[keyboard]], 'keyboard-on' : !isSoundStops[pianoKeyboards.keyboards[keyboard]]}"></li>
+                </ul>
+                <ul id="black" class="clearfix">
+                    <li ng-repeat="keyboard in pianoKeyboards.blacks track by $index" ng-mousedown="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseup="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-class="{'keyboard-off' : isSoundStops[pianoKeyboards.keyboards[keyboard]], 'keyboard-on' : !isSoundStops[pianoKeyboards.keyboards[keyboard]], 'skip' : (keyboard === 'skip')}"></li>
+                </ul>
+            </div>
+            <!-- /piano -->
+        </div>
+        <!-- /container -->
+        <div class="container clearfix" ng-show="isReady" ng-class="{'fade-to' : isReady, 'fade-in' : isStart}" ui-sortable>
+            <div class="controller-panel">
+                <div id="compressor-controllers">
+                    <fieldset>
+                        <legend class="margin-bottom">
+                            <label for="checkbox-is-compressor">COMPRESSOR<span ui-toggle-effector effector="compressor" state="1"></span></label>
+                            <input type="checkbox" id="checkbox-is-compressor" name="checkbox-is-compressor" checked />
+                        </legend>
+                        <dl>
+                            <dt>THRESHOLD<ui-spinner module="compressor" param="threshold" value="-24" min="-100" max="0" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="compressor" param="threshold" value="-24" min="-100" max="0" step="1"></ui-slider></dd>
+                            <dt>KNEE<ui-spinner module="compressor" param="knee" value="30" min="0" max="40" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="compressor" param="knee" value="30" min="0" max="40" step="1"></ui-slider></dd>
+                            <dt>RATIO<ui-spinner module="compressor" param="ratio" value="12" min="1" max="20" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="compressor" param="ratio" value="12" min="1" max="20" step="1"></ui-slider></dd>
+                            <dt>ATTACK<ui-spinner module="compressor" param="attack" value="0.003" min="0" max="1" step="0.001"></ui-spinner></dt>
+                            <dd><ui-slider module="compressor" param="attack" value="0.003" min="0" max="1" step="0.001"></ui-slider></dd>
+                            <dt>RELEASE<ui-spinner module="compressor" param="release" value="0.25" min="0.01" max="1" step="0.01"></ui-spinner></dt>
+                            <dd><ui-slider module="compressor" param="release" value="0.25" min="0.01" max="1" step="0.01"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /compressor-controllers -->
+                <div id="distortion-controllers">
+                    <fieldset>
+                        <legend>
+                            <label for="checkbox-is-distortion">DISTORTION<span ui-toggle-effector effector="distortion" state="0"></span></label>
+                            <input type="checkbox" id="checkbox-is-distortion" name="checkbox-is-distortion" />
+                        </legend>
+                        <dl>
+                            <dt class="invisibility"><label for="select-distortion-type">TYPE</label></dt>
+                            <dd class="select-parent">
+                                <select id="select-distortion-type" name="select-distortion-type" ui-select>
+                                    <option value="clean" selected>CLEAN</option>
+                                    <option value="crunch">CRUNCH</option>
+                                    <option value="overdrive">OVERDRIVE</option>
+                                    <option value="distortion">DISTORTION</option>
+                                    <option value="fuzz">FUZZ</option>
+                                </select>
+                            </dd>
+                            <dd class="select-parent">
+                                <select id="select-distortion-sample" name="select-distortion-sample" ui-select>
+                                    <option value="8">8</option>
+                                    <option value="16">16</option>
+                                    <option value="32">32</option>
+                                    <option value="64">64</option>
+                                    <option value="128">128</option>
+                                    <option value="256">256</option>
+                                    <option value="512">512</option>
+                                    <option value="1024">1024</option>
+                                    <option value="2048">2048</option>
+                                    <option value="4096" selected>4096</option>
+                                    <option value="8192">8192</option>
+                                    <option value="16384">16384</option>
+                                    <option value="32768">32768</option>
+                                    <option value="65536">65536</option>
+                                </select>
+                            </dd>
+                            <dt>DRIVE<ui-spinner module="distortion" param="drive" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="distortion" param="drive" value="1" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>COLOR<ui-spinner module="distortion" param="color" value="2000" min="20" max="2000" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="distortion" param="color" value="2000" min="20" max="2000" step="1"></ui-slider></dd>
+                            <dt>TONE<ui-spinner module="distortion" param="tone" value="4000" min="20" max="8000" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="distortion" param="tone" value="4000" min="20" max="8000" step="1"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /distortion-controllers -->
+            </div>
+            <!-- /controller-panel -->
+            <div class="controller-panel">
+                <div id="wah-controllers">
+                    <fieldset>
+                        <legend class="margin-bottom">
+                            <label for="checkbox-is-wah">Wah<span ui-toggle-effector effector="wah" state="0"></span></label>
+                            <input type="checkbox" id="checkbox-is-wah" name="checkbox-is-wah" />
+                        </legend>
+                        <dl>
+                            <dt>CUTOFF<ui-spinner module="wah" param="cutoff" value="350" min="350" max="8000" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="wah" param="cutoff" value="350" min="350" max="8000" step="1"></ui-slider></dd>
+                            <dt>DEPTH<ui-spinner module="wah" param="depth" value="0" min="0" max="0.9" step="0.01"></ui-spinner></dt>
+                            <dd><ui-slider module="wah" param="depth" value="0" min="0" max="0.9" step="0.01"></ui-slider></dd>
+                            <dt>RATE<ui-spinner module="wah" param="rate" value="0" min="0" max="10" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="wah" param="rate" value="0" min="0" max="10" step="0.05"></ui-slider></dd>
+                            <dt>RESONANCE<ui-spinner module="wah" param="resonance" value="1" min="1" max="20" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="wah" param="resonance" value="1" min="1" max="20" step="1"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /wah-controllers -->
+                <div id="equalizer-controllers">
+                    <fieldset>
+                        <legend class="margin-bottom">
+                            <label for="checkbox-is-equalizer">EQUALIZER<span ui-toggle-effector effector="equalizer" state="0"></span></label>
+                            <input type="checkbox" id="checkbox-is-equalizer" name="checkbox-is-equalizer" />
+                        </legend>
+                        <dl>
+                            <dt>BASS<ui-spinner module="equalizer" param="bass" value="0" min="-18" max="18" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="equalizer" param="bass" value="0" min="-18" max="18" step="1"></ui-slider></dd>
+                            <dt>MIDDLE<ui-spinner module="equalizer" param="middle" value="0" min="-18" max="18" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="equalizer" param="middle" value="0" min="-18" max="18" step="1"></ui-slider></dd>
+                            <dt>TREBLE<ui-spinner module="equalizer" param="treble" value="0" min="-18" max="18" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="equalizer" param="treble" value="0" min="-18" max="18" step="1"></ui-slider></dd>
+                            <dt>PRESENCE<ui-spinner module="equalizer" param="presence" value="0" min="-18" max="18" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="equalizer" param="presence" value="0" min="-18" max="18" step="1"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /equalizer-controllers -->
+            </div>
+            <!-- /controller-panel -->
+            <div class="controller-panel">
+                <div id="filter-controllers">
+                    <fieldset>
+                        <legend>
+                            <label for="checkbox-is-filter">FILTER<span ui-toggle-effector effector="filter" state="0"></span></label>
+                            <input type="checkbox" id="checkbox-is-filter" name="checkbox-is-filter" />
+                        </legend>
+                        <dl>
+                            <dt class="invisibility"><label for="select-filter-type">TYPE</label>
+                            <dd class="select-parent">
+                                <select id="select-filter-type" name="select-filter-type" ui-select>
+                                    <option value="lowpass">LOWPASS</option>
+                                    <option value="highpass">HIGHPASS</option>
+                                    <option value="bandpass">BANDPASS</option>
+                                    <option value="lowshelf">LOWSHELF</option>
+                                    <option value="highshelf">HIGHSHELF</option>
+                                    <option value="peaking">PEAKING</option>
+                                    <option value="notch">NOTCH</option>
+                                    <option value="allpass">ALLPASS</option>
+                                </select>
+                            </dd>
+                            <dt class="invisibility">FILTER PARAMETERS</dt>
+                            <dd>
+                                <dl>
+                                    <dt>FREQUENCY<ui-spinner module="filter" param="cutoff" value="8000" min="20" max="22050" step="1"></ui-spinner></dt>
+                                    <dd><ui-slider module="filter" param="cutoff" value="8000" min="20" max="22050" step="1"></ui-slider></dd>
+                                    <dt>QUALITY<ui-spinner module="filter" param="Q" value="1" min="1" max="20" step="1"></ui-spinner></dt>
+                                    <dd><ui-slider module="filter" param="Q" value="1" min="1" max="20" step="1"></ui-slider></dd>
+                                    <dt>GAIN<ui-spinner module="filter" param="gain" value="0" min="-18" max="18" step="1"></ui-spinner></dt>
+                                    <dd><ui-slider module="filter" param="gain" value="0" min="-18" max="18" step="1"></ui-slider></dd>
+                                    <dt>ATTACK<ui-spinner module="filter" param="attack" value="0.01" min="0" max="1" step="0.01"></ui-spinner></dt>
+                                    <dd><ui-slider module="filter" param="attack" value="0.01" min="0" max="1" step="0.01"></ui-slider></dd>
+                                    <dt>DECAY<ui-spinner module="filter" param="decay" value="0.3" min="0" max="1" step="0.01"></ui-spinner></dt>
+                                    <dd><ui-slider module="filter" param="decay" value="0.3" min="0" max="1" step="0.01"></ui-slider></dd>
+                                    <dt>SUSTAIN<ui-spinner module="filter" param="sustain" value="1" min="0" max="1" step="0.01"></ui-spinner></dt>
+                                    <dd><ui-slider module="filter" param="sustain" value="1" min="0" max="1" step="0.01"></ui-slider></dd>
+                                    <dt>RELEASE<ui-spinner module="filter" param="release" value="1" min="0" max="1" step="0.01"></ui-spinner></dt>
+                                    <dd><ui-slider module="filter" param="release" value="1" min="0" max="1" step="0.01"></ui-slider></dd>
+                                </dl>
+                            </dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- filter-controllers -->
+                <div id="auto-panner-controllers">
+                    <fieldset>
+                        <legend class="margin-bottom">
+                            <label for="checkbox-is-autopanner">AUTO PAN<span ui-toggle-effector effector="autopanner" state="0"></span></label>
+                            <input type="checkbox" id="checkbox-is-autopanner" name="checkbox-is-autopanner" />
+                        </legend>
+                        <dl>
+                            <dt>DEPTH<ui-spinner module="autopanner" param="depth" value="0" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="autopanner" param="depth" value="0" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>RATE<ui-spinner module="autopanner" param="rate" value="0" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="autopanner" param="rate" value="0" min="0" max="1" step="0.05"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /auto-panner-controllers -->
+            </div>
+            <!-- /controller-panel -->
+            <div class="controller-panel">
+                <div id="tremolo-controllers">
+                    <fieldset>
+                        <legend class="margin-bottom">
+                            <label for="checkbox-is-tremolo">TREMOLO<span ui-toggle-effector effector="tremolo" state="0"></span></label>
+                            <input type="checkbox" id="checkbox-is-tremolo" name="checkbox-is-tremolo" />
+                        </legend>
+                        <dl>
+                            <dt>DEPTH<ui-spinner module="tremolo" param="depth" value="0" min="0" max="1" step="0.05"></ui-spinner><dt>
+                            <dd><ui-slider module="tremolo" param="depth" value="0" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>RATE<ui-spinner module="tremolo" param="rate" value="0" min="0" max="25" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="tremolo" param="rate" value="0" min="0" max="25" step="0.05"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /tremolo-controllers -->
+                <div id="ringmodulator-controllers">
+                    <fieldset>
+                        <legend class="margin-bottom">
+                            <label for="checkbox-is-ringmodulator">RING MOD.<span ui-toggle-effector effector="ringmodulator" state="0"></span></label>
+                            <input type="checkbox" id="checkbox-is-ringmodulator" name="checkbox-is-ringmodulator" />
+                        </legend>
+                        <dl>
+                            <dt>DEPTH<ui-spinner module="ringmodulator" param="depth" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="ringmodulator" param="depth" value="1" min="0" max="1" step="0.05"></ui-slider>
+                            <dt>RATE<ui-spinner module="ringmodulator" param="rate" value="0" min="0" max="1500" step="100"></ui-spinner></dt>
+                            <dd><ui-slider module="ringmodulator" param="rate" value="0" min="0" max="1500" step="100"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /ringmodulator-controllers -->
+                <div id="phaser-controllers">
+                    <fieldset>
+                        <legend>
+                            <label for="checkbox-is-phaser">PHASER<span ui-toggle-effector effector="phaser" state="0"></span></label>
+                            <input type="checkbox" id="checkbox-is-phaser" name="checkbox-is-phaser" />
+                        </legend>
+                        <dl>
+                            <dt class="invisibility"><label for="select-phaser-stage">STAGE</label></dt>
+                            <dd class="select-parent">
+                                <select id="select-phaser-stage" name="select-phaser-stage" ui-select>
+                                    <option value="0">ALL-PASS FILTERs</option>
+                                    <option value="2">2 STAGES</option>
+                                    <option value="4">4 STAGES</option>
+                                    <option value="8">8 STAGES</option>
+                                    <option value="12" selected>12 STAGES</option>
+                                    <option value="24">24 STAGES</option>
+                                </select>
+                            </dd>
+                            <dt>FREQUENCY<ui-spinner module="phaser" param="cutoff" value="350" min="350" max="8000" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="phaser" param="cutoff" value="350" min="350" max="8000" step="1"></ui-slider></dd>
+                            <!--
+                            <dt>RESONANCE<ui-spinner module="phaser" param="resonance"></ui-spinner></dt>
+                            <dd><ui-slider module="phaser" param="resonance"></ui-slider></dd>
+                            -->
+                            <dt>DEPTH<ui-spinner module="phaser" param="depth" value="0" min="0" max="0.9" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="phaser" param="depth" value="0" min="0" max="0.9" step="0.05"></ui-slider></dd>
+                            <dt>RATE<ui-spinner module="phaser" param="rate" value="0" min="0" max="5" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="phaser" param="rate" value="0" min="0" max="5" step="0.05"></ui-slider></dd>
+                            <dt>MIX<ui-spinner module="phaser" param="mix" value="0" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="phaser" param="mix" value="0" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>FEEDBACK<ui-spinner module="phaser" param="feedback" value="0" min="0" max="0.95" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="phaser" param="feedback" value="0" min="0" max="0.95" step="0.05"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /phaser-controllers -->
+            </div>
+            <!-- /controller-panel -->
+            <div class="controller-panel">
+                <div id="chorus-controllers">
+                    <fieldset>
+                        <legend class="margin-bottom">
+                            <label for="checkbox-is-chorus">CHORUS<span ui-toggle-effector effector="chorus" state="0"></span></label>
+                            <input type="checkbox" id="checkbox-is-chorus" name="checkbox-is-chorus" />
+                        </legend>
+                        <dl>
+                            <dt>TIME<ui-spinner module="chorus" param="time" value="0" min="0" max="50" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="chorus" param="time" value="0" min="0" max="50" step="1"></ui-slider></dd>
+                            <dt>DEPTH<ui-spinner module="chorus" param="depth" value="0" min="0" max="1" step="0.01"></ui-spinner></dt>
+                            <dd><ui-slider module="chorus" param="depth" value="0" min="0" max="1" step="0.01"></ui-slider></dd>
+                            <dt>RATE<ui-spinner module="chorus" param="rate" value="0" min="0" max="1" step="0.01"></ui-spinner></dt>
+                            <dd><ui-slider module="chorus" param="rate" value="0" min="0" max="1" step="0.01"></ui-slider></dd>
+                            <dt>MIX<ui-spinner module="chorus" param="mix" value="0" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="chorus" param="mix" value="0" min="0" max="1" step="0.05"></ui-slider>
+                            <dt>TONE<ui-spinner module="chorus" param="tone" value="4000" min="20" max="8000" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="chorus" param="tone" value="4000" min="20" max="8000" step="1"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /chorus-controllers -->
+                <div id="flanger-controllers">
+                    <fieldset>
+                        <legend class="margin-bottom">
+                            <label for="checkbox-is-flanger">FLANGER<span ui-toggle-effector effector="flanger" state="0"></span></label>
+                            <input type="checkbox" id="checkbox-is-flanger" name="checkbox-is-flanger" />
+                        </legend>
+                        <dl>
+                            <dt>TIME<ui-spinner module="flanger" param="time" value="0" min="0" max="10" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="flanger" param="time" value="0" min="0" max="10" step="0.05"></ui-slider></dd>
+                            <dt>DEPTH<ui-spinner module="flanger" param="depth" value="0" min="0" max="1" step="0.01"></ui-spinner></dt>
+                            <dd><ui-slider module="flanger" param="depth" value="0" min="0" max="1" step="0.01"></ui-slider></dd>
+                            <dt>RATE<ui-spinner module="flanger" param="rate" value="0" min="0" max="10" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="flanger" param="rate" value="0" min="0" max="10" step="0.05"></ui-slider></dd>
+                            <dt>MIX<ui-spinner module="flanger" param="mix" value="0" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="flanger" param="mix" value="0" min="0" max="1" step="0.05"></ui-slider>
+                            <dt>TONE<ui-spinner module="flanger" param="tone" value="4000" min="20" max="8000" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="flanger" param="tone" value="4000" min="20" max="8000" step="1"></ui-slider></dd>
+                            <dt>FEEDBACK<ui-spinner module="flanger" param="feedback"value="0" min="0" max="0.95" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="flanger" param="feedback" value="0" min="0" max="0.95" step="0.05"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /flanger-controllers -->
+            </div>
+            <!-- /controller-panel -->
+            <div class="controller-panel">
+                <div id="delay-controllers">
+                    <fieldset>
+                        <legend class="margin-bottom">
+                            <label for="checkbox-is-delay">DELAY<span ui-toggle-effector effector="delay" state="0"></span></label>
+                            <input type="checkbox" id="checkbox-is-delay" name="checkbox-is-delay" />
+                        </legend>
+                        <dl>
+                            <dt>TIME<ui-spinner module="delay" param="time" value="0" min="0" max="1000" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="delay" param="time" value="0" min="0" max="1000" step="1"></ui-slider></dd>
+                            <dt>DRY<ui-spinner module="delay" param="dry" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="delay" param="dry" value="1" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>WET<ui-spinner module="delay" param="wet" value="0" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="delay" param="wet" value="0" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>TONE<ui-spinner module="delay" param="tone" value="4000" min="20" max="8000" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="delay" param="tone" value="4000" min="20" max="8000" step="1"></ui-slider></dd>
+                            <dt>FEEDBACK<ui-spinner module="delay" param="feedback" value="0" min="0" max="0.8" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="delay" param="feedback" value="0" min="0" max="0.8" step="0.05"></ui-slider></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+                <!-- /delay-controllers -->
+                <div id="reverb-controllers">
+                    <fieldset>
+                        <legend>
+                            <label for="checkbox-is-reverb">REVERB<span ui-toggle-effector effector="reverb" state="0"></span></label>
+                            <input type="checkbox" id="checkbox-is-reverb" name="checkbox-is-reverb" />
+                        </legend>
+                        <form name="form-upload-impulse-response">
+                            <input type="file" id="file-upload-impulse-response" accept="audio/*" rir-uploader />
+                            <input type="text" id="text-mask-upload-impulse-response" class="drag-off hover" placeholder="Impulse Response File (wav, ogg. mp3)" readonly ng-click="triggerFileUploader($event)" />
+                        </form>
+                        <dl>
+                            <dt class="invisibility"><label for="select-reverb-type">RIR</label></dt>
+                            <dd class="select-parent">
+                                <select id="select-reverb-type" name="select-revreb-type" ui-select>
+                                    <option value="0">SELECT PRESET REVERB</option>
+                                    <optgroup label="Sideways pointed cardioid measurements in the audience area">
+                                        <option ng-repeat="rir in rirs | limitTo: 12" value="{{ rir.value }}" ng-bind="rir.label"></option>
+                                    </optgroup>
+                                    <optgroup label="Omnidirectional measurements in the audience area">
+                                        <option ng-repeat="rir in rirs.slice(12) | limitTo: 12" value="{{ rir.value }}" ng-bind="rir.label"></option>
+                                    </optgroup>
+                                    <optgroup label="Omnidirectional measurements on the stage">
+                                        <option ng-repeat="rir in rirs.slice(24) | limitTo: 9" value="{{ rir.value }}" ng-bind="rir.label"></option>
+                                    </optgroup>
+                                </select>
+                            </dd>
+                            <dt>DRY<ui-spinner module="reverb" param="dry" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="reverb" param="dry" value="1" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>WET<ui-spinner module="reverb" param="wet" value="0" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider module="reverb" param="wet" value="0" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>TONE<ui-spinner module="reverb" param="tone" value="4000" min="20" max="8000" step="1"></ui-spinner></dt>
+                            <dd><ui-slider module="reverb" param="tone" value="4000" min="20" max="8000" step="1"></ui-slider></dd>
+                        </dl>
+                        <p>
+                            Reverb effect requires Impulse Response data.
+                            <a href="http://legacy.spa.aalto.fi/projects/poririrs/" target="_blank">Here</a>, you can get Impulse Response file !!
+                        </p>
+                    </fieldset>
+                </div>
+                <!-- /reverb-controllers -->
+            </div>
+            <!-- /controller-panel -->
+        </div>
+        <!-- /container -->
+
+        <!-- for patch system -->
+        <div id="patch-container"><!-- HTML is created by Jade template --></div>
+
+        <!-- for dialog, modal window -->
+        <div>
+            <ui-modal-progress ng-if="isModalProgressReadFile">
+                <section>
+                    <h1>Read file ...</h1>
+                    <div><b ng-bind="readFileProgress"></b></div>
+                </section>
+            </ui-modal-progress>
+
+            <ui-modal-progress ng-if="isModalProgressDecodeAudio">
+                <section>
+                    <h1>Decoding ...</h1>
+                    <div>
+                        <div class="progress-wrap">
+                            <div class="progress-mask"></div>
+                            <div class="progress-bar auto-progress"></div>
+                        </div>
+                    </div>
+                </section>
+            </ui-modal-progress>
+
+            <ui-modal-progress ng-if="isModalProgressSessionWait">
+                <section>
+                    <h1>Waiting...</h1>
+                    <div>
+                        <div class="progress-wrap">
+                            <div class="progress-mask"></div>
+                            <div class="progress-bar auto-progress"></div>
+                        </div>
+                    </div>
+                </section>
+            </ui-modal-progress>
+        </div>
+    </div>
+    <!-- /page -->
+    <!-- Footer -->
+    <footer ng-show="isReady" ng-class="{'fade-to' : isReady, 'fade-in' : isStart}">
+        <ul>
+            <li>
+                <a href="http://www.google.co.jp/intl/ja/chrome/browser/" class="image-link" target="_blank" title="Chrome">
+                    <img src="images/illust/png/icon-chrome-128.png" alt="Chrome" width="32" height="32" />
+                </a>
+            </li>
+            <li>
+                <a href="http://www.apple.com/jp/safari/" class="image-link" target="_blank" title="Safari">
+                    <img src="images/illust/png/icon-safari-128.png" alt="Safari" width="32" height="32" />
+                </a>
+            </li>
+            <li>
+                <a href="http://jp.opera.com/" class="image-link" target="_blank" title="Opera">
+                    <img src="images/illust/png/icon-opera-128.png" alt="Opera" width="32" height="32" />
+                </a>
+            </li>
+            <li>
+                <a href="http://www.mozilla.jp/firefox/" class="image-link" target="_blank" title="Firefox">
+                    <img src="images/illust/png/icon-firefox-128.png" alt="Firefox" width="32" height="32" />
+                </a>
+            </li>
+        </ul>
+        <div>
+            <small>Copyright &copy; <strong>Tomohiro IKEDA</strong> &gt;&gt; <a href="http://curtaincall.weblike.jp/" target="_blank" title="Author's Website">Website</a></small>
+            <small><a href="http://maoudamashii.jokersounds.com/" title="音楽素材/魔王魂" target="_blank">音楽素材/魔王魂</a></small>
+        </div>
+    </footer>
+    <!-- /footer -->
+</body>
+</html>
