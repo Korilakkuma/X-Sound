@@ -209,6 +209,5 @@ $transparent      : rgba(#000, 0);
 // @include setRem(12, 16);
 //
 @mixin setRem($fontSize, $baseFontSize : 16) {
-    font-size : unquote($fontSize + "px");
     font-size : toRem($fontSize, $baseFontSize);
 }

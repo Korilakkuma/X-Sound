@@ -11,7 +11,7 @@
 @import "partial/_utility.scss";
 
 // Base font-size (for Responsive)
-$baseFontSize : 16px;
+$baseFontSize : 16;
 
 // Define colors
 $accentColor1 : #cc00cc;
@@ -31,11 +31,9 @@ $white        : #ffffff;
     background-image:-webkit-linear-gradient(top, rgba(#cc00cc, 1.0), rgba(#b200b2, 1.0) 55%, rgba(#a000a0, 1.0) 50%, rgba(#b700b7, 1.0));
 }
 
-/**
- * This function returns true in the case of "-webkit-", otherwise, false.
- * @param string $prefix This argument is vendor prefix;
- * @return boolean If vendor prefix is "-webkit-", this value is true. Otherwise, this value is false.
- */
+//
+// This function returns true in the case of "-webkit-", otherwise, false.
+// 
 @function isWebKit($prefix) {
     @if ($prefix == -webkit-) {
         @return true;
@@ -53,7 +51,7 @@ $white        : #ffffff;
 // for page loading or JavaScript OFF*/
 html, body {
     height:auto !important;
-    font-size:$baseFontSize * 0.75;
+    font-size:unquote(($baseFontSize * 0.75) + "px");
 
     &.loading {
         height:100% !important;
@@ -66,7 +64,7 @@ body {
 
     font-family:Helvetica, Arial, sans-serif;
     // font-family:"Racing Sans One", cursive;
-    line-height:1.6;
+    line-height:1.5;
 
     background-color:rgba($black, 1.0);
 
@@ -110,7 +108,7 @@ noscript {
     margin:0px auto;
     padding-top:10rem;
     font-family:"Alike", serif;
-    font-size:16px;
+    font-size:1rem;
     color:rgba(204, 0, 204, 1.0);
     text-align:center;
 }
@@ -128,7 +126,7 @@ noscript {
 
     p {
         font-family:"Neuton", serif;
-        font-size:22px;
+        @include setRem(22, $baseFontSize);
         color:$accentColor1;
         text-align:center;
     }
@@ -143,7 +141,7 @@ ui-modal-progress {
         h1, p {
             padding:0.5rem 0rem 0.5rem 1rem;
             font-family:"Neuton", serif;
-            font-size:22px;
+            @include setRem(22, $baseFontSize);
             font-weight:lighter;
             color:$white;
             background-color:$accentColor1;
@@ -187,7 +185,7 @@ header {
             width:200px;
             height:100px;
 
-            font-size:36px;
+            @include setRem(36, $baseFontSize);
             text-align:center;
 
             // Wait for completing layout
@@ -208,7 +206,7 @@ header {
         #intro {
             margin:12px auto 24px auto;
             width:950px;
-            font-size:18px;
+            @include setRem(18, $baseFontSize);
             text-align:center;
 
             p {
@@ -274,7 +272,7 @@ fieldset {
         // font-family:"Playfair Display SC", serif;
         // font-family:"Sancreek", cursive;
         // font-family:"Metal Mania", cursive;
-        font-size:22px;
+        @include setRem(22, $baseFontSize);
         font-weight:lighter;
         color:rgba($accentColor1, 1.0);
 
@@ -382,7 +380,7 @@ fieldset {
         dl dt {
             // font-family:"Alike", serif;
             // font-family:"Trykker", serif;
-            font-size:12px;
+            @include setRem(12, $baseFontSize);
             color:rgba(255, 255, 255, 1.0);
             // text-shadow:-1px -1px 1px rgba(0, 0, 0, 1.0), 1px 1px 1px rgba(255, 255, 255, 0.2);
         }
@@ -397,7 +395,7 @@ fieldset {
             div p {
                 // font-family:"Alike", serif;
                 // font-family:"Trykker", serif;
-                font-size:12px;
+                @include setRem(12, $baseFontSize);
                 color:rgba(255, 255, 255, 1.0);
                 // text-shadow:-1px -1px 1px rgba(0, 0, 0, 1.0), 1px 1px 1px rgba(255, 255, 255, 0.2);
             }
@@ -431,7 +429,7 @@ footer {
     padding:18px 15px;
     height:100%;
 
-    font-size:12px;
+    @include setRem(12, $baseFontSize);
     color:rgba($white, 1.0);
     text-align:right;
     // text-shadow:-1px -1px 0px rgba($black, 1.0), 1px 1px 0px rgba($black, 1.0);
@@ -464,19 +462,14 @@ footer {
     div {
         small, span {
             display:inline-block;
-            margin-left:18px;
+            margin-left:1rem;
             height:22px;
-
-            /*List marker*/
-            background-image:url(../../images/illust/png/list-marker.png);
-            background-position:left top;
-            background-repeat:no-repeat;
-            padding-left:24px;
-            padding-top:0.2em;
         }
 
-        small a {font-size:12px;}
-        // small span {vertical-align:0.35em;}
+        small a {
+            @include setRem(12, $baseFontSize);
+            vertical-align:middle;
+        }
     }
 }
 
@@ -509,6 +502,8 @@ b {
     color:rgba($accentColor1, 1.0);
     text-shadow:-1px -1px 1px rgba($black, 1.0), 1px 1px 1px rgba($white, 0.2);
 }
+
+b.dangerous {color:rgba(#C00, 1.0);}
 
 // jQuery UI dialog
 
@@ -558,7 +553,7 @@ b {
         // font-family:"Alike", serif;
         // font-family:"Neuton", serif;
         // font-family:"Racing Sans One", cursive;
-        font-size:13px;
+        @include setRem(13, $baseFontSize);
         font-weight:normal;
         color:rgba($white, 1.0);
         // color:rgba(51, 51, 51, 1.0);
@@ -628,7 +623,7 @@ b {
 
         // Close Button
         .ui-state-hover {
-            right:0.6em;
+            right:0.6rem;
 
             border:none;
             width:16px;
@@ -655,7 +650,7 @@ b {
     p {
         margin:0rem 1rem;
         // font-family:"Alike", serif;
-        font-size:16px;
+        font-size:1rem;
     }
 }
 
@@ -669,7 +664,7 @@ b {
     border:none;
     background-color:rgba($black, 0.7);
     background-image:none;
-    font-size:12px;
+    @include setRem(12, $baseFontSize);
     font-weight:lighter;
     color:rgba($white, 1.0);
 
@@ -772,7 +767,7 @@ label {
         // background: #a3cae0;
         position:absolute;
         z-index:1;
-        font-size:0.7em;
+        @include setRem(14, $baseFontSize);
         display:block;
         border:0;
         background-position:0px 0px;
@@ -861,7 +856,7 @@ ui-spinner, ui-spinner-time {
 }
 
 .ui-spinner-button {@include borderradius(0px);}
-.ui-spinner-input  {margin-left:0.8em;}
+.ui-spinner-input  {margin-left:0.8rem;}
 
 // Spin button
 // [type="number"] {
@@ -896,7 +891,7 @@ ui-spinner, ui-spinner-time {
         margin-left:12px;
         @include offLeft(58px, 34px);
 
-        vertical-align:-0.5em;
+        vertical-align:-0.625rem;
 
         // for Retina Display
         @include backgroundsize(58px 68px);
@@ -970,7 +965,7 @@ ui-spinner, ui-spinner-time {
     margin-right:5px;
     margin-bottom:2px;
     @include offLeft(50px, 22px);
-    vertical-align:-0.75em;
+    vertical-align:-0.5rem;
 
     // @extend backgroundclip;
 
@@ -1103,7 +1098,7 @@ ui-spinner, ui-spinner-time {
     margin:10px auto;
     padding:6px;
     color:rgba($white, 1.0);
-    font-size:9px;
+    @include setRem(9, $baseFontSize);
 
     @extend .text-ellipsis;
 
@@ -1334,7 +1329,7 @@ ui-spinner, ui-spinner-time {
     z-index:2;
 
     width:140px;
-    font-size:12px;
+    @include setRem(12, $baseFontSize);
     color:rgba($white, 1.0);
     text-align:center;
     // text-shadow:-1px -1px 1px rgba($black, 1.0), 1px 1px 1px rgba($white, 0.2);
@@ -1367,7 +1362,7 @@ ui-spinner, ui-spinner-time {
         margin-left:12px;
         @include offLeft(58px, 34px);
 
-        vertical-align:-1em;
+        vertical-align:-0.75rem;
 
         // for Retina Display
         @include backgroundsize(58px 68px);
@@ -1517,7 +1512,7 @@ ui-spinner, ui-spinner-time {
         left:3px;
         z-index:9999;
 
-        font-size:16px;
+        font-size:1rem;
         color:rgba($white, 1.0);
         text-indent:0px;
     }
@@ -1538,7 +1533,7 @@ ui-spinner, ui-spinner-time {
                 border:none;
                 padding:6px 24px;
 
-                font-size:14px;
+                @include setRem(14, $baseFontSize);
                 color:rgba($white, 1.0);
                 text-decoration:none;
                 // text-shadow:-1px -1px 1px rgba($black, 0.2);
@@ -1560,7 +1555,7 @@ ui-spinner, ui-spinner-time {
     }
 }
 
-#patch-form-area {
+.patch-form-area {
     /*border:2px solid rgba(210, 210, 210, 1.0);*/
     padding:12px 24px;
     height:420px;
@@ -1571,31 +1566,21 @@ ui-spinner, ui-spinner-time {
         margin:12px 0px;
 
         dt {
-            margin:3px 0px;
-            font-size:16px;
+            margin:0.5rem 0rem 0.5rem 1rem;
+            font-size:1rem;
             color:rgba($accentColor1, 1.0);
-
-            /*List marker*/
-            background-image:url(../../images/illust/png/list-marker.png);
-            background-position:left top;
-            background-repeat:no-repeat;
-            padding-left:24px;
         }
 
-        dd {margin-left:24px;}
+        dd {margin-left:1rem;}
     }
 
     div {
         form {
             > ul {
-                margin:6px 0px 0px 32px;
-                width:260px;
-                text-align:right;
+                margin:0.5rem 0rem 0rem 7.5rem;
 
-                > li {
-                    display:inline-block;
-                    margin-left:6px;
-                }
+                > li            {display:inline-block;}
+                > li:last-child {margin-left:0.5rem;}
             }
 
             &#signout > ul {
@@ -1617,26 +1602,27 @@ ui-spinner, ui-spinner-time {
             }
 
             [type="text"], [type="password"] {
-                padding:0.5em 1em;
-                width:20em;
-                font-size:12px;
+                padding:0.625rem 1rem;
+                width:20rem;
+                font-size:1rem;
+                color:rgba(#666, 1.0);
 
                 &:focus {
                     outline:none;
                     background-color:rgba(250, 250, 250, 1.0);
 
-                    @include boxshadow(0px 0px 2px rgba($black, 0.2) inset);
+                    @include boxshadow(0px 1px 1px 1px rgba($black, 0.2) inset);
                 }
             }
 
             button {
                 cursor:pointer;
                 border:none;
-                padding:8px 0px;
+                padding:0.75rem 0rem;
                 width:120px;
                 height:auto;
 
-                font-size:13px;
+                font-size:1rem;
                 color:rgba($white, 1.0);
                 text-align:center;
                 // text-shadow:-1px -1px 1px rgba($black, 0.2);
@@ -1660,12 +1646,15 @@ ui-spinner, ui-spinner-time {
 
             cursor:pointer;
             display:block;
-            margin:0px 0px 0px 24px;
-            padding:5px 0px 5px 12px;
+            padding:0.5rem 0rem 0.5rem 1rem;
 
-            font-size:16px;
+            font-size:1rem;
             color:rgba($white, 1.0);
             background-color:rgba($accentColor2, 1.0);
+
+            @each $prefix in $prefixLists {
+                #{$prefix}transition:background-color 0.8s ease;
+            }
 
             &:not(:first-of-type) {border-top:1px solid rgba($accentColor1, 1.0);}
 
@@ -1675,13 +1664,13 @@ ui-spinner, ui-spinner-time {
 
     #patch-save {
         dl {float:left;}
-        ul {float:left; margin:44px 0px 0px 3px; width:auto;}
+        ul {float:left; margin:53px 0px 0px 3px; width:auto;}
     }
 }
 
 b.dangerous {color:rgba(255, 0, 0, 1.0);}
 
-#dialog-operate-patch,
+#dialog-patch-detail,
 #patch-save {
     table {
         @extend %borderbox;
@@ -1694,13 +1683,20 @@ b.dangerous {color:rgba(255, 0, 0, 1.0);}
         font-weight:lighter;
         color:rgba(255, 255, 255, 1.0);
 
+        &:first-of-type tbody {
+            tr:nth-child(1),
+            tr:nth-child(2) {
+                 td:last-child {text-align:center;}
+            }
+        }
+
         caption {@extend .invisibility;}
 
         tr {
             th {
                 @extend %borderbox;
                 border:2px solid rgba($accentColor2, 1.0);
-                font-size:16px;
+                font-size:1rem;
                 font-weight:lighter;
                 // text-shadow:-1px -1px 1px rgba($black, 0.2);
                 background-color:rgba($accentColor1, 1.0);
@@ -1711,7 +1707,7 @@ b.dangerous {color:rgba(255, 0, 0, 1.0);}
                 border:2px solid rgba($accentColor2, 1.0);
                 padding-left:6px;
                 width:50%;
-                font-size:14px;
+                @include setRem(14, $baseFontSize);
             }
         }
 
@@ -1732,22 +1728,16 @@ b.dangerous {color:rgba(255, 0, 0, 1.0);}
 }
 
 .cookie-help-list {
-    margin-top:1em;
+    margin-top:1rem;
 
     li {
         display:block;
         float:left;
-        margin-left:1em;
-
-        /*List marker*/
-        background-image:url(../../images/illust/png/list-marker.png);
-        background-position:left top;
-        background-repeat:no-repeat;
-        padding-left:24px;
+        margin-left:1rem;
 
         a {
             display:block;
-            font-size:14px;
+            @include setRem(14, $baseFontSize);
             color:rgba($accentColor1, 1.0);
 
             @each $prefix in $prefixLists {
@@ -2037,9 +2027,9 @@ $endIndex   : 6;
 
 
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
-    html, body {font-size:$baseFontSize * 0.875;}
+    html, body {font-size:unquote(($baseFontSize * 0.875) + "px");}
 }
 
 @media only screen and (min-width: 1024px) {
-    html, body {font-size:$baseFontSize;}
+    html, body {font-size:unquote($baseFontSize + "px");}
 }
