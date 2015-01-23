@@ -33,7 +33,7 @@
         var baseURL = '';
 
         if ($location.host() === 'localhost') {
-            baseURL = $location.protocol() + '://' + $location.host() + '/~rilakkuma3xjapan/portfolio-x-sound/resources/';
+            baseURL = $location.protocol() + '://' + $location.host() + '/~rilakkuma3xjapan/GitHub/X-Sound/resources/';
         } else {
             baseURL = $location.protocol() + '://' + $location.host() + '/X-Sound/resources/';
         }
@@ -180,6 +180,7 @@
             modal     : modal,
             draggable : true,
             resizable : false,
+            zIndex    : 9999,
             buttons   : {
                 'OK'    : function() {
                     $(this).dialog('close')
@@ -332,6 +333,123 @@
     });
 
     /**
+     * This service gets current parameters.
+     */
+    xsound.value('getCurrentPatches', function() {
+            return {
+                'mastervolume' : X('oscillator').params().mastervolume,
+                'glide'        : {
+                    'type' : X('oscillator').params().oscillator.glide.type,
+                    'time' : X('oscillator').params().oscillator.glide.time
+                },
+                'oscillator0'  : X('oscillator').params().oscillator.oscillator0,
+                'oscillator1'  : C('oscillator').params().oscillator.oscillator0,
+                'eg'           : {
+                    'attack'  : X('oscillator').params().eg.attack,
+                    'decay'   : X('oscillator').params().eg.decay,
+                    'sustain' : X('oscillator').params().eg.sustain,
+                    'release' : X('oscillator').params().eg.release
+                },
+                'compressor'   : {
+                    'state'     : X('oscillator').params().compressor.state,
+                    'threshold' : X('oscillator').params().compressor.threshold,
+                    'knee'      : X('oscillator').params().compressor.knee,
+                    'ratio'     : X('oscillator').params().compressor.ratio,
+                    'attack'    : X('oscillator').params().compressor.attack,
+                    'release'   : X('oscillator').params().compressor.release
+                },
+                'distortion'    : {
+                    'state'   : X('oscillator').params().distortion.state,
+                    'curve'   : X('oscillator').params().distortion.curve,
+                    'samples' : X('oscillator').params().distortion.samples,
+                    'drive'   : X('oscillator').params().distortion.drive,
+                    'color'   : X('oscillator').params().distortion.color,
+                    'tone'    : X('oscillator').params().distortion.tone
+                },
+                'wah'           : {
+                    'state'     : X('oscillator').params().wah.state,
+                    'cutoff'    : X('oscillator').params().wah.cutoff,
+                    'depth'     : X('oscillator').params().wah.depth,
+                    'rate'      : X('oscillator').params().wah.rate,
+                    'resonance' : X('oscillator').params().wah.resonance
+                },
+                'equalizer'     : {
+                    'state'    : X('oscillator').params().equalizer.state,
+                    'bass'     : X('oscillator').params().equalizer.bass,
+                    'middle'   : X('oscillator').params().equalizer.middle,
+                    'treble'   : X('oscillator').params().equalizer.treble,
+                    'presence' : X('oscillator').params().equalizer.presence
+                },
+                'filter'        : {
+                    'state'     : X('oscillator').params().filter.state,
+                    'type'      : X('oscillator').params().filter.type,
+                    'frequency' : X('oscillator').params().filter.frequency,
+                    'Q'         : X('oscillator').params().filter.Q,
+                    'gain'      : X('oscillator').params().filter.gain,
+                    'attack'    : X('oscillator').params().filter.attack,
+                    'decay'     : X('oscillator').params().filter.decay,
+                    'sustain'   : X('oscillator').params().filter.sustain,
+                    'release'   : X('oscillator').params().filter.release
+                },
+                'autopanner'    : {
+                    'state' : X('oscillator').params().autopanner.state,
+                    'depth' : X('oscillator').params().autopanner.depth,
+                    'rate'  : X('oscillator').params().autopanner.rate
+                },
+                'tremolo'       : {
+                    'state' : X('oscillator').params().tremolo.state,
+                    'depth' : X('oscillator').params().tremolo.depth,
+                    'rate'  : X('oscillator').params().tremolo.rate
+                },
+                'ringmodulator' : {
+                    'state' : X('oscillator').params().ringmodulator.state,
+                    'depth' : X('oscillator').params().ringmodulator.depth,
+                    'rate'  : X('oscillator').params().ringmodulator.rate
+                },
+                'phaser'        : {
+                    'state'     : X('oscillator').params().phaser.state,
+                    'stage'     : X('oscillator').params().phaser.stage,
+                    'frequency' : X('oscillator').params().phaser.frequency,
+                    'depth'     : X('oscillator').params().phaser.depth,
+                    'rate'      : X('oscillator').params().phaser.rate,
+                    'mix'       : X('oscillator').params().phaser.mix,
+                    'feedback'  : X('oscillator').params().phaser.feedback
+                },
+                'chorus'        : {
+                    'state' : X('oscillator').params().chorus.state,
+                    'time'  : X('oscillator').params().chorus.time * 1000,
+                    'depth' : X('oscillator').params().chorus.depth,
+                    'rate'  : X('oscillator').params().chorus.rate,
+                    'mix'   : X('oscillator').params().chorus.mix,
+                    'tone'  : X('oscillator').params().chorus.tone
+                },
+                'flanger'        : {
+                    'state'    : X('oscillator').params().flanger.state,
+                    'time'     : X('oscillator').params().flanger.time * 1000,
+                    'depth'    : X('oscillator').params().flanger.depth,
+                    'rate'     : X('oscillator').params().flanger.rate,
+                    'mix'      : X('oscillator').params().flanger.mix,
+                    'tone'     : X('oscillator').params().flanger.tone,
+                    'feedback' : X('oscillator').params().flanger.feedback
+                },
+                'delay'        : {
+                    'state'    : X('oscillator').params().delay.state,
+                    'time'     : X('oscillator').params().delay.time * 1000,
+                    'dry'      : X('oscillator').params().delay.dry,
+                    'wet'      : X('oscillator').params().delay.wet,
+                    'tone'     : X('oscillator').params().delay.tone,
+                    'feedback' : X('oscillator').params().delay.feedback
+                },
+                'reverb'        : {
+                    'state'    : X('oscillator').params().reverb.state,
+                    'dry'      : X('oscillator').params().reverb.dry,
+                    'wet'      : X('oscillator').params().reverb.wet,
+                    'tone'     : X('oscillator').params().reverb.tone
+                }
+            };
+        });
+
+    /**
      * Initialization
      * @param {$rootScope} $rootScope This argument is service of DI (Dependency Injection).
      * @param {$window} $window This argument is service of DI (Dependency Injection).
@@ -344,9 +462,11 @@
             return;
         }
 
-        $rootScope.isActives               = {};
-        $rootScope.isActives.visualization = false;
-        $rootScope.isActives.mml           = false;
+        $rootScope.isActives = {
+            visualization : false,
+            mml           : false,
+            patch         : false
+        };
 
         //Initialization for using XSound.js
 
@@ -626,6 +746,7 @@
                         if (X(source).module(effector).state()) {
                             X(source).module(effector).state(false);
                             C('oscillator').module(effector).state(false);
+
                             $(iElement).removeClass('check-on');
                         } else {
                             X(source).module(effector).state(true);
@@ -650,7 +771,7 @@
                     'position'         : 'fixed',
                     'top'              : '0px',
                     'left'             : '0px',
-                    'z-index'          : 9999,
+                    'z-index'          : 999,
                     'padding'          : '15% 0%',
                     'width'            : '100%',
                     'height'           : '100%',
@@ -1022,6 +1143,7 @@
                                 height    : 'auto',
                                 draggable : true,
                                 resizable : false,
+                                zIndex    : 9999,
                                 buttons   : {
                                     'OK'    : function() {
                                         // Overwrite
@@ -1082,8 +1204,9 @@
      * @param {string} BASE_URL This argument is service of DI (Dependency Injection).
      * @param {Array.<string>} sources readFileByDragAndDrop This argument is service of DI (Dependency Injection).
      * @param {function} openDialog This argument is service of DI (Dependency Injection).
+     * @param {function} getCurrentPatches This argument is service of DI (Dependency Injection).
      */
-    xsound.controller('XSoundController', ['$rootScope', '$scope', '$window', '$timeout', 'BASE_URL', 'sources', 'openDialog', function($rootScope, $scope, $window, $timeout, BASE_URL, sources, openDialog) {
+    xsound.controller('XSoundController', ['$rootScope', '$scope', '$window', '$timeout', 'BASE_URL', 'sources', 'openDialog', 'getCurrentPatches', function($rootScope, $scope, $window, $timeout, BASE_URL, sources, openDialog, getCurrentPatches) {
         var NUMBER_OF_ONESHOTS = 88;
         var AJAX_TIMEOUT       = 60000;
 
@@ -1519,6 +1642,38 @@
         };
 
         /**
+         * This event handler is to open or close window for patch system.
+         * @param {Event} event This argument is event object from ng-click directive.
+         */
+        $scope.togglePatchState = function(event) {
+            $rootScope.isActives.patch = !$rootScope.isActives.patch;
+
+            if ($rootScope.isActives.patch) {
+                $('#patch-container').colorbox({
+                    open        : true,
+                    inline      : true,
+                    href        : '#patch-container',
+                    width       : '600px',
+                    height      : '480px',
+                    transition  : 'fade',
+                    speed       : 600,
+                    opacity     : 0.6,
+                    fadeOut     : 600,
+                    returnFocus : false,
+                    onOpen      : function() {
+                        // to PatchController
+                        $scope.$broadcast('onOpenPatchDialog');
+                    },
+                    onCleanup  : function() {
+                        $timeout(function() {
+                            $rootScope.isActives.patch = false;
+                        });
+                    }
+                });
+            }
+        };
+
+        /**
          * This event handler is to change oscillator's wave type.
          * @param {Event} event This argument is event object from ng-click directive.
          * @param {number} number This argument is either 0 or 1.
@@ -1660,6 +1815,7 @@
                 height    : 'auto',
                 draggable : true,
                 resizable : false,
+                zIndex    : 9999,
                 buttons   : {
                     'START' : function() {
                         angular.forEach(sources, function(source) {
@@ -1696,6 +1852,7 @@
                 height    : 'auto',
                 draggable : true,
                 resizable : false,
+                zIndex    : 9999,
                 buttons   : {
                     'STOP'  : function() {
                         angular.forEach(sources, function(source) {
@@ -1825,6 +1982,7 @@
                 height    : 'auto',
                 draggable : true,
                 resizable : false,
+                zIndex    : 9999,
                 buttons   : {
                     'CLEAR' : function() {
                         angular.forEach(sources, function(source) {
@@ -2294,6 +2452,865 @@
                 });
             }
         };
+    }]);
+
+    /**
+     * Controller for  Account and Patch system
+     * @param {$rootScope} $rootScope This argument is service of DI (Dependency Injection).
+     * @param {$scope} $scope This argument is scope of this controller.
+     * @param {$http} $http This argument is service of DI (Dependency Injection).
+     * @param {$location} $location This argument is service of DI (Dependency Injection).
+     * @param {$timeout} $timeout This argument is to update view.
+     * @param {Array.<string>} sources readFileByDragAndDrop This argument is service of DI (Dependency Injection).
+     * @param {function} openDialog This argument is service of DI (Dependency Injection).
+     * @param {function} getCurrentPatches This argument is service of DI (Dependency Injection).
+     * @extends {XSoundController}
+     */
+    xsound.controller('PatchController', ['$rootScope', '$scope', '$http', '$location', '$timeout', 'sources', 'openDialog', 'getCurrentPatches', function($rootScope, $scope, $http, $location, $timeout, sources, openDialog, getCurrentPatches) {
+        var TIMEOUT = 10000;
+
+        var POST_ORIGIN = (function() {
+            if ($location.host().indexOf('localhost') !== -1) {
+                return 'http://localhost:3000';                                                            //Node.js + MongoDB
+                //return 'http://localhost/~rilakkuma3xjapan/portfolio-x-sound-server/php/bootstrap.php';  //PHP + MySQL
+            } else {
+                return 'http://curtaincall.c.node-ninja.com:3000';                                    //Node.js + MongoDB
+                //return 'http://curtaincall.weblike.jp/portfolio-x-sound-server/php/bootstrap.php';  //PHP + MySQL
+            }
+        })();
+
+        var _deleteAccount = function() {
+            $scope.isDisabled = true;
+
+            $http({
+                method           : 'POST',
+                url              : (POST_ORIGIN + '/account/delete'),
+                timeout          : TIMEOUT,
+                withCredentials  : true,
+                params           : '',  // Query Parameters (GET)
+                data             : {
+                    'username' : $scope.deleteAccounts.username,
+                    'password' : $scope.deleteAccounts.password,
+                    '_csrf'    : $scope.csrf
+                },
+                headers         : {
+                    //'X-Requested-With' : 'XMLHttpRequest',  // Unnecessary for CORS
+                    'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                transformRequest : function(data) {
+                    // JSON -> serialize (key1=value1&key2=value2 ...)
+                    return $.param(data);
+                }
+            }).success(function(data, status, headers, config) {
+                if (angular.isObject(data)) {
+                    $scope.csrf           = data.csrf;
+                    $scope.isAuth         = data.isAuth;
+                    $scope.authedUsername = data.username;
+
+                    if (!$scope.isAuth) {
+                        angular.forEach(data.message, function(message) {
+                            openDialog('Confirmation', 400, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        });
+                    } else {
+                        angular.forEach(data.message, function(message) {
+                            openDialog('Error', 400, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        });
+                    }
+                }
+
+                $scope.isDisabled = false;
+            }).error(function(data, status, headers, config) {
+                _ajaxErrorHandler();
+                $scope.isDisabled = false;
+            });
+        };
+
+        var _loadPatch = function(patches) {
+            if (!angular.isObject(patches)) {
+                return;
+            }
+
+            var setState = function(module, state) {
+                angular.forEach(sources, function(source) {
+                    X(source).module(module).state(state);
+                });
+
+                C('oscillator').module(module).state(state);
+
+                if (state) {
+                    $('[effector="' + module + '"]').addClass('check-on');
+                } else {
+                    $('[effector="' + module + '"]').removeClass('check-on');
+                }
+            };
+
+            if ('mastervolume' in patches) {
+                $('.slider-masterVolume:not(:first)').slider('value', patches.mastervolume);
+            }
+
+            if ('glide' in patches) {
+                var glide = patches.glide;
+
+                if ('time' in glide) {
+                    $('.slider-glide-time').slider('value', glide.time);
+                }
+            }
+
+            if ('eg' in patches) {
+                var eg = patches.eg;
+
+                if ('attack'  in eg) {$('.slider-eg-attack').slider('value', eg.attack);}
+                if ('decay'   in eg) {$('.slider-eg-decay').slider('value', eg.decay);}
+                if ('sustain' in eg) {$('.slider-eg-sustain').slider('value', eg.sustain);}
+                if ('release' in eg) {$('.slider-eg-release').slider('value', eg.release);}
+            }
+
+            if ('oscillator0' in patches) {
+                var oscillator0 = patches.oscillator0;
+
+                if ('state' in oscillator0) {
+                    $timeout(function() {
+                        $scope.$parent.oscillators.oscillator0.isActive = !oscillator0;
+                        $scope.$parent.toggleOscillatorState(null, 0);
+                    });
+                }
+
+                if ('type' in oscillator0) {
+                    $timeout(function() {
+                        $scope.$parent.changeWaveType(null, 0, oscillator0.type);
+                    });
+                }
+
+                if ('gain'   in oscillator0) {$('.slider-volume:first').slider('value', oscillator0.gain);}
+                if ('octave' in oscillator0) {$('.slider-octave:first').slider('value', oscillator0.octave);}
+                if ('fine'   in oscillator0) {$('.slider-fine:first').slider('value', oscillator0.fine);}
+            }
+
+            if ('oscillator1' in patches) {
+                var oscillator1 = patches.oscillator1;
+
+                if ('state' in oscillator1) {
+                    $timeout(function() {
+                        $scope.$parent.oscillators.oscillator1.isActive = !oscillator1;
+                        $scope.$parent.toggleOscillatorState(null, 1);
+                    });
+                }
+
+                if ('type'in oscillator1) {
+                    $timeout(function() {
+                        $scope.$parent.changeWaveType(null, 1, oscillator1.type);
+                    });
+                }
+
+                if ('gain'   in oscillator1) {$('.slider-volume:last').slider('value', oscillator1.gain);}
+                if ('octave' in oscillator1) {$('.slider-octave:last').slider('value', oscillator1.octave);}
+                if ('fine'   in oscillator1) {$('.slider-fine:last').slider('value', oscillator1.fine);}
+            }
+
+            if ('compressor' in patches) {
+                var compressor = patches.compressor;
+
+                if ('state'     in compressor) {setState('compressor', compressor.state);}
+                if ('threshold' in compressor) {$('.slider-threshold').slider('value', compressor.threshold);}
+                if ('knee'      in compressor) {$('.slider-knee').slider('value', compressor.knee);}
+                if ('ratio'     in compressor) {$('.slider-ratio').slider('value', compressor.ratio);}
+                if ('attack'    in compressor) {$('.slider-compressor-attack').slider('value', compressor.attack);}
+                if ('release'   in compressor) {$('.slider-compressor-release').slider('value', compressor.release);}
+            }
+
+            if ('distortion' in patches) {
+                var distortion = patches.distortion;
+
+                if ('state'   in distortion) {setState('distortion', distortion.state);}
+                if ('curve'   in distortion) {$('#select-distortion-type').val(distortion.curve).trigger('change');}
+                if ('samples' in distortion) {$('#select-distortion-sample').val('value', distortion.samples);}
+                if ('drive'   in distortion) {$('.slider-distortion-drive').slider('value', distortion.drive);}
+                if ('color'   in distortion) {$('.slider-distortion-color').slider('value', distortion.color);}
+                if ('tone'    in distortion) {$('.slider-distortion-tone').slider('value', distortion.tone);}
+            }
+
+            if ('wah' in patches) {
+                var wah = patches.wah;
+
+                if ('state'     in wah) {setState('wah', wah.state);}
+                if ('cutoff'    in wah) {$('.slider-wah-cutoff').slider('value', wah.cutoff);}
+                if ('depth'     in wah) {$('.slider-wah-depth').slider('value', wah.depth);}
+                if ('rate'      in wah) {$('.slider-wah-rate').slider('value', wah.rate);}
+                if ('resonance' in wah) {$('.slider-wah-resonance').slider('value', wah.resonance);}
+            }
+
+            if ('equalizer' in patches) {
+                var equalizer = patches.equalizer;
+
+                if ('state'    in equalizer) {setState('equalizer', equalizer.state);}
+                if ('bass'     in equalizer) {$('.slider-equalizer-bass').slider('value', equalizer.bass);}
+                if ('middle'   in equalizer) {$('.slider-equalizer-middle').slider('value', equalizer.middle);}
+                if ('treble'   in equalizer) {$('.slider-equalizer-treble').slider('value', equalizer.treble);}
+                if ('presence' in equalizer) {$('.slider-equalizer-presence').slider('value', equalizer.presence);}
+            }
+
+            if ('filter' in patches) {
+                var filter = patches.filter;
+
+                if ('state'     in filter) {setState('filter', filter.state);}
+                if ('type'      in filter) {$('#select-filter-type').val(filter.type).trigger('change');}
+                if ('frequency' in filter) {$('.slider-filter-cutoff').slider('value', filter.frequency);}
+                if ('Q'         in filter) {$('.slider-filter-Q').slider('value', filter.Q);}
+                if ('gain'      in filter) {$('.slider-filter-gain').slider('value', filter.gain);}
+                if ('attack'    in filter) {$('.slider-filter-attack').slider('value', filter.attack);}
+                if ('decay'     in filter) {$('.slider-filter-decay').slider('value', filter.decay);}
+                if ('sustain'   in filter) {$('.slider-filter-sustain').slider('value', filter.sustain);}
+                if ('release'   in filter) {$('.slider-filter-release').slider('value', filter.release);}
+            }
+
+            if ('autopanner' in patches) {
+                var autopanner = patches.autopanner;
+
+                if ('state' in autopanner) {setState('autopanner', autopanner.state);}
+                if ('depth' in autopanner) {$('.slider-autopanner-depth').slider('value', autopanner.depth);}
+                if ('rate'  in autopanner) {$('.slider-autopanner-rate').slider('value', autopanner.rate);}
+            }
+
+            if ('tremolo' in patches) {
+                var tremolo = patches.tremolo;
+
+                if ('state' in tremolo) {setState('tremolo', tremolo.state);}
+                if ('depth' in tremolo) {$('.slider-tremolo-depth').slider('value', tremolo.depth);}
+                if ('rate'  in tremolo) {$('.slider-tremolo-rate').slider('value', tremolo.rate);}
+            }
+
+            if ('ringmodulator' in patches) {
+                var ringmodulator = patches.ringmodulator;
+
+                if ('state' in ringmodulator) {setState('ringmodulator', ringmodulator.state);}
+                if ('depth' in ringmodulator) {$('.slider-ringmodulator-depth').slider('value', ringmodulator.depth);}
+                if ('rate'  in ringmodulator) {$('.slider-ringmodulator-rate').slider('value', ringmodulator.rate);}
+            }
+
+            if ('phaser' in patches) {
+                var phaser = patches.phaser;
+
+                if ('state'     in phaser) {setState('phaser', phaser.state);}
+                if ('stage'     in phaser) {$('.select-phaser-stage').val(phaser.stage);}
+                if ('frequency' in phaser) {$('.slider-phaser-cutoff').slider('value', phaser.frequency);}
+                if ('depth'     in phaser) {$('.slider-phaser-depth').slider('value', phaser.depth);}
+                if ('rate'      in phaser) {$('.slider-phaser-rate').slider('value', phaser.rate);}
+                if ('mix'       in phaser) {$('.slider-phaser-mix').slider('value', phaser.mix);}
+                if ('feedback'  in phaser) {$('.slider-phaser-feedback').slider('value', phaser.feedback);}
+            }
+
+            if ('flanger' in patches) {
+                var flanger = patches.flanger;
+
+                if ('state'    in flanger) {setState('flanger', flanger.state);}
+                if ('time'     in flanger) {$('.slider-flanger-time').slider('value', flanger.time);}
+                if ('depth'    in flanger) {$('.slider-flanger-depth').slider('value', flanger.depth);}
+                if ('rate'     in flanger) {$('.slider-flanger-rate').slider('value', flanger.rate);}
+                if ('mix'      in flanger) {$('.slider-flanger-mix').slider('value', flanger.mix);}
+                if ('tone'     in flanger) {$('.slider-flanger-tone').slider('value', flanger.tone);}
+                if ('feedback' in flanger) {$('.slider-flanger-feedback').slider('value', flanger.feedback);}
+            }
+
+            if ('chorus' in patches) {
+                var chorus = patches.chorus;
+
+                if ('state'    in chorus) {setState('chorus', chorus.state);}
+                if ('time'     in chorus) {$('.slider-chorus-time').slider('value', chorus.time);}
+                if ('depth'    in chorus) {$('.slider-chorus-depth').slider('value', chorus.depth);}
+                if ('rate'     in chorus) {$('.slider-chorus-rate').slider('value', chorus.rate);}
+                if ('mix'      in chorus) {$('.slider-chorus-mix').slider('value', chorus.mix);}
+                if ('tone'     in chorus) {$('.slider-chorus-tone').slider('value', chorus.tone);}
+                if ('feedback' in chorus) {$('.slider-chorus-feedback').slider('value', chorus.feedback);}
+            }
+
+            if ('delay' in patches) {
+                var delay = patches.delay;
+
+                if ('state'    in delay) {setState('delay', delay.state);}
+                if ('time'     in delay) {$('.slider-delay-time').slider('value', delay.time);}
+                if ('dry'      in delay) {$('.slider-delay-dry').slider('value', delay.dry);}
+                if ('wet'      in delay) {$('.slider-delay-wet').slider('value', delay.wet);}
+                if ('tone'     in delay) {$('.slider-delay-tone').slider('value', delay.tone);}
+                if ('feedback' in delay) {$('.slider-delay-feedback').slider('value', delay.feedback);}
+            }
+
+            if ('reverb' in patches) {
+                var reverb = patches.reverb;
+
+                if ('state' in reverb) {setState('reverb', reverb.state);}
+                if ('dry'   in reverb) {$('.slider-reverb-dry').slider('value', reverb.dry);}
+                if ('wet'   in reverb) {$('.slider-reverb-wet').slider('value', reverb.wet);}
+                if ('tone'  in reverb) {$('.slider-reverb-tone').slider('value', reverb.tone);}
+            }
+
+            $timeout(function() {
+                $scope.currentPatches = getCurrentPatches();
+            });
+        };
+
+        var _updatePatch = function(patchname) {
+            $http({
+                method           : 'POST',
+                url              : (POST_ORIGIN + '/patch/update'),
+                timeout          : TIMEOUT,
+                withCredentials  : true,
+                params           : '',  // Query Parameters (GET)
+                data             : {
+                    'name'  : patchname,
+                    'patch' : angular.toJson(getCurrentPatches()),
+                    '_csrf' : $scope.csrf
+                },
+                headers         : {
+                    //'X-Requested-With' : 'XMLHttpRequest',  // Unnecessary for CORS
+                    'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                transformRequest : function(data) {
+                    // JSON -> serialize (key1=value1&key2=value2 ...)
+                    return $.param(data);
+                }
+            }).success(function(data, status, headers, config) {
+                $timeout(function() {
+                    if (angular.isObject(data)) {
+                        $scope.csrf       = data.csrf;
+                        $scope.isAuth     = data.isAuth;
+                        $scope.patchLists = angular.fromJson(data.patches);
+
+                        angular.forEach(data.message, function(message) {
+                            openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        });
+                    }
+                });
+            }).error(function(data, status, headers, config) {
+                _ajaxErrorHandler();
+            });
+        };
+
+        var _deletePatch = function(patchname) {
+            $http({
+                method           : 'POST',
+                url              : (POST_ORIGIN + '/patch/delete'),
+                timeout          : TIMEOUT,
+                withCredentials  : true,
+                params           : '',  // Query Parameters (GET)
+                data             : {
+                    'name'  : patchname,
+                    '_csrf' : $scope.csrf
+                },
+                headers         : {
+                    //'X-Requested-With' : 'XMLHttpRequest',  // Unnecessary for CORS
+                    'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                transformRequest : function(data) {
+                    // JSON -> serialize (key1=value1&key2=value2 ...)
+                    return $.param(data);
+                }
+            }).success(function(data, status, headers, config) {
+                if (angular.isObject(data)) {
+                    $scope.csrf       = data.csrf;
+                    $scope.isAuth     = data.isAuth;
+                    $scope.patchLists = angular.fromJson(data.patches);
+
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
+                }
+            }).error(function(data, status, headers, config) {
+                _ajaxErrorHandler();
+            });
+        };
+
+        var _ajaxErrorHandler = function() {
+            openDialog('Error', 500, 'auto', false, ('<p><b>Connection to Server failed.</b></p>'));
+        };
+
+        $scope.isAuth      = false;
+
+        $scope.isSignin    = true;
+        $scope.isSignup    = false;
+        $scope.isPatchList = false;
+        $scope.isSavePath  = false;
+        $scope.isAccount   = false;
+
+        $scope.isDisabled  = false;
+
+        $scope.csrf = '';
+
+        $scope.signups = {
+            username : '',
+            password : ''
+        };
+
+        $scope.signins = {
+            username : '',
+            password : ''
+        };
+
+        $scope.deleteAccounts = {
+            username : '',
+            password : ''
+        };
+
+        $scope.authedUsername = '';
+
+        $scope.patchname  = '';
+        $scope.patchLists = [];
+
+        $scope.dialogPatchDetailId     = 'dialog-patch-detail';
+        $scope.isShowDialogPatchDetail = false;
+
+        // Object.observe
+        $scope.$watch(function() {
+            return $scope.isAuth;
+        }, function(newVal) {
+            if (newVal) {
+                // Authenticated
+                $scope.signups = {
+                    username : '',
+                    password : ''
+                };
+
+                $scope.signins = {
+                    username : '',
+                    password : ''
+                };
+
+                $scope.currentPatches = getCurrentPatches();
+
+                $scope.toggleAction(null, 'patchList');
+            } else {
+                // Not Authenticated
+                $scope.deleteAccounts = {
+                    username : '',
+                    password : ''
+                };
+
+                $scope.currentPatches = {};
+                $scope.patches        = {};
+
+                $scope.patchname      = '';
+                $scope.patchLists     = [];
+
+                $scope.authedUsername = '';
+
+                $scope.isShowDialogPatchDetail = false;
+
+                $scope.toggleAction(null, 'signin');
+            }
+        });
+
+        // from XSoundController
+        $scope.$on('onOpenPatchDialog', function(event) {
+            $scope.currentPatches = getCurrentPatches();
+        });
+
+        /**
+         * This event handler prevents from closing modal window at typing.
+         * @param {Event} event This argument is event object from ng-click directive.
+         */
+        $scope.cancelClose = function(event) {
+            event.stopImmediatePropagation();
+        };
+
+        /**
+         * This event handler changes flag for Tab-Panel menu.
+         * @param {Event} event This argument is event object from ng-click directive.
+         * @param {string} action This argument is one of 'signin', 'signup', 'patchList', 'savePatch', 'account'
+         * @returns {undefined}
+         */
+        $scope.toggleAction = function(event, action) {
+            if (event !== null) {
+                event.preventDefault();
+            }
+
+            $scope.isSignin    = false;
+            $scope.isSignup    = false;
+            $scope.isPatchList = false;
+            $scope.isSavePatch = false;
+            $scope.isAccount   = false;
+
+            switch (action) {
+                case 'signin' :
+                    $scope.isSignin = true;
+                    break;
+                case 'signup' :
+                    $scope.isSignup = true;
+                    break;
+                case 'patchList' :
+                    $scope.isPatchList = true;
+                    break;
+                case 'savePatch' :
+                    $scope.isSavePatch = true;
+                    break;
+                case 'account' :
+                    $scope.isAccount = true;
+                default :
+                    break;
+            }
+        };
+
+        /**
+         * This event handler is to sign in.
+         * @param {Event} event This argument is event object from ng-click directive.
+         */
+        $scope.signin = function(event) {
+            $scope.isDisabled = true;
+
+            $http({
+                method           : 'POST',
+                url              : (POST_ORIGIN + '/account/signin'),
+                timeout          : TIMEOUT,
+                withCredentials  : true,
+                params           : '',  // Query Parameters (GET)
+                data             : {
+                    'username' : $scope.signins.username,
+                    'password' : $scope.signins.password,
+                    '_csrf'    : $scope.csrf
+                },
+                headers : {
+                    //'X-Requested-With' : 'XMLHttpRequest',  // Unnecessary for CORS
+                    'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                transformRequest : function(data) {
+                    // JSON -> serialize (key1=value1&key2=value2 ...)
+                    return $.param(data);
+                }
+            }).success(function(data, status, headers, config) {
+                if (angular.isObject(data)) {
+                    $scope.csrf           = data.csrf;
+                    $scope.isAuth         = data.isAuth;
+                    $scope.authedUsername = data.username;
+
+                    if ($scope.isAuth) {
+                        $scope.patchLists = angular.fromJson(data.patches);
+                    } else {
+                        angular.forEach(data.message, function(message) {
+                            openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        });
+                    }
+                }
+
+                $scope.isDisabled = false;
+            }).error(function(data, status, headers, config) {
+                _ajaxErrorHandler();
+                $scope.isDisabled = false;
+            });
+        };
+
+        /**
+         * This event handler is to sign up.
+         * @param {Event} event This argument is event object from ng-click directive.
+         */
+        $scope.signup = function(event) {
+            $scope.isDisabled = true;
+
+            $http({
+                method           : 'POST',
+                url              : (POST_ORIGIN + '/account/signup'),
+                timeout          : TIMEOUT,
+                withCredentials  : true,
+                params           : '',  // Query Parameters (GET)
+                data             : {
+                    'username' : $scope.signups.username,
+                    'password' : $scope.signups.password,
+                    '_csrf'    : $scope.csrf
+                },
+                headers          : {
+                    //'X-Requested-With' : 'XMLHttpRequest',  // Unnecessary for CORS
+                    'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                transformRequest : function(data) {
+                    // JSON -> serialize (key1=value1&key2=value2 ...)
+                    return $.param(data);
+                }
+            }).success(function(data, status, headers, config) {
+                if (angular.isObject(data)) {
+                    $scope.csrf           = data.csrf;
+                    $scope.isAuth         = data.isAuth;
+                    $scope.authedUsername = data.username;
+
+                    if ($scope.isAuth) {
+                        angular.forEach(data.message, function(message) {
+                            openDialog('Confirmation', 600, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        });
+                    } else {
+                        angular.forEach(data.message, function(message) {
+                            openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        });
+                    }
+                }
+
+                $scope.isDisabled = false;
+            }).error(function(data, status, headers, config) {
+                _ajaxErrorHandler();
+                $scope.isDisabled = false;
+            });
+        };
+
+        /**
+         * This event handler is to sign out.
+         * @param {Event} event This argument is event object from ng-click directive.
+         */
+        $scope.signout = function(event) {
+            $scope.isDisabled = true;
+
+            $http({
+                method           : 'POST',
+                url              : (POST_ORIGIN + '/account/signout'),
+                timeout          : TIMEOUT,
+                withCredentials  : true,
+                params           : '',  // Query Parameters (GET)
+                data             : {
+                    '_csrf' : $scope.csrf
+                },
+                headers         : {
+                    //'X-Requested-With' : 'XMLHttpRequest',  // Unnecessary for CORS
+                    'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                transformRequest : function(data) {
+                    // JSON -> serialize (key1=value1&key2=value2 ...)
+                    return $.param(data);
+                }
+            }).success(function(data, status, headers, config) {
+                if (angular.isObject(data)) {
+                    $scope.csrf           = data.csrf;
+                    $scope.isAuth         = data.isAuth;
+                    $scope.authedUsername = data.username;
+                }
+
+                $scope.isDisabled = false;
+            }).error(function(data, status, headers, config) {
+                _ajaxErrorHandler();
+                $scope.isDisabled = false;
+            });
+        };
+
+        /**
+         * This event handler is to delete account.
+         * @param {Event} event This argument is event object from ng-click directive.
+         */
+        $scope.deleteAccount = function(event) {
+            // Delet OK ?
+            $('<div />').html('<p><b>Delete your account. OK ?<br /> <b class="dangerous">If you delete account, the all of patches that you saved are also deleted.</b></b></p>').dialog({
+                title     : 'Confirmation',
+                autoOpen  : true,
+                show      : 'bounce',
+                hide      : 'explode',
+                modal     : false,
+                width     : 650,
+                height    : 'auto',
+                draggable : true,
+                resizable : false,
+                zIndex    : 9999,
+                buttons   : {
+                    'OK'    : function() {
+                        _deleteAccount();
+
+                        $(this).dialog('close')
+                               .dialog('destroy')
+                               .remove();
+                    },
+                    'CANCEL' : function() {
+                        $(this).dialog('close')
+                               .dialog('destroy')
+                               .remove();
+                    }
+                }
+            });
+        };
+
+        /**
+         * This event handler sets patch name.
+         * @param {Event} event This argument is event object from ng-keyup directive.
+         */
+        $scope.typePatchname = function(event) {
+            $scope.patchname = event.currentTarget.value;
+        };
+
+        /**
+         * This event handler saves the designated patch.
+         * @param {Event} event This argument is event object from ng-click directive.
+         */
+        $scope.savePatch = function(event) {
+            $scope.isDisabled = true;
+
+            $http({
+                method           : 'POST',
+                url              : (POST_ORIGIN + '/patch/add'),
+                timeout          : TIMEOUT,
+                withCredentials  : true,
+                params           : '',  // Query Parameters (GET)
+                data             : {
+                    'name'  : $scope.patchname,
+                    'patch' : angular.toJson(getCurrentPatches()),
+                    '_csrf' : $scope.csrf
+                },
+                headers          : {
+                    //'X-Requested-With' : 'XMLHttpRequest',  // Unnecessary for CORS
+                    'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                transformRequest : function(data) {
+                    // JSON -> serialize (key1=value1&key2=value2 ...)
+                    return $.param(data);
+                }
+            }).success(function(data, status, headers, config) {
+                if (angular.isObject(data)) {
+                    $scope.csrf   = data.csrf;
+                    $scope.isAuth = data.isAuth;
+
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
+
+                    if (data.result) {
+                        $scope.patchLists = angular.fromJson(data.patches);
+                    }
+                }
+
+                $scope.isDisabled = false;
+            }).error(function(data, status, headers, config) {
+                _ajaxErrorHandler();
+                $scope.isDisabled = false;
+            });
+        };
+
+        /**
+         *  This event handler opens the dialog for patch details.
+         * @param {Event} event This argument is event object from ng-click directive.
+         * @param {object|string} patchList This argument is patch data as associative array or JSON.
+         */
+        $scope.openPatchDetail = function(event, patchList) {
+            if (angular.isObject(patchList)) {
+                $scope.patches = patchList.patch;
+            } else {
+                var patch = patchList.patch.replace(/&quot;/g, '"')
+                                           .replace(/&apos;/g, "'")
+                                           .replace(/&amp;/g, '&');
+
+                $scope.patches = angular.fromJson(patch);
+            }
+
+            $scope.isShowDialogPatchDetail = true;
+
+            // Define dialog
+            $('#' + $scope.dialogPatchDetailId).dialog({
+                title     : patchList.name,
+                autoOpen  : true,
+                show      : 'explode',
+                hide      : 'explode',
+                modal     : false,
+                width     : 600,
+                height    : 400,
+                draggable : true,
+                resizable : false,
+                zIndex    : 9999,
+                position  : {
+                    my : 'center top',
+                    at : 'center top'
+                },
+                buttons   : {
+                    'LOAD'   : function() {
+                        _loadPatch($scope.patches);
+
+                        $(this).dialog('close');
+                    },
+                    'UPDATE' : function() {
+                        // Update OK ?
+                        $('<div />').html('<p><b>Update the patch. OK ?</b></p>').dialog({
+                            title     : 'Confirmation',
+                            autoOpen  : true,
+                            show      : 'explode',
+                            hide      : 'explode',
+                            modal     : false,
+                            width     : 400,
+                            height    : 'auto',
+                            draggable : true,
+                            resizable : false,
+                            zIndex    : 10000,
+                            buttons   : {
+                                'OK'    : function() {
+                                    _updatePatch(patchList.name);
+
+                                    $(this).dialog('close')
+                                           .dialog('destroy')
+                                           .remove();
+
+                                    $('#' + $scope.dialogPatchDetailId).dialog('close');
+                                },
+                                'CANCEL' : function() {
+                                    $(this).dialog('close')
+                                           .dialog('destroy')
+                                           .remove();
+                                }
+                            }
+                        });
+                    },
+                    'DELETE' : function() {
+                        // Delet OK ?
+                        $('<div />').html('<p><b>Delete the patch. OK ?</b></p>').dialog({
+                            title     : 'Confirmation',
+                            autoOpen  : true,
+                            show      : 'explode',
+                            hide      : 'explode',
+                            modal     : false,
+                            width     : 400,
+                            height    : 'auto',
+                            draggable : true,
+                            resizable : false,
+                            zIndex    : 10000,
+                            buttons   : {
+                                'OK'    : function() {
+                                    _deletePatch(patchList.name);
+
+                                    $(this).dialog('close')
+                                           .dialog('destroy')
+                                           .remove();
+
+                                    $('#' + $scope.dialogPatchDetailId).dialog('close');
+                                },
+                                'CANCEL' : function() {
+                                    $(this).dialog('close')
+                                           .dialog('destroy')
+                                           .remove();
+                                }
+                            }
+                        });
+                    },
+                    'CLOSE'    : function() {
+                        $(this).dialog('close');
+                    }
+                },
+                close     : function(event, ui) {
+                    $(this).dialog('destroy');
+
+                    $timeout(function() {
+                        $scope.isShowDialogPatchDetail = false;
+                    });
+                }
+            });
+        };
+
+        $http({
+            method          : 'GET',
+            url             : POST_ORIGIN,
+            timeout         : TIMEOUT,
+            withCredentials : true,
+            params          : '',  // Query Parameters (GET)
+            headers         : {
+                //'X-Requested-With' : 'XMLHttpRequest'  // Unnecessary for CORS
+            }
+        }).success(function(data, status, headers, config) {
+            if (angular.isObject(data) && data.result) {
+                $scope.isAuth         = data.isAuth;
+                $scope.csrf           = data.csrf;
+                $scope.authedUsername = data.username;
+
+                if ($scope.isAuth) {
+                    $scope.patchLists = angular.fromJson(data.patches);
+                }
+            }
+        }).error(function(data, status, headers, config) {
+            _ajaxErrorHandler();
+        });
     }]);
 
 })();
