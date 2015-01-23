@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Alike" type="text/css" media="all" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton" type="text/css" media="all" />
 <link rel="stylesheet" href="lib/css/jquery-ui/jquery-ui-1.10.3.custom.min.css" type="text/css" media="all" />
+<link rel="stylesheet" href="lib/css/colorbox/colorbox.css" type="text/css" media="all" />
 <link rel="stylesheet" href="lib/js/select2/select2.css" type="text/css" media="all" />
 <link rel="stylesheet" href="stylesheets/css/x-sound.css" type="text/css" media="all" />
 <link rel="stylesheet" href="stylesheets/css/mac.css" type="text/css" media="all" ng-if="isSafari" />
@@ -24,6 +25,7 @@
 <script type="text/javascript" src="lib/js/angularjs/angular.min.js"></script>
 <script type="text/javascript" src="lib/js/jquery/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="lib/js/jquery-ui/jquery-ui-1.9.2.custom.min.js"></script>
+<script type="text/javascript" src="lib/js/colorbox/jquery.colorbox-min.js"></script>
 <script type="text/javascript" src="lib/js/select2/select2.min.js"></script>
 <script type="text/javascript" src="javascripts/xsound.min.js"></script>
 <script type="text/javascript" src="javascripts/controller.min.js"></script>
@@ -379,17 +381,15 @@
                     </fieldset>
                 </div>
                 <!-- /session-controllers -->
-                <!--
                 <div id="patch-controllers">
                     <fieldset>
                         <legend class="invisibility">PATCH</legend>
                         <dl>
-                            <dt><label for="checkbox-is-patch">PATCH<span><a href="#patch-container"></a></span></label></dt>
-                            <dd><input type="checkbox" id="checkbox-is-patch" name="checkbox-is-patch" /></dd>
+                            <dt><label for="checkbox-is-patch">PATCH<span ng-class="{'check-on' : isActives.patch}"><a href="#patch-container"></a></span></label></dt>
+                            <dd><input type="checkbox" id="checkbox-is-patch" name="checkbox-is-patch" ng-click="togglePatchState($event)" /></dd>
                         </dl>
                     </fieldset>
                 </div>
-                -->
                 <!-- /patch-controllers -->
                 <ul id="white" class="clearfix">
                     <li ng-repeat="keyboard in pianoKeyboards.whites" ng-mousedown="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseup="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-class="{'keyboard-off' : isSoundStops[pianoKeyboards.keyboards[keyboard]], 'keyboard-on' : !isSoundStops[pianoKeyboards.keyboards[keyboard]]}"></li>
@@ -757,7 +757,451 @@
         <!-- /container -->
 
         <!-- for patch system -->
-        <div id="patch-container"><!-- HTML is created by Jade template --></div>
+        <div id="patch-container" ng-controller="PatchController" ng-click="cancelClose($event)" ng-show="isActives.patch">
+            <ul class="clearfix" ng-if="!isAuth">
+                <li><a href="#signin" ng-click="toggleAction($event, 'signin')" ng-class="{'selected' : isSignin}">SIGN IN</a></li>
+                <li><a href="#signup" ng-click="toggleAction($event, 'signup')" ng-class="{'selected' : isSignup}">SIGN UP</a></li>
+            </ul>
+            <div class="patch-form-area" ng-if="!isAuth">
+                <div id="signin" ng-show="isSignin">
+                    <form>
+                        <fieldset>
+                            <legend>ACCOUNT</legend>
+                            <dl>
+                                <dt><label for="text-signin-user-name">USER</label></dt>
+                                <dd><input id="text-signin-user-name" type="text" placeholder="USER NAME" ng-model="signins.username"></dd>
+                                <dt><label for="password-signin-user-password">PASSWORD</label></dt>
+                                <dd><input id="password-signin-user-password" type="password" placeholder="PASSWORD" ng-model="signins.password"></dd>
+                            </dl>
+                        </fieldset>
+                        <ul>
+                            <li><button type="reset">RESET</button></li>
+                            <li><button type="button" ng-click="signin($event)" ng-disabled="isDisabled">SIGN IN</button></li>
+                        </ul>
+                    </form>
+                </div>
+                <!--/ signin-->
+                <div id="signup" ng-show="isSignup">
+                    <form>
+                        <fieldset>
+                            <legend>ACCOUNT</legend>
+                            <dl>
+                                <dt><label for="text-signout-user-name">USER</label></dt>
+                                <dd><input id="text-signout-user-name" type="text" placeholder="USER NAME" ng-model="signups.username"></dd>
+                                <dt><label for="password-signout-user-password">PASSWORD</label></dt>
+                                <dd><input id="password-signout-user-password" type="password" name="password" placeholder="PASSWORD" ng-model="signups.password"></dd>
+                            </dl>
+                        </fieldset>
+                        <ul>
+                            <li><button type="reset">RESET</button></li>
+                            <li><button type="button" ng-click="signup($event)" ng-disabled="isDisabled">SIGN UP</button></li>
+                        </ul>
+                    </form>
+                </div>
+                <!--/ signup-->
+            </div>
+            <!--/.patch-form-area-->
+            <ul class="clearfix" ng-if="isAuth">
+                <li><a href="#patch-load" ng-click="toggleAction($event, 'patchList')" ng-class="{'selected' : isPatchList}">LOAD</a></li>
+                <li><a href="#patch-save" ng-click="toggleAction($event, 'savePatch')" ng-class="{'selected' : isSavePatch}">SAVE</a></li>
+                <li><a href="#account"    ng-click="toggleAction($event, 'account')"   ng-class="{'selected' : isAccount}" ng-bind="authedUsername"></a></li>
+            </ul>
+            <div class="patch-form-area" ng-if="isAuth">
+                <div id="patch-load" ng-show="isPatchList">
+                    <dl id="patch-list">
+                        <dt>PATCH LIST</dt>
+                        <dd ng-repeat="patchList in patchLists" ng-click="openPatchDetail($event, patchList)" ng-bind="patchList.name"></dd>
+                    </dl>
+                    <div id="{{ dialogPatchDetailId }}" ng-show="isShowDialogPatchDetail">
+                        <table>
+                            <caption>Oscillator</caption>
+                            <thead><tr><th scope="col"></th><th scope="col">OSCILLATOR 1</th><th>OSCILLATOR 2</th></tr></thead>
+                            <tbody>
+                                <tr><td>MASTER VOLUME</td><td colspan="2" ng-bind="patches.mastervolume"></td></tr>
+                                <tr><td>GLIDE</td><td colspan="2" ng-bind="patches.glide.time"></td></tr>
+                                <tr><td>STATE</td><td ng-bind="patches.oscillator0.state ? 'ON' : 'OFF'"></td><td ng-bind="patches.oscillator1.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>TYPE</td><td ng-bind="patches.oscillator0.type | uppercase"></td><td ng-bind="patches.oscillator1.type | uppercase"></td></tr>
+                                <tr><td>GAIN</td><td ng-bind="patches.oscillator0.gain"></td><td ng-bind="patches.oscillator1.gain"></td></tr>
+                                <tr><td>OCTAVE</td><td ng-bind="patches.oscillator0.octave"></td><td ng-bind="patches.oscillator1.octave"></td></tr>
+                                <tr><td>FINE</td><td ng-bind="patches.oscillator0.fine"></td><td ng-bind="patches.oscillator1.fine"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Envelope Generator</caption>
+                            <thead><tr><th scope="col" colspan="2">ENVELOPE GENERATOR</th></tr></thead>
+                            <tbody>
+                                <tr><td>ATTACK</td><td ng-bind="patches.eg.attack"></td></tr>
+                                <tr><td>DECAY</td><td ng-bind="patches.eg.decay"></td></tr>
+                                <tr><td>SUSTAIN</td><td ng-bind="patches.eg.decay"></td></tr>
+                                <tr><td>RELEASE</td><td ng-bind="patches.eg.release"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Compressor</caption>
+                            <thead><tr><th scope="col" colspan="2">COMPRESSOR</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.compressor.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>THRESHOLD</td><td ng-bind="patches.compressor.threshold"></td></tr>
+                                <tr><td>KNEE</td><td ng-bind="patches.compressor.knee"></td></tr>
+                                <tr><td>RATIO</td><td ng-bind="patches.compressor.ratio"></td></tr>
+                                <tr><td>ATTACK</td><td ng-bind="patches.compressor.attack"></td></tr>
+                                <tr><td>RELEASE</td><td ng-bind="patches.compressor.release"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Distortion</caption>
+                            <thead><tr><th scope="col" colspan="2">DISTORTION</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.distortion.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>CURVE</td><td ng-bind="patches.distortion.curve | uppercase"></td></tr>
+                                <tr><td>SAMPLES</td><td ng-bind="patches.distortion.samples"></td></tr>
+                                <tr><td>DRIVE</td><td ng-bind="patches.distortion.drive"></td></tr>
+                                <tr><td>COLOR</td><td ng-bind="patches.distortion.color"></td></tr>
+                                <tr><td>TONE</td><td ng-bind="patches.distortion.tone"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Wah</caption>
+                            <thead><tr><th scope="col" colspan="2">Wah</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.wah.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>CUTOFF</td><td ng-bind="patches.wah.cutoff"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="patches.wah.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="patches.wah.rate"></td></tr>
+                                <tr><td>RESONANCE</td><td ng-bind="patches.wah.resonance"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Equalizer</caption>
+                            <thead><tr><th scope="col" colspan="2">EQUALIZER</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.equalizer.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>BASS</td><td ng-bind="patches.equalizer.bass"></td></tr>
+                                <tr><td>MIDDLE</td><td ng-bind="patches.equalizer.middle"></td></tr>
+                                <tr><td>TRABLE</td><td ng-bind="patches.equalizer.treble"></td></tr>
+                                <tr><td>PRESENCE</td><td ng-bind="patches.equalizer.presence"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                           <caption>Filter</caption>
+                            <thead><tr><th scope="col" colspan="2">FILTER</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.filter.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>TYPE</td><td ng-bind="patches.filter.type | uppercase"></td></tr>
+                                <tr><td>FREQUENCY</td><td ng-bind="patches.filter.frequency"></td></tr>
+                                <tr><td>QUALITY FACTOR</td><td ng-bind="patches.filter.Q"></td></tr>
+                                <tr><td>GAIN</td><td ng-bind="patches.filter.gain"></td></tr>
+                                <tr><td>ATTACK</td><td ng-bind="patches.filter.attack"></td></tr>
+                                <tr><td>DECAY</td><td ng-bind="patches.filter.decay"></td></tr>
+                                <tr><td>SUSTAIN</td><td ng-bind="patches.filter.decay"></td></tr>
+                                <tr><td>RELEASE</td><td ng-bind="patches.filter.release"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Auto Pan</caption>
+                            <thead><tr><th scope="col" colspan="2">AUTO PAN</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.autopanner.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="patches.autopanner.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="patches.autopanner.rate"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Tremolo</caption>
+                            <thead><tr><th scope="col" colspan="2">TREMOLO</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.tremolo.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="patches.tremolo.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="patches.tremolo.rate"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Ring Modulator</caption>
+                            <thead><tr><th scope="col" colspan="2">RING MODULATOR</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.ringmodulator.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="patches.ringmodulator.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="patches.ringmodulator.rate"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Phaser</caption>
+                            <thead><tr><th scope="col" colspan="2">PHASER</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.phaser.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>STAGE</td><td ng-bind="patches.phaser.stage"></td></tr>
+                                <tr><td>FREQUENCY</td><td ng-bind="patches.phaser.frequency"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="patches.phaser.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="patches.phaser.rate"></td></tr>
+                                <tr><td>MIX</td><td ng-bind="patches.phaser.mix"></td></tr>
+                                <tr><td>FEEDBACK</td><td ng-bind="patches.phaser.feedback"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Chorus</caption>
+                            <thead><tr><th scope="col" colspan="2">CHORUS</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.chorus.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>TIME</td><td ng-bind="patches.chorus.time"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="patches.chorus.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="patches.chorus.rate"></td></tr>
+                                <tr><td>MIX</td><td ng-bind="patches.chorus.mix"></td></tr>
+                                <tr><td>TONE</td><td ng-bind="patches.chorus.tone"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Flanger</caption>
+                            <thead><tr><th scope="col" colspan="2">FLANGER</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.flanger.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>TIME</td><td ng-bind="patches.flanger.time"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="patches.flanger.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="patches.flanger.rate"></td></tr>
+                                <tr><td>MIX</td><td ng-bind="patches.flanger.mix"></td></tr>
+                                <tr><td>TONE</td><td ng-bind="patches.flanger.tone"></td></tr>
+                                <tr><td>FEEDBACK</td><td ng-bind="patches.flanger.feedback"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Delay</caption>
+                            <thead><tr><th scope="col" colspan="2">DELAY</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.delay.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>TIME</td><td ng-bind="patches.delay.time"></td></tr>
+                                <tr><td>DRY</td><td ng-bind="patches.delay.dry"></td></tr>
+                                <tr><td>WET</td><td ng-bind="patches.delay.wet"></td></tr>
+                                <tr><td>TONE</td><td ng-bind="patches.delay.tone"></td></tr>
+                                <tr><td>FEEDBACK</td><td ng-bind="patches.delay.feedback"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Reverb</caption>
+                            <thead><tr><th scope="col" colspan="2">REVERB</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="patches.reverb.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>DRY</td><td ng-bind="patches.reverb.dry"></td></tr>
+                                <tr><td>WET</td><td ng-bind="patches.reverb.wet"></td></tr>
+                                <tr><td>TONE</td><td ng-bind="patches.reverb.tone"></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- //#patch-load -->
+                <div id="patch-save" ng-show="isSavePatch">
+                    <form class="clearfix">
+                        <dl>
+                            <dt><label for="text-patch-name">SAVE PATCH</label></dt>
+                            <dd><input type="text" id="text-patch-name" placeholder="PATCH NAME" ng-keyup="typePatchname($event)" /></dd>
+                        </dl>
+                        <ul>
+                            <li><button type="button" ng-click="savePatch($event)">SAVE</button></li>
+                        </ul>
+                    </form>
+                    <div id="patch-table">
+                        <table>
+                            <caption>Oscillator</caption>
+                            <thead><tr><th scope="col"></th><th scope="col">OSCILLATOR 1</th><th>OSCILLATOR 2</th></tr></thead>
+                            <tbody>
+                                <tr><td>MASTER VOLUME</td><td colspan="2" ng-bind="currentPatches.mastervolume"></td></tr>
+                                <tr><td>GLIDE</td><td colspan="2" ng-bind="currentPatches.glide.time"></td></tr>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.oscillator0.state ? 'ON' : 'OFF'"></td><td ng-bind="currentPatches.oscillator1.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>TYPE</td><td ng-bind="currentPatches.oscillator0.type | uppercase"></td><td ng-bind="currentPatches.oscillator1.type | uppercase"></td></tr>
+                                <tr><td>GAIN</td><td ng-bind="currentPatches.oscillator0.gain"></td><td ng-bind="currentPatches.oscillator1.gain"></td></tr>
+                                <tr><td>OCTAVE</td><td ng-bind="currentPatches.oscillator0.octave"></td><td ng-bind="currentPatches.oscillator1.octave"></td></tr>
+                                <tr><td>FINE</td><td ng-bind="currentPatches.oscillator0.fine"></td><td ng-bind="currentPatches.oscillator1.fine"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Envelope Generator</caption>
+                            <thead><tr><th scope="col" colspan="2">ENVELOPE GENERATOR</th></tr></thead>
+                            <tbody>
+                                <tr><td>ATTACK</td><td ng-bind="currentPatches.eg.attack"></td></tr>
+                                <tr><td>DECAY</td><td ng-bind="currentPatches.eg.decay"></td></tr>
+                                <tr><td>SUSTAIN</td><td ng-bind="currentPatches.eg.decay"></td></tr>
+                                <tr><td>RELEASE</td><td ng-bind="currentPatches.eg.release"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Compressor</caption>
+                            <thead><tr><th scope="col" colspan="2">COMPRESSOR</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.compressor.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>THRESHOLD</td><td ng-bind="currentPatches.compressor.threshold"></td></tr>
+                                <tr><td>KNEE</td><td ng-bind="currentPatches.compressor.knee"></td></tr>
+                                <tr><td>RATIO</td><td ng-bind="currentPatches.compressor.ratio"></td></tr>
+                                <tr><td>ATTACK</td><td ng-bind="currentPatches.compressor.attack"></td></tr>
+                                <tr><td>RELEASE</td><td ng-bind="currentPatches.compressor.release"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Distortion</caption>
+                            <thead><tr><th scope="col" colspan="2">DISTORTION</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.distortion.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>CURVE</td><td ng-bind="currentPatches.distortion.curve | uppercase"></td></tr>
+                                <tr><td>SAMPLES</td><td ng-bind="currentPatches.distortion.samples"></td></tr>
+                                <tr><td>DRIVE</td><td ng-bind="currentPatches.distortion.drive"></td></tr>
+                                <tr><td>COLOR</td><td ng-bind="currentPatches.distortion.color"></td></tr>
+                                <tr><td>TONE</td><td ng-bind="currentPatches.distortion.tone"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Wah</caption>
+                            <thead><tr><th scope="col" colspan="2">Wah</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.wah.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>CUTOFF</td><td ng-bind="currentPatches.wah.cutoff"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="currentPatches.wah.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="currentPatches.wah.rate"></td></tr>
+                                <tr><td>RESONANCE</td><td ng-bind="currentPatches.wah.resonance"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Equalizer</caption>
+                            <thead><tr><th scope="col" colspan="2">EQUALIZER</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.equalizer.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>BASS</td><td ng-bind="currentPatches.equalizer.bass"></td></tr>
+                                <tr><td>MIDDLE</td><td ng-bind="currentPatches.equalizer.middle"></td></tr>
+                                <tr><td>TRABLE</td><td ng-bind="currentPatches.equalizer.treble"></td></tr>
+                                <tr><td>PRESENCE</td><td ng-bind="currentPatches.equalizer.presence"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                           <caption>Filter</caption>
+                            <thead><tr><th scope="col" colspan="2">FILTER</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.filter.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>TYPE</td><td ng-bind="currentPatches.filter.type | uppercase"></td></tr>
+                                <tr><td>FREQUENCY</td><td ng-bind="currentPatches.filter.frequency"></td></tr>
+                                <tr><td>QUALITY FACTOR</td><td ng-bind="currentPatches.filter.Q"></td></tr>
+                                <tr><td>GAIN</td><td ng-bind="currentPatches.filter.gain"></td></tr>
+                                <tr><td>ATTACK</td><td ng-bind="currentPatches.filter.attack"></td></tr>
+                                <tr><td>DECAY</td><td ng-bind="currentPatches.filter.decay"></td></tr>
+                                <tr><td>SUSTAIN</td><td ng-bind="currentPatches.filter.decay"></td></tr>
+                                <tr><td>RELEASE</td><td ng-bind="currentPatches.filter.release"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Auto Pan</caption>
+                            <thead><tr><th scope="col" colspan="2">AUTO PAN</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.autopanner.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="currentPatches.autopanner.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="currentPatches.autopanner.rate"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Tremolo</caption>
+                            <thead><tr><th scope="col" colspan="2">TREMOLO</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.tremolo.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="currentPatches.tremolo.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="currentPatches.tremolo.rate"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Ring Modulator</caption>
+                            <thead><tr><th scope="col" colspan="2">RING MODULATOR</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.ringmodulator.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="currentPatches.ringmodulator.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="currentPatches.ringmodulator.rate"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Phaser</caption>
+                            <thead><tr><th scope="col" colspan="2">PHASER</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.phaser.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>STAGE</td><td ng-bind="currentPatches.phaser.stage"></td></tr>
+                                <tr><td>FREQUENCY</td><td ng-bind="currentPatches.phaser.frequency"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="currentPatches.phaser.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="currentPatches.phaser.rate"></td></tr>
+                                <tr><td>MIX</td><td ng-bind="currentPatches.phaser.mix"></td></tr>
+                                <tr><td>FEEDBACK</td><td ng-bind="currentPatches.phaser.feedback"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Chorus</caption>
+                            <thead><tr><th scope="col" colspan="2">CHORUS</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.chorus.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>TIME</td><td ng-bind="currentPatches.chorus.time"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="currentPatches.chorus.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="currentPatches.chorus.rate"></td></tr>
+                                <tr><td>MIX</td><td ng-bind="currentPatches.chorus.mix"></td></tr>
+                                <tr><td>TONE</td><td ng-bind="currentPatches.chorus.tone"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Flanger</caption>
+                            <thead><tr><th scope="col" colspan="2">FLANGER</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.flanger.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>TIME</td><td ng-bind="currentPatches.flanger.time"></td></tr>
+                                <tr><td>DEPTH</td><td ng-bind="currentPatches.flanger.depth"></td></tr>
+                                <tr><td>RATE</td><td ng-bind="currentPatches.flanger.rate"></td></tr>
+                                <tr><td>MIX</td><td ng-bind="currentPatches.flanger.mix"></td></tr>
+                                <tr><td>TONE</td><td ng-bind="currentPatches.flanger.tone"></td></tr>
+                                <tr><td>FEEDBACK</td><td ng-bind="currentPatches.flanger.feedback"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Delay</caption>
+                            <thead><tr><th scope="col" colspan="2">DELAY</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.delay.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>TIME</td><td ng-bind="currentPatches.delay.time"></td></tr>
+                                <tr><td>DRY</td><td ng-bind="currentPatches.delay.dry"></td></tr>
+                                <tr><td>WET</td><td ng-bind="currentPatches.delay.wet"></td></tr>
+                                <tr><td>TONE</td><td ng-bind="currentPatches.delay.tone"></td></tr>
+                                <tr><td>FEEDBACK</td><td ng-bind="currentPatches.delay.feedback"></td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <caption>Reverb</caption>
+                            <thead><tr><th scope="col" colspan="2">REVERB</th></tr></thead>
+                            <tbody>
+                                <tr><td>STATE</td><td ng-bind="currentPatches.reverb.state ? 'ON' : 'OFF'"></td></tr>
+                                <tr><td>DRY</td><td ng-bind="currentPatches.reverb.dry"></td></tr>
+                                <tr><td>WET</td><td ng-bind="currentPatches.reverb.wet"></td></tr>
+                                <tr><td>TONE</td><td ng-bind="currentPatches.reverb.tone"></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- //patch-save -->
+                <div id="account" ng-show="isAccount">
+                    <form id="signout">
+                        <fieldset>
+                            <legend>SIGN OUT</legend>
+                        </fieldset>
+                        <ul>
+                            <li><button type="button" ng-click="signout($event)">SIGN OUT</button></li>
+                        </ul>
+                    </form>
+                    <form id="delete-account">
+                        <fieldset>
+                            <legend>DELETE ACCOUNT</legend>
+                            <dl>
+                                <dt><label for="text-delete-user-name">USER</label></dt>
+                                <dd><input type="text" id="text-delete-user-name" placeholder="USER NAME" ng-model="deleteAccounts.username" /></dd>
+                                <dt><label for="password-delete-user-password">PASSWORD</label></dt>
+                                <dd><input type="password" id="password-delete-user-password" placeholder="PASSWORD" ng-model="deleteAccounts.password" /></dd>
+                            </dl>
+                        </fieldset>
+                        <ul>
+                            <li><button type="reset">RESET</button></li>
+                            <li><button type="button" ng-click="deleteAccount($event)" ng-disabled="isDisabled">DELETE</button></li>
+                        </ul>
+                    </form>
+                </div>
+                <!-- //#account -->
+            </div>
+            <!--/.patch-form-area-->
+        </div>
+        <!-- //#patch-container -->
 
         <!-- for dialog, modal window -->
         <div>
@@ -819,7 +1263,7 @@
             </li>
         </ul>
         <div>
-            <small>Copyright &copy; <strong>Tomohiro IKEDA</strong> &gt;&gt; <a href="http://curtaincall.weblike.jp/" target="_blank" title="Author's Website">Website</a></small>
+            <small>Copyright 2012 - 2014 &copy; <strong>Tomohiro IKEDA</strong> &gt;&gt; <a href="http://curtaincall.weblike.jp/" target="_blank" title="Author's Website">Website</a></small>
             <small><a href="http://maoudamashii.jokersounds.com/" title="音楽素材/魔王魂" target="_blank">音楽素材/魔王魂</a></small>
         </div>
     </footer>
