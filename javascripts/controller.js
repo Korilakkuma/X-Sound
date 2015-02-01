@@ -838,7 +838,8 @@
 
                                     $timeout(function() {
                                         // This is scope of XSoundController
-                                        scope.currentSoundSource = value;
+                                        scope.currentSoundSource  = value;
+                                        scope.selectedSoundSource = value;
                                     });
 
                                     break;
@@ -847,23 +848,24 @@
                                         $timeout(function() {
                                             // This is scope of XSoundController
                                             scope.currentSoundSource = value;
+                                            scope.selectedSoundSource = value;
                                         });
                                     }
 
                                     X('stream').stop();
 
                                     break;
-                                case 'microphone' :
+                                case 'stream' :
                                     try {
                                         X('stream').start();
                                         X('stream').module('session').start();
-                                    } catch (error) {
-                                        openDialog('Error', 400, 'auto', true, ('<p><b>' + error.message + '</b></p>'));
 
                                         $timeout(function() {
                                             // This is scope of XSoundController
-                                            scope.currentSoundSource = value;
+                                            scope.selectedSoundSource = value;
                                         });
+                                    } catch (error) {
+                                        openDialog('Error', 400, 'auto', true, ('<p><b>' + error.message + '</b></p>'));
                                     }
 
                                     break;
@@ -893,6 +895,10 @@
                             angular.forEach(sources, function(source) {
                                 if ((source !== 'oscillator') && (source !== 'audio')) {
                                     X(source).module('recorder').ready(value);
+
+                                    if (source === 'stream') {
+                                        X('stream').module('recorder').start();
+                                    }
                                 }
                             });
                         });
@@ -1369,7 +1375,8 @@
         }
 
         // This model is refered by other controllers.
-        $scope.currentSoundSource = 'oscillator';
+        $scope.currentSoundSource  = 'oscillator';
+        $scope.selectedSoundSource = 'oscillator';
 
         $scope.isReady       = false;
         $scope.progress      = 0;
@@ -1821,6 +1828,10 @@
                         angular.forEach(sources, function(source) {
                             if ((source !== 'oscillator') && (source !== 'audio')) {
                                 X(source).module('recorder').ready($scope.activeTrack);
+
+                                if (source === 'stream') {
+                                    X('stream').module('recorder').start();
+                                }
                             }
                         });
 
@@ -1920,7 +1931,7 @@
             var BIT     = 16;  // 16 bit
             var TYPE    = 'blob';  // or 'dataURL'
 
-            var source = $scope.$parent.currentSoundSource;
+            var source = $scope.$parent.selectedSoundSource;
 
             if (source === 'oscillator') {
                 source = 'mixer';
@@ -2412,7 +2423,7 @@
                     && X('audio').module('session').isConnected()
                     && X('stream').module('session').isConnected()) {
                     // Connection to server has existed already
-                   angular.forEach(sources, function(source) {
+                    angular.forEach(sources, function(source) {
                         if (source !== 'oscillator') {
                             X(source).module('session').state(true, _stateCallback, _waitCallback);
                         }
@@ -2432,7 +2443,7 @@
                     try {
                         angular.forEach(sources, function(source) {
                             if (source !== 'oscillator') {
-                                X('mixer').module('session')
+                                X(source).module('session')
                                           .setup(_sessionSetups)
                                           .state(true, _stateCallback, _waitCallback);
 

@@ -345,8 +345,8 @@
                         <select id="select-sound-source" name="select-sound-source" ui-select>
                             <option value="oscillator" selected>OSCILLATOR</option>
                             <option value="one-shot" ng-if="isEnableOneshot">PIANO</option>
-                            <option value="microphone">MICROPHONE</option>
-                            <!-- <option value="midi">MIDI</option> -->
+                            <option value="stream">MICROPHONE</option>
+                            <option value="midi" ng-if="false">MIDI</option>
                         </select>
                     </fieldset>
                 </div>
