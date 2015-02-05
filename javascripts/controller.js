@@ -20,7 +20,7 @@
 
     /**
      * This configuration for set Data URL and Object URL  (except "unsafe:").
-     * @param {$compileProvider} This argument is service of DI (Dependency Injection).
+     * @param {$compileProvider} $compileProvider This argument is service of DI (Dependency Injection).
      */
     xsound.config(['$compileProvider', function($compileProvider) {
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|data|blob):/);
@@ -28,6 +28,7 @@
 
     /**
      * for loading resources (one-shot audios, RIRs, MML texts).
+     * @param {$location} $location This argument is service that wraps location object.
      */
     xsound.factory('BASE_URL', ['$location', function($location) {
         var baseURL = '';
@@ -288,24 +289,36 @@
         }
     });
 
+    xsound.factory('drawNodeCallback', ['$rootScope', function($rootScope) {
+        /**
+         * This service redraws Canvas or SVG according to audio position.
+         * @param {$timeout} timeout This argument is in order to update view.
+         * @param {number} currentTime This argument is current time of audio.
+         */
+        return function(timeout, currentTime) {
+            if ((currentTime >= 0) && (currentTime <= X('audio').param('duration'))) {
+                X('audio').param('currentTime', currentTime);
+                X('audio').module('analyser').domain('time-all-L').update(currentTime);
+                X('audio').module('analyser').domain('time-all-R').update(currentTime);
+
+                timeout(function() {
+                    $rootScope.currentTime = currentTime;
+                });
+            }
+        };
+    }]);
+
     /**
-     * This service redraws Canvas or SVG according to audio position.
-     * @param {$scope} scope This argument is scope object of AudioController.
-     * @param {$timeout} timeout This argument is in order to update view.
-     * @param {number} currentTime This argument is current time of audio.
+     * This service creates formatted time string.
+     * @param {number} time This argument is time (seconds).
      */
-    xsound.value('drawNodeCallback', function(scope, timeout, currentTime) {
-        if ((currentTime >= 0) && (currentTime <= X('audio').param('duration'))) {
-            X('audio').param('currentTime', currentTime);
-            X('audio').module('analyser').domain('time-all-L').update(currentTime);
-            X('audio').module('analyser').domain('time-all-R').update(currentTime);
+    xsound.value('createTimeString', function(time) {
+        var times = X.convertTime(time);
 
-            var times = X.convertTime(currentTime);
-
-            timeout(function() {
-                scope.currentTime     = currentTime;
-                scope.currentTimeText = ('0' + times.minutes).slice(-2) + ' : ' + ('0' + times.seconds).slice(-2) + '.' + String(times.milliseconds).slice(2, 4);
-            });
+        if (times.milliseconds === 0) {
+            return ('0' + times.minutes).slice(-2) + ' : ' + ('0' + times.seconds).slice(-2) + '.00';
+        } else {
+            return ('0' + times.minutes).slice(-2) + ' : ' + ('0' + times.seconds).slice(-2) + '.' + String(times.milliseconds).slice(2, 4);
         }
     });
 
@@ -336,118 +349,118 @@
      * This service gets current parameters.
      */
     xsound.value('getCurrentPatches', function() {
-            return {
-                'mastervolume' : X('oscillator').params().mastervolume,
-                'glide'        : {
-                    'type' : X('oscillator').params().oscillator.glide.type,
-                    'time' : X('oscillator').params().oscillator.glide.time
-                },
-                'oscillator0'  : X('oscillator').params().oscillator.oscillator0,
-                'oscillator1'  : C('oscillator').params().oscillator.oscillator0,
-                'eg'           : {
-                    'attack'  : X('oscillator').params().eg.attack,
-                    'decay'   : X('oscillator').params().eg.decay,
-                    'sustain' : X('oscillator').params().eg.sustain,
-                    'release' : X('oscillator').params().eg.release
-                },
-                'compressor'   : {
-                    'state'     : X('oscillator').params().compressor.state,
-                    'threshold' : X('oscillator').params().compressor.threshold,
-                    'knee'      : X('oscillator').params().compressor.knee,
-                    'ratio'     : X('oscillator').params().compressor.ratio,
-                    'attack'    : X('oscillator').params().compressor.attack,
-                    'release'   : X('oscillator').params().compressor.release
-                },
-                'distortion'    : {
-                    'state'   : X('oscillator').params().distortion.state,
-                    'curve'   : X('oscillator').params().distortion.curve,
-                    'samples' : X('oscillator').params().distortion.samples,
-                    'drive'   : X('oscillator').params().distortion.drive,
-                    'color'   : X('oscillator').params().distortion.color,
-                    'tone'    : X('oscillator').params().distortion.tone
-                },
-                'wah'           : {
-                    'state'     : X('oscillator').params().wah.state,
-                    'cutoff'    : X('oscillator').params().wah.cutoff,
-                    'depth'     : X('oscillator').params().wah.depth,
-                    'rate'      : X('oscillator').params().wah.rate,
-                    'resonance' : X('oscillator').params().wah.resonance
-                },
-                'equalizer'     : {
-                    'state'    : X('oscillator').params().equalizer.state,
-                    'bass'     : X('oscillator').params().equalizer.bass,
-                    'middle'   : X('oscillator').params().equalizer.middle,
-                    'treble'   : X('oscillator').params().equalizer.treble,
-                    'presence' : X('oscillator').params().equalizer.presence
-                },
-                'filter'        : {
-                    'state'     : X('oscillator').params().filter.state,
-                    'type'      : X('oscillator').params().filter.type,
-                    'frequency' : X('oscillator').params().filter.frequency,
-                    'Q'         : X('oscillator').params().filter.Q,
-                    'gain'      : X('oscillator').params().filter.gain,
-                    'attack'    : X('oscillator').params().filter.attack,
-                    'decay'     : X('oscillator').params().filter.decay,
-                    'sustain'   : X('oscillator').params().filter.sustain,
-                    'release'   : X('oscillator').params().filter.release
-                },
-                'autopanner'    : {
-                    'state' : X('oscillator').params().autopanner.state,
-                    'depth' : X('oscillator').params().autopanner.depth,
-                    'rate'  : X('oscillator').params().autopanner.rate
-                },
-                'tremolo'       : {
-                    'state' : X('oscillator').params().tremolo.state,
-                    'depth' : X('oscillator').params().tremolo.depth,
-                    'rate'  : X('oscillator').params().tremolo.rate
-                },
-                'ringmodulator' : {
-                    'state' : X('oscillator').params().ringmodulator.state,
-                    'depth' : X('oscillator').params().ringmodulator.depth,
-                    'rate'  : X('oscillator').params().ringmodulator.rate
-                },
-                'phaser'        : {
-                    'state'     : X('oscillator').params().phaser.state,
-                    'stage'     : X('oscillator').params().phaser.stage,
-                    'frequency' : X('oscillator').params().phaser.frequency,
-                    'depth'     : X('oscillator').params().phaser.depth,
-                    'rate'      : X('oscillator').params().phaser.rate,
-                    'mix'       : X('oscillator').params().phaser.mix,
-                    'feedback'  : X('oscillator').params().phaser.feedback
-                },
-                'chorus'        : {
-                    'state' : X('oscillator').params().chorus.state,
-                    'time'  : X('oscillator').params().chorus.time * 1000,
-                    'depth' : X('oscillator').params().chorus.depth,
-                    'rate'  : X('oscillator').params().chorus.rate,
-                    'mix'   : X('oscillator').params().chorus.mix,
-                    'tone'  : X('oscillator').params().chorus.tone
-                },
-                'flanger'        : {
-                    'state'    : X('oscillator').params().flanger.state,
-                    'time'     : X('oscillator').params().flanger.time * 1000,
-                    'depth'    : X('oscillator').params().flanger.depth,
-                    'rate'     : X('oscillator').params().flanger.rate,
-                    'mix'      : X('oscillator').params().flanger.mix,
-                    'tone'     : X('oscillator').params().flanger.tone,
-                    'feedback' : X('oscillator').params().flanger.feedback
-                },
-                'delay'        : {
-                    'state'    : X('oscillator').params().delay.state,
-                    'time'     : X('oscillator').params().delay.time * 1000,
-                    'dry'      : X('oscillator').params().delay.dry,
-                    'wet'      : X('oscillator').params().delay.wet,
-                    'tone'     : X('oscillator').params().delay.tone,
-                    'feedback' : X('oscillator').params().delay.feedback
-                },
-                'reverb'        : {
-                    'state'    : X('oscillator').params().reverb.state,
-                    'dry'      : X('oscillator').params().reverb.dry,
-                    'wet'      : X('oscillator').params().reverb.wet,
-                    'tone'     : X('oscillator').params().reverb.tone
-                }
-            };
-        });
+        return {
+            'mastervolume' : X('oscillator').params().mastervolume,
+            'glide'        : {
+                'type' : X('oscillator').params().oscillator.glide.type,
+                'time' : X('oscillator').params().oscillator.glide.time
+            },
+            'oscillator0'  : X('oscillator').params().oscillator.oscillator0,
+            'oscillator1'  : C('oscillator').params().oscillator.oscillator0,
+            'eg'           : {
+                'attack'  : X('oscillator').params().eg.attack,
+                'decay'   : X('oscillator').params().eg.decay,
+                'sustain' : X('oscillator').params().eg.sustain,
+                'release' : X('oscillator').params().eg.release
+            },
+            'compressor'   : {
+                'state'     : X('oscillator').params().compressor.state,
+                'threshold' : X('oscillator').params().compressor.threshold,
+                'knee'      : X('oscillator').params().compressor.knee,
+                'ratio'     : X('oscillator').params().compressor.ratio,
+                'attack'    : X('oscillator').params().compressor.attack,
+                'release'   : X('oscillator').params().compressor.release
+            },
+            'distortion'    : {
+                'state'   : X('oscillator').params().distortion.state,
+                'curve'   : X('oscillator').params().distortion.curve,
+                'samples' : X('oscillator').params().distortion.samples,
+                'drive'   : X('oscillator').params().distortion.drive,
+                'color'   : X('oscillator').params().distortion.color,
+                'tone'    : X('oscillator').params().distortion.tone
+            },
+            'wah'           : {
+                'state'     : X('oscillator').params().wah.state,
+                'cutoff'    : X('oscillator').params().wah.cutoff,
+                'depth'     : X('oscillator').params().wah.depth,
+                'rate'      : X('oscillator').params().wah.rate,
+                'resonance' : X('oscillator').params().wah.resonance
+            },
+            'equalizer'     : {
+                'state'    : X('oscillator').params().equalizer.state,
+                'bass'     : X('oscillator').params().equalizer.bass,
+                'middle'   : X('oscillator').params().equalizer.middle,
+                'treble'   : X('oscillator').params().equalizer.treble,
+                'presence' : X('oscillator').params().equalizer.presence
+            },
+            'filter'        : {
+                'state'     : X('oscillator').params().filter.state,
+                'type'      : X('oscillator').params().filter.type,
+                'frequency' : X('oscillator').params().filter.frequency,
+                'Q'         : X('oscillator').params().filter.Q,
+                'gain'      : X('oscillator').params().filter.gain,
+                'attack'    : X('oscillator').params().filter.attack,
+                'decay'     : X('oscillator').params().filter.decay,
+                'sustain'   : X('oscillator').params().filter.sustain,
+                'release'   : X('oscillator').params().filter.release
+            },
+            'autopanner'    : {
+                'state' : X('oscillator').params().autopanner.state,
+                'depth' : X('oscillator').params().autopanner.depth,
+                'rate'  : X('oscillator').params().autopanner.rate
+            },
+            'tremolo'       : {
+                'state' : X('oscillator').params().tremolo.state,
+                'depth' : X('oscillator').params().tremolo.depth,
+                'rate'  : X('oscillator').params().tremolo.rate
+            },
+            'ringmodulator' : {
+                'state' : X('oscillator').params().ringmodulator.state,
+                'depth' : X('oscillator').params().ringmodulator.depth,
+                'rate'  : X('oscillator').params().ringmodulator.rate
+            },
+            'phaser'        : {
+                'state'     : X('oscillator').params().phaser.state,
+                'stage'     : X('oscillator').params().phaser.stage,
+                'frequency' : X('oscillator').params().phaser.frequency,
+                'depth'     : X('oscillator').params().phaser.depth,
+                'rate'      : X('oscillator').params().phaser.rate,
+                'mix'       : X('oscillator').params().phaser.mix,
+                'feedback'  : X('oscillator').params().phaser.feedback
+            },
+            'chorus'        : {
+                'state' : X('oscillator').params().chorus.state,
+                'time'  : X('oscillator').params().chorus.time * 1000,
+                'depth' : X('oscillator').params().chorus.depth,
+                'rate'  : X('oscillator').params().chorus.rate,
+                'mix'   : X('oscillator').params().chorus.mix,
+                'tone'  : X('oscillator').params().chorus.tone
+            },
+            'flanger'        : {
+                'state'    : X('oscillator').params().flanger.state,
+                'time'     : X('oscillator').params().flanger.time * 1000,
+                'depth'    : X('oscillator').params().flanger.depth,
+                'rate'     : X('oscillator').params().flanger.rate,
+                'mix'      : X('oscillator').params().flanger.mix,
+                'tone'     : X('oscillator').params().flanger.tone,
+                'feedback' : X('oscillator').params().flanger.feedback
+            },
+            'delay'        : {
+                'state'    : X('oscillator').params().delay.state,
+                'time'     : X('oscillator').params().delay.time * 1000,
+                'dry'      : X('oscillator').params().delay.dry,
+                'wet'      : X('oscillator').params().delay.wet,
+                'tone'     : X('oscillator').params().delay.tone,
+                'feedback' : X('oscillator').params().delay.feedback
+            },
+            'reverb'        : {
+                'state'    : X('oscillator').params().reverb.state,
+                'dry'      : X('oscillator').params().reverb.dry,
+                'wet'      : X('oscillator').params().reverb.wet,
+                'tone'     : X('oscillator').params().reverb.tone
+            }
+        };
+    });
 
     /**
      * Initialization
@@ -468,7 +481,10 @@
             patch         : false
         };
 
-        //Initialization for using XSound.js
+        // for Audio
+        $rootScope.currentTime = 0;
+
+        // Initialization for using XSound.js
 
         // Clone X object as global object
         $window.C = X.clone();  // for MML of OscillatorModule
@@ -646,8 +662,11 @@
 
     /**
      * Directive for current time of audio (Slider).
+     * @param {$rootScope} $rootScope This argument is service of DI (Dependency Injection).
+     * @param {$timeout} $timeout This argument is in order to update view.
+     * @param {function} createTimeString This argument is service of DI (Dependency Injection).
      */
-    xsound.directive('uiSliderTime', [function() {
+    xsound.directive('uiSliderTime', ['$rootScope', '$timeout', 'createTimeString', function($rootScope, $timeout, createTimeString) {
         return {
             restrict : 'EA',
             template : '<div></div>',
@@ -670,6 +689,12 @@
                     },
                     slide   : function(event, ui) {
                         X('audio').param('currentTime', parseFloat(ui.value));
+                        X('audio').module('analyser').domain('time-all-L').update(X('audio').param('currentTime'));
+                        X('audio').module('analyser').domain('time-all-R').update(X('audio').param('currentTime'));
+
+                        $timeout(function() {
+                            $rootScope.currentTime = X('audio').param('currentTime');
+                        });
                     }
                 });
 
@@ -683,10 +708,12 @@
 
                 // Object.observe
                 scope.$watch(function() {
-                    return scope.currentTime;
+                    return $rootScope.currentTime;
                 }, function(newVal) {
                     $('#slider-audio-current-time').slider('value', newVal);
                     $('#spinner-audio-current-time').spinner('value', newVal);
+
+                    scope.currentTimeText = createTimeString(newVal);
                 });
             }
         };
@@ -694,8 +721,10 @@
 
    /**
      * Directive for current time of audio (Spinner).
+     * @param {$rootScope} $rootScope This argument is service of DI (Dependency Injection).
+     * @param {$timeout} $timeout This argument is in order to update view.
      */
-    xsound.directive('uiSpinnerTime', [function() {
+    xsound.directive('uiSpinnerTime', ['$rootScope', '$timeout', function($rootScope, $timeout) {
         return {
             restrict : 'EA',
             template : '<input />',
@@ -710,6 +739,12 @@
                     step : parseFloat(step),
                     spin : function(event, ui) {
                         X('audio').param('currentTime', parseFloat(ui.value));
+                        X('audio').module('analyser').domain('time-all-L').update(X('audio').param('currentTime'));
+                        X('audio').module('analyser').domain('time-all-R').update(X('audio').param('currentTime'));
+
+                        $timeout(function() {
+                            $rootScope.currentTime = X('audio').param('currentTime');
+                        });
                     }
                 }).spinner('value', parseFloat(value));
             }
@@ -1712,11 +1747,13 @@
 
     /**
      * Controller for Audio
+     * @param {$rootScope} $rootScope This argument is service of DI (Dependency Injection).
      * @param {$scope} $scope This argument is scope of this controller.
      * @param {$timeout} $timeout This argument is to update view.
+     * @param {function} createTimeString This argument is service of DI (Dependency Injection).
      * @extends {XSoundController}
      */
-    xsound.controller('AudioController', ['$scope', '$timeout', function($scope, $timeout) {
+    xsound.controller('AudioController', ['$rootScope', '$scope', '$timeout', 'createTimeString', function($rootScope, $scope, $timeout, createTimeString) {
         var _decodeCallback = function(arrayBuffer) {
             $timeout(function() {
                 $scope.$parent.isModalProgressDecodeAudio = true;
@@ -1736,10 +1773,7 @@
                 // Set audio duration time
                 $scope.duration = duration;
 
-                // Update UI value
-                var times = X.convertTime(duration);
-
-                $scope.durationText    = ('0' + Math.floor(times.minutes)).slice(-2)+ ' : ' + ('0' + Math.floor(times.seconds)).slice(-2) + '.' + String(times.milliseconds).slice(2, 4);
+                $scope.durationText    = createTimeString(duration);
                 $scope.currentTimeText = '00 : 00.00';
             });
         };
@@ -1758,11 +1792,9 @@
         };
 
         var _updateCallback = function(source, currentTime) {
-            var times = X.convertTime(currentTime);
-
             $timeout(function() {
-                $scope.currentTime     = currentTime;
-                $scope.currentTimeText = ('0' + times.minutes).slice(-2) + ' : ' + ('0' + times.seconds).slice(-2) + '.' + String(times.milliseconds).slice(2, 4);
+                $rootScope.currentTime = currentTime;
+                $scope.currentTimeText = createTimeString(currentTime);
             });
         };
 
@@ -1772,7 +1804,7 @@
 
             $timeout(function() {
                 $scope.isActive        = false;
-                $scope.currentTime     = 0;
+                $rootScope.currentTime = 0;
                 $scope.currentTimeText = '00 : 00.00';
             });
         };
@@ -2104,8 +2136,8 @@
             $scope.setAnalyser(api);
 
             // Set current time
-            X('audio').module('analyser').domain('time-all-L').drag(function(currentTime) {drawNodeCallback($scope, $timeout, currentTime);});
-            X('audio').module('analyser').domain('time-all-R').drag(function(currentTime) {drawNodeCallback($scope, $timeout, currentTime);});
+            X('audio').module('analyser').domain('time-all-L').drag(function(currentTime) {drawNodeCallback($timeout, currentTime);});
+            X('audio').module('analyser').domain('time-all-R').drag(function(currentTime) {drawNodeCallback($timeout, currentTime);});
         };
 
         /**
