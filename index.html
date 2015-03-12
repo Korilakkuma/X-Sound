@@ -126,9 +126,9 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /oscillator-1-controllers -->
+                <!-- /#oscillator-0-controllers -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
             <div class="controller-panel">
                 <div id="oscillator-1-controllers">
                     <fieldset>
@@ -155,9 +155,9 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /oscillator-2-controllers -->
+                <!-- /#oscillator-1-controllers -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
             <div class="controller-panel">
                 <div id="envelope-generator-controllers">
                     <fieldset>
@@ -176,7 +176,7 @@
                  </div>
                  <!-- envelope-generator-controllers -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
             <div class="controller-panel" ng-controller="RecordController">
                 <div id="record-controllers">
                     <fieldset>
@@ -205,9 +205,9 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /record-controllers -->
+                <!-- /#record-controllers -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
             <div class="controller-panel" ng-controller="AudioController">
                 <div id="audio-controllers">
                     <fieldset>
@@ -232,9 +232,9 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /audio-controllers -->
+                <!-- /#audio-controllers -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
         </div>
         <!-- /up-container -->
         <div class="container clearfix" ng-show="isReady" ng-class="{'fade-to' : isReady, 'fade-in' : isStart}">
@@ -283,9 +283,9 @@
                         </dl>
                     </div>
                 </div>
-                <!-- /visualization-of-sound -->
+                <!-- /#visualization-of-sound -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
             <div class="controller-panel clearfix" ng-controller="MMLController" slide-block model="mml">
                 <div id="mml-player">
                     <dl>
@@ -312,11 +312,11 @@
                         </dd>
                     </dl>
                 </div>
-                <!-- /mml-player -->
+                <!-- /#mml-player -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
         </div>
-        <!-- /container -->
+        <!-- /.container -->
         <div class="container" ng-show="isReady" ng-class="{'fade-to' : isReady, 'fade-in' : isStart}">
             <div id="piano" class="controller-panel">
                 <div id="master-volume-controllers">
@@ -328,7 +328,7 @@
                         </dl>
                      </fieldset>
                 </div>
-                <!-- /master-volume-controllers -->
+                <!-- /#master-volume-controllers -->
                 <div id="glide-controllers">
                     <fieldset>
                         <legend class="invisibility">GLIDE</legend>
@@ -338,7 +338,7 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /glide-controllers -->
+                <!-- /#glide-controllers -->
                 <div id="sound-source-controllers">
                     <fieldset>
                         <legend class="invisibility">SELECT SOUND SOURCE</legend>
@@ -350,7 +350,7 @@
                         </select>
                     </fieldset>
                 </div>
-                <!-- /sound-source-controllers -->
+                <!-- /#sound-source-controllers -->
                 <div id="visualization-controllers">
                     <fieldset>
                         <legend class="invisibility">ANALYSER</legend>
@@ -360,7 +360,7 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /visualization-controllers -->
+                <!-- /#visualization-controllers -->
                 <div id="mml-controllers">
                     <fieldset>
                         <legend class="invisibility">MML</legend>
@@ -370,7 +370,7 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /mml-controllers -->
+                <!-- /#mml-controllers -->
                 <div id="session-controllers" ng-controller="SessionController">
                     <fieldset>
                         <legend class="invisibility">SESSION</legend>
@@ -380,7 +380,7 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /session-controllers -->
+                <!-- /#session-controllers -->
                 <div id="patch-controllers">
                     <fieldset>
                         <legend class="invisibility">PATCH</legend>
@@ -390,7 +390,7 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /patch-controllers -->
+                <!-- /#patch-controllers -->
                 <ul id="white" class="clearfix">
                     <li ng-repeat="keyboard in pianoKeyboards.whites" ng-mousedown="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseup="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-class="{'keyboard-off' : isSoundStops[pianoKeyboards.keyboards[keyboard]], 'keyboard-on' : !isSoundStops[pianoKeyboards.keyboards[keyboard]]}"></li>
                 </ul>
@@ -398,9 +398,9 @@
                     <li ng-repeat="keyboard in pianoKeyboards.blacks track by $index" ng-mousedown="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseup="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-class="{'keyboard-off' : isSoundStops[pianoKeyboards.keyboards[keyboard]], 'keyboard-on' : !isSoundStops[pianoKeyboards.keyboards[keyboard]], 'skip' : (keyboard === 'skip')}"></li>
                 </ul>
             </div>
-            <!-- /piano -->
+            <!-- /#piano -->
         </div>
-        <!-- /container -->
+        <!-- /.container -->
         <div class="container clearfix" ng-show="isReady" ng-class="{'fade-to' : isReady, 'fade-in' : isStart}" ui-sortable>
             <div class="controller-panel">
                 <div id="compressor-controllers">
@@ -423,7 +423,7 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /compressor-controllers -->
+                <!-- /#compressor-controllers -->
                 <div id="distortion-controllers">
                     <fieldset>
                         <legend>
@@ -468,9 +468,9 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /distortion-controllers -->
+                <!-- /#distortion-controllers -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
             <div class="controller-panel">
                 <div id="wah-controllers">
                     <fieldset>
@@ -490,7 +490,7 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /wah-controllers -->
+                <!-- /#wah-controllers -->
                 <div id="equalizer-controllers">
                     <fieldset>
                         <legend class="margin-bottom">
@@ -509,9 +509,9 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /equalizer-controllers -->
+                <!-- /#equalizer-controllers -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
             <div class="controller-panel">
                 <div id="filter-controllers">
                     <fieldset>
@@ -570,9 +570,9 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /auto-panner-controllers -->
+                <!-- /#auto-panner-controllers -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
             <div class="controller-panel">
                 <div id="tremolo-controllers">
                     <fieldset>
@@ -588,7 +588,7 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /tremolo-controllers -->
+                <!-- /#tremolo-controllers -->
                 <div id="ringmodulator-controllers">
                     <fieldset>
                         <legend class="margin-bottom">
@@ -603,7 +603,7 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /ringmodulator-controllers -->
+                <!-- /#ringmodulator-controllers -->
                 <div id="phaser-controllers">
                     <fieldset>
                         <legend>
@@ -639,9 +639,9 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /phaser-controllers -->
+                <!-- /#phaser-controllers -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
             <div class="controller-panel">
                 <div id="chorus-controllers">
                     <fieldset>
@@ -663,7 +663,7 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /chorus-controllers -->
+                <!-- /#chorus-controllers -->
                 <div id="flanger-controllers">
                     <fieldset>
                         <legend class="margin-bottom">
@@ -686,9 +686,9 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /flanger-controllers -->
+                <!-- /#flanger-controllers -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
             <div class="controller-panel">
                 <div id="delay-controllers">
                     <fieldset>
@@ -710,7 +710,7 @@
                         </dl>
                     </fieldset>
                 </div>
-                <!-- /delay-controllers -->
+                <!-- /#delay-controllers -->
                 <div id="reverb-controllers">
                     <fieldset>
                         <legend>
@@ -750,11 +750,11 @@
                         </p>
                     </fieldset>
                 </div>
-                <!-- /reverb-controllers -->
+                <!-- /#reverb-controllers -->
             </div>
-            <!-- /controller-panel -->
+            <!-- /.controller-panel -->
         </div>
-        <!-- /container -->
+        <!-- /.container -->
 
         <!-- for patch system -->
         <div id="patch-container" ng-controller="PatchController" ng-click="cancelClose($event)" ng-show="isActives.patch">
@@ -986,7 +986,7 @@
                         </table>
                     </div>
                 </div>
-                <!-- //#patch-load -->
+                <!-- /#patch-load -->
                 <div id="patch-save" ng-show="isSavePatch">
                     <form class="clearfix">
                         <dl>
@@ -1171,7 +1171,7 @@
                         </table>
                     </div>
                 </div>
-                <!-- //patch-save -->
+                <!-- /#patch-save -->
                 <div id="account" ng-show="isAccount">
                     <form id="signout">
                         <fieldset>
@@ -1197,11 +1197,11 @@
                         </ul>
                     </form>
                 </div>
-                <!-- //#account -->
+                <!-- /#account -->
             </div>
             <!--/.patch-form-area-->
         </div>
-        <!-- //#patch-container -->
+        <!-- /#patch-container -->
 
         <!-- for dialog, modal window -->
         <div>
@@ -1237,8 +1237,7 @@
             </ui-modal-progress>
         </div>
     </div>
-    <!-- /page -->
-    <!-- Footer -->
+    <!-- /#page -->
     <footer ng-show="isReady" ng-class="{'fade-to' : isReady, 'fade-in' : isStart}">
         <ul>
             <li>
