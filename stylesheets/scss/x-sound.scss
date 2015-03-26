@@ -48,7 +48,7 @@ $white        : #ffffff;
  * for Layout
  */
 
-// for page loading or JavaScript OFF*/
+// for page loading or JavaScript OFF
 html, body {
     height:auto !important;
     font-size:unquote(($baseFontSize * 0.75) + "px");
@@ -278,7 +278,7 @@ fieldset {
 
         //-moz-text-shadow:-1px -1px 1px rgba(0, 0, 0, 0.2), 1px 1px 1px rgba(255, 255, 255, 0.2);
 
-        /*WebKit only*/
+        // WebKit only
         @extend %textGradient;
 
         &.margin-bottom {margin-bottom:12px;}
@@ -1378,8 +1378,8 @@ ui-spinner, ui-spinner-time {
 
 }
 
-/*Reference | Size of piano keyboard (black)*/
-/*width : height -> 23 : 150*/
+// Reference | Size of piano keyboard (black)
+// width : height -> 23 : 150
 #white {
     position:absolute;
     top:73px;
@@ -1410,14 +1410,14 @@ ui-spinner, ui-spinner-time {
     }
 }
 
-/*Reference | Size of piano keyboard (black)*/
-/*width : height -> 11 : 95*/
+// Reference | Size of piano keyboard (black)
+// width : height -> 11 : 95
 #black {
     position:absolute;
     top:73px;
     left:35px;
     z-index:3;
-    height:95px;  /*Enable to click keyboard*/
+    height:95px;  // Enable to click keyboard
 
     li {
         @extend %borderbox;
@@ -1450,7 +1450,7 @@ ui-spinner, ui-spinner-time {
     }
 }
 
-///---  for Piano ---///
+///--- for Piano ---///
 
 
 
@@ -1555,7 +1555,7 @@ ui-spinner, ui-spinner-time {
 }
 
 .patch-form-area {
-    /*border:2px solid rgba(210, 210, 210, 1.0);*/
+    // border:2px solid rgba(210, 210, 210, 1.0);
     padding:12px 24px;
     height:420px;
     overflow-y:scroll;

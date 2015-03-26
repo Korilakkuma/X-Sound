@@ -50,11 +50,15 @@ $viewportUserZoom : zoom !default;  // or fixed
 }
 
 @if $isResponsive {
-    img {max-width : $imgMaxWidth;}
+    img {
+        max-width : $imgMaxWidth;
+    }
 }
 
 @if $isNoOutline {
-    input, textarea, select, button {outline : none;}
+    input, textarea, select, button {
+        outline : none;
+    }
 }
 
 @if $isPointer {
@@ -75,7 +79,7 @@ $viewportUserZoom : zoom !default;  // or fixed
 html {
     overflow   : scroll;
     overflow   : -moz-scrollbars-vertical;
-    overflow-x :scroll;
+    overflow-x : scroll;
 }
 
 ul, ol {
@@ -86,7 +90,7 @@ p, li, dt, dd, th, td, pre {
     -ms-line-break : strict;
         line-break : strict;
     -ms-word-break : break-strict;
-        word-break : break-stritc;
+        word-break : break-strict;
 }
 
 table {

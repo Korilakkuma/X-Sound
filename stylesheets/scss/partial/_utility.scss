@@ -18,7 +18,7 @@ $transparent      : rgba(#000, 0);
 @if $isSimpleClearfix {
     // Simple clearfix
     .clearfix {
-        @if #isCleafixIE6 {
+        @if $isCleafixIE6 {
             zoom : 1;
         }
 
