@@ -2502,6 +2502,7 @@
      * @param {$rootScope} $rootScope This argument is service of DI (Dependency Injection).
      * @param {$scope} $scope This argument is scope of this controller.
      * @param {$http} $http This argument is service of DI (Dependency Injection).
+     * @param {$window} $window This argument is service of DI (Dependency Injection).
      * @param {$location} $location This argument is service of DI (Dependency Injection).
      * @param {$timeout} $timeout This argument is to update view.
      * @param {Array.<string>} sources readFileByDragAndDrop This argument is service of DI (Dependency Injection).
@@ -2509,7 +2510,7 @@
      * @param {function} getCurrentPatches This argument is service of DI (Dependency Injection).
      * @extends {XSoundController}
      */
-    xsound.controller('PatchController', ['$rootScope', '$scope', '$http', '$location', '$timeout', 'sources', 'openDialog', 'getCurrentPatches', function($rootScope, $scope, $http, $location, $timeout, sources, openDialog, getCurrentPatches) {
+    xsound.controller('PatchController', ['$rootScope', '$scope', '$http', '$window', '$location', '$timeout', 'sources', 'openDialog', 'getCurrentPatches', function($rootScope, $scope, $http, $window, $location, $timeout, sources, openDialog, getCurrentPatches) {
         var TIMEOUT = 10000;
 
         var POST_ORIGIN = (function() {
@@ -2521,6 +2522,8 @@
                 //return 'http://curtaincall.weblike.jp/portfolio-x-sound-server/php/bootstrap.php';  //PHP + MySQL
             }
         })();
+
+        var _defaultPatches = getCurrentPatches();
 
         var _deleteAccount = function() {
             $scope.isDisabled = true;
@@ -2568,7 +2571,7 @@
             });
         };
 
-        var _loadPatch = function(patches) {
+        var _loadPatch = function(patches, isPushState) {
             if (!angular.isObject(patches)) {
                 return;
             }
@@ -2788,6 +2791,10 @@
 
             $timeout(function() {
                 $scope.currentPatches = getCurrentPatches();
+
+                if (isPushState) {
+                    history.pushState(getCurrentPatches(), null);
+                }
             });
         };
 
@@ -2863,7 +2870,15 @@
         };
 
         var _ajaxErrorHandler = function() {
-            openDialog('Error', 500, 'auto', false, ('<p><b>Connection to Server failed.</b></p>'));
+            openDialog('Error', 500, 'auto', false, '<p><b>Connection to Server failed.</b></p>');
+        };
+
+        $window.onpopstate = function(event) {
+            if (event.state) {
+                _loadPatch(event.state, false);
+            } else {
+                _loadPatch(_defaultPatches, false);
+            }
         };
 
         $scope.isAuth      = false;
@@ -3252,7 +3267,7 @@
                 },
                 buttons   : {
                     'LOAD'   : function() {
-                        _loadPatch($scope.patches);
+                        _loadPatch($scope.patches, true);
 
                         $(this).dialog('close');
                     },
