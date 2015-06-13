@@ -183,7 +183,7 @@
             resizable : false,
             zIndex    : 9999,
             buttons   : {
-                'OK'    : function() {
+                'OK' : function() {
                     $(this).dialog('close')
                            .dialog('destroy')
                            .remove();
@@ -280,7 +280,7 @@
             progress = event.loaded + ' Bytes load (' + rate + ' %)';// +  event.total + ' Bytes';
 
             timeout(function() {
-                scope.readFileProgress         = progress;
+                scope.readFileProgress = progress;
 
                 if (!scope.isModalProgressReadFile) {
                     scope.isModalProgressReadFile = true;
@@ -2515,11 +2515,11 @@
 
         var POST_ORIGIN = (function() {
             if ($location.host().indexOf('localhost') !== -1) {
-                return 'http://localhost:3000';                                                            //Node.js + MongoDB
-                //return 'http://localhost/~rilakkuma3xjapan/portfolio-x-sound-server/php/bootstrap.php';  //PHP + MySQL
+                // return 'http://localhost:3000';                                                       // Node.js + MongoDB
+                return 'http://localhost/~rilakkuma3xjapan/portfolio-x-sound-server/php/bootstrap.php';  // PHP + MySQL
             } else {
-                return 'http://curtaincall.c.node-ninja.com:3000';                                    //Node.js + MongoDB
-                //return 'http://curtaincall.weblike.jp/portfolio-x-sound-server/php/bootstrap.php';  //PHP + MySQL
+                // return 'http://curtaincall.c.node-ninja.com:3000';                               // Node.js + MongoDB
+                return 'http://curtaincall.weblike.jp/portfolio-x-sound-server/php/bootstrap.php';  // PHP + MySQL
             }
         })();
 
@@ -3237,14 +3237,18 @@
          * @param {object|string} patchList This argument is patch data as associative array or JSON.
          */
         $scope.openPatchDetail = function(event, patchList) {
-            if (angular.isObject(patchList)) {
+            if (angular.isObject(patchList) && (angular.isObject(patchList.patch))) {
+                // Node.js + MongoDB
                 $scope.patches = patchList.patch;
-            } else {
+            } else if (angular.isString(patchList.patch)) {
+                // PHP + MySQL
                 var patch = patchList.patch.replace(/&quot;/g, '"')
                                            .replace(/&apos;/g, "'")
                                            .replace(/&amp;/g, '&');
 
                 $scope.patches = angular.fromJson(patch);
+            } else {
+                return;
             }
 
             $scope.isShowDialogPatchDetail = true;
