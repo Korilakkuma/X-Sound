@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": ";;;;;;GASA,yBAA0B,CAAC,cAAc,CAAC,iBAAiB",
-"sources": ["../../../scss/x-sound/mac.scss"],
+"mappings": ";;;;;;GASA,yBAA0B,CACtB,cAAc,CAAC,iBAAiB",
+"sources": ["../scss/mac.scss"],
 "names": [],
 "file": "mac.css"
 }
