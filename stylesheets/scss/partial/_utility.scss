@@ -50,7 +50,7 @@ $transparent      : rgba(#000, 0);
 }
 
 //
-// border-box
+// border-box : border-box
 //
 // @extend %borderbox
 //
@@ -72,6 +72,17 @@ $transparent      : rgba(#000, 0);
         } @else {
             #{$prefix}background-clip:padding-box;
         }
+    }
+}
+
+//
+// user-select : none
+//
+// @extend %userselectnone
+//
+%userselectnone {
+    @each $prefix in $prefixLists {
+        #{$prefix}user-select:none;
     }
 }
 
