@@ -2115,7 +2115,7 @@ $endIndex   : 6;
 }
 
 .auto-progress {
-    @include setAnimation(auto-progress-animation 1s ease-in-out infinite normal 0s);
+    @include setAnimation(auto-progress-animation 3s ease-in-out infinite normal 0s);
 }
 
 @include defineKeyframes(auto-progress-animation) {
