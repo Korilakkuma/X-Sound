@@ -302,7 +302,7 @@
                 X('audio').module('analyser').domain('time-all-R').update(currentTime);
 
                 timeout(function() {
-                    $rootScope.currentTime = currentTime;
+                    $rootScope.currentTime.time = currentTime;
                 });
             }
         };
@@ -482,7 +482,7 @@
         };
 
         // for Audio
-        $rootScope.currentTime = 0;
+        $rootScope.currentTime = {time : 0};
 
         // Initialization for using XSound.js
 
@@ -693,7 +693,7 @@
                         X('audio').module('analyser').domain('time-all-R').update(X('audio').param('currentTime'));
 
                         $timeout(function() {
-                            $rootScope.currentTime = X('audio').param('currentTime');
+                            $rootScope.currentTime.time = X('audio').param('currentTime');
                         });
                     }
                 });
@@ -706,15 +706,29 @@
                     $('#spinner-audio-current-time').spinner('option', 'max', newVal);
                 });
 
-                // Object.observe
-                scope.$watch(function() {
-                    return $rootScope.currentTime;
-                }, function(newVal) {
-                    $('#slider-audio-current-time').slider('value', newVal);
-                    $('#spinner-audio-current-time').spinner('value', newVal);
+                var setCurrentTime = function(currentTime) {
+                    $('#slider-audio-current-time').slider('value', currentTime);
+                    $('#spinner-audio-current-time').spinner('value', currentTime);
 
-                    scope.currentTimeText = createTimeString(newVal);
-                });
+                    scope.currentTimeText = createTimeString(currentTime);
+                };
+
+                // Object.observe
+                if (Object.observe) {
+                    Object.observe($rootScope.currentTime, function(event) {
+                        for (var i = 0, len = event.length; i < len; i++) {
+                            if (event[i]['name'] === 'time') {
+                                setCurrentTime($rootScope.currentTime.time);
+                            }
+                        }
+                    }, ['update']);
+                } else {
+                    scope.$watch(function() {
+                        return $rootScope.currentTime.time;
+                    }, function(newVal) {
+                        setCurrentTime(newVal);
+                    });
+                }
             }
         };
     }]);
@@ -743,7 +757,7 @@
                         X('audio').module('analyser').domain('time-all-R').update(X('audio').param('currentTime'));
 
                         $timeout(function() {
-                            $rootScope.currentTime = X('audio').param('currentTime');
+                            $rootScope.currentTime.time = X('audio').param('currentTime');
                         });
                     }
                 }).spinner('value', parseFloat(value));
@@ -1793,8 +1807,8 @@
 
         var _updateCallback = function(source, currentTime) {
             $timeout(function() {
-                $rootScope.currentTime = currentTime;
-                $scope.currentTimeText = createTimeString(currentTime);
+                $rootScope.currentTime.time = currentTime;
+                $scope.currentTimeText      = createTimeString(currentTime);
             });
         };
 
@@ -1803,9 +1817,9 @@
             X('audio').module('analyser').domain('time-all-R').update(0);
 
             $timeout(function() {
-                $scope.isActive        = false;
-                $rootScope.currentTime = 0;
-                $scope.currentTimeText = '00 : 00.00';
+                $scope.isActive             = false;
+                $rootScope.currentTime.time = 0;
+                $scope.currentTimeText      = '00 : 00.00';
             });
         };
 
@@ -2241,7 +2255,7 @@
         // Chnage sound source -> parse MML text
         $scope.$watch(function() {
             return $scope.$parent.currentSoundSource;
-        }, function(newVal) {
+        }, function() {
             $scope.readyMML();
         });
 
