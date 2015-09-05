@@ -705,10 +705,10 @@ b.dangerous {
  */
 
 // Forms for parameters (jQuery UI slider, input[type="number"])
-[id*="slider-"] {
+[id*="slider-"],
+[class*="slider-"] {
     cursor:pointer;
-    position:relative;
-    margin:10px auto;
+    margin:0px auto;
     width:94%;
 }
 
