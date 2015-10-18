@@ -1,0 +1,40 @@
+{
+  "name": "x-sound",
+  "version": "0.0.0",
+  "description": "Multi Sound Application that uses XSound.js (Web Audio API Library)",
+  "scripts": {
+      "build-js": "gulp build-js",
+      "build-css": "gulp build-css",
+      "build": "gulp build",
+      "watch": "gulp watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Korilakkuma/X-Sound.git"
+  },
+  "keywords": [
+    "X Sound",
+    "X-Sound",
+    "XSound.js",
+    "XSound",
+    "JavaScript",
+    "HTML5",
+    "Web Audio API",
+    "Web MIDI API",
+    "WebRTC"
+  ],
+  "author": "Korilakkuma <rilakkuma.san.xjapan@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Korilakkuma/X-Sound/issues"
+  },
+  "homepage": "https://korilakkuma.github.io/X-Sound/",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.0.4",
+    "gulp-sourcemaps": "^1.5.2"
+  }
+}
