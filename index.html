@@ -770,7 +770,7 @@
                 <div id="signin" ng-show="isSignin">
                     <form>
                         <fieldset>
-                            <legend>ACCOUNT</legend>
+                            <legend class="invisibility">ACCOUNT</legend>
                             <dl>
                                 <dt><label for="text-signin-user-name">USER</label></dt>
                                 <dd><input id="text-signin-user-name" type="text" placeholder="USER NAME" ng-model="signins.username"></dd>
@@ -788,7 +788,7 @@
                 <div id="signup" ng-show="isSignup">
                     <form>
                         <fieldset>
-                            <legend>ACCOUNT</legend>
+                            <legend class="invisibility">ACCOUNT</legend>
                             <dl>
                                 <dt><label for="text-signout-user-name">USER</label></dt>
                                 <dd><input id="text-signout-user-name" type="text" placeholder="USER NAME" ng-model="signups.username"></dd>
@@ -808,7 +808,6 @@
             <ul class="clearfix" ng-if="isAuth">
                 <li><a href="#patch-load" ng-click="toggleAction($event, 'patchList')" ng-class="{'selected' : isPatchList}">LOAD</a></li>
                 <li><a href="#patch-save" ng-click="toggleAction($event, 'savePatch')" ng-class="{'selected' : isSavePatch}">SAVE</a></li>
-                <li><a href="#account"    ng-click="toggleAction($event, 'account')"   ng-class="{'selected' : isAccount}" ng-bind="authedUsername"></a></li>
             </ul>
             <div class="patch-form-area" ng-if="isAuth">
                 <div id="patch-load" ng-show="isPatchList">
@@ -1176,34 +1175,8 @@
                     </div>
                 </div>
                 <!-- /#patch-save -->
-                <div id="account" ng-show="isAccount">
-                    <form id="signout">
-                        <fieldset>
-                            <legend>SIGN OUT</legend>
-                        </fieldset>
-                        <ul>
-                            <li><button type="button" ng-click="signout($event)">SIGN OUT</button></li>
-                        </ul>
-                    </form>
-                    <form id="delete-account">
-                        <fieldset>
-                            <legend>DELETE ACCOUNT</legend>
-                            <dl>
-                                <dt><label for="text-delete-user-name">USER</label></dt>
-                                <dd><input type="text" id="text-delete-user-name" placeholder="USER NAME" ng-model="deleteAccounts.username" /></dd>
-                                <dt><label for="password-delete-user-password">PASSWORD</label></dt>
-                                <dd><input type="password" id="password-delete-user-password" placeholder="PASSWORD" ng-model="deleteAccounts.password" /></dd>
-                            </dl>
-                        </fieldset>
-                        <ul>
-                            <li><button type="reset">RESET</button></li>
-                            <li><button type="button" ng-click="deleteAccount($event)" ng-disabled="isDisabled">DELETE</button></li>
-                        </ul>
-                    </form>
-                </div>
-                <!-- /#account -->
             </div>
-            <!--/.patch-form-area-->
+            <!-- /.patch-form-area -->
         </div>
         <!-- /#patch-container -->
 
