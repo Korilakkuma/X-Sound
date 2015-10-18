@@ -125,8 +125,9 @@ noscript {
     // background-color:rgba($black, 1.0);
 
     p {
-        font-family:"Neuton", serif;
-        @include setRem(22, $baseFontSize);
+        // font-family:"Neuton", serif;
+        font-family:"Alike", serif;
+        font-size:1rem;
         color:$accentColor1;
         text-align:center;
     }
@@ -532,6 +533,14 @@ b.dangerous {
 }
 
 // Dialog
+.ui-widget {
+    font-family:Helvetica, Arial, sans-serif;
+
+    button {
+        font-family:Helvetica, Arial, sans-serif;
+    }
+}
+
 .ui-dialog {
     // Dialog Body
     /*Reset default style*/
@@ -1703,6 +1712,7 @@ ui-spinner, ui-spinner-time {
                 width:120px;
                 height:auto;
 
+                font-family:Helvetica, Arial, sans-serif;
                 font-size:1rem;
                 color:rgba($white, 1.0);
                 text-align:center;
