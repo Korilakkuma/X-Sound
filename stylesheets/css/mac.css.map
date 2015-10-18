@@ -1,7 +1,1 @@
-{
-"version": 3,
-"mappings": ";;;;;;GASA,yBAA0B,CACtB,cAAc,CAAC,iBAAiB",
-"sources": ["../scss/mac.scss"],
-"names": [],
-"file": "mac.css"
-}
+{"version":3,"sources":["mac.scss"],"names":[],"mappings":"AACA;;;;;;GAMG,CAE0B,IAAC,EAAM,sBAAN,AAA4B,CAA3B,CAC3B,cAAc,CAAC,iBAAkB,CADL","file":"mac.css","sourcesContent":["@charset \"UTF-8\";\n/*!\n * mac.scss\n *\n * This Sass file is used \"X Sound\" application for Mac OS X.\n *\n * Copyright (c) 2012, 2013, 2014 Tomohiro IKEDA (Korilakkuma)\n */\n\n[href*=\"#wave-time-overview-\"] {\n    vertical-align:0.25em !important;\n}\n"],"sourceRoot":"/source/"}
