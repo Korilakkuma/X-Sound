@@ -1,14 +1,13 @@
-/** 
+/**
  * controller.js
- *
  * @fileoverview AngularJS controller for X Sound Application
- * 
+ *
  * JavaScript Libraries :
  *     XSound.js (https://github.com/Korilakkuma/XSound)
  *     jQuery / jQuery UI
  *     select2.js
  *
- * Copyright 2012, 2013, 2014@Tomohiro IKEDA
+ * Copyright (c) 2012, 2013, 2014 Tomohiro IKEDA (Korilakkuma)
  * Released under the MIT license
  */
  
@@ -86,7 +85,7 @@
         }
     });
 
-    /*
+    /**
      * This service sets parameter for module.
      * @param {string} source This argument is sound source name that is defined by XSound.js.
      * @param {string} module This argument is module name this is defined by XSound.js.
@@ -94,9 +93,9 @@
      * @param {number|string} value This argument is parameter value.
      */
     xsound.value('updateParamOfModule', function(source, module, param, value) {
-        if ((source === 'oscillator') && (module === 'eg')) {
-            X('oscillator').module('eg').param(param, value);
-            C('oscillator').module('eg').param(param, value);
+        if ((source === 'oscillator') && (module === 'envelopegenerator')) {
+            X('oscillator').module('envelopegenerator').param(param, value);
+            C('oscillator').module('envelopegenerator').param(param, value);
         } else if ((module === 'analyser') && (param === 'interval')) {
             if (value > 0) {
                 X(source).module('analyser').domain('time').param('interval', value);
@@ -298,8 +297,8 @@
         return function(timeout, currentTime) {
             if ((currentTime >= 0) && (currentTime <= X('audio').param('duration'))) {
                 X('audio').param('currentTime', currentTime);
-                X('audio').module('analyser').domain('time-all-L').update(currentTime);
-                X('audio').module('analyser').domain('time-all-R').update(currentTime);
+                X('audio').module('analyser').domain('time-overview-L').update(currentTime);
+                X('audio').module('analyser').domain('time-overview-R').update(currentTime);
 
                 timeout(function() {
                     $rootScope.currentTime.time = currentTime;
@@ -350,20 +349,20 @@
      */
     xsound.value('getCurrentPatches', function() {
         return {
-            'mastervolume' : X('oscillator').params().mastervolume,
-            'glide'        : {
+            'mastervolume'      : X('oscillator').params().mastervolume,
+            'glide'             : {
                 'type' : X('oscillator').params().oscillator.glide.type,
                 'time' : X('oscillator').params().oscillator.glide.time
             },
-            'oscillator0'  : X('oscillator').params().oscillator.oscillator0,
-            'oscillator1'  : C('oscillator').params().oscillator.oscillator0,
-            'eg'           : {
-                'attack'  : X('oscillator').params().eg.attack,
-                'decay'   : X('oscillator').params().eg.decay,
-                'sustain' : X('oscillator').params().eg.sustain,
-                'release' : X('oscillator').params().eg.release
+            'oscillator0'       : X('oscillator').params().oscillator.oscillator0,
+            'oscillator1'       : C('oscillator').params().oscillator.oscillator0,
+            'envelopegenerator' : {
+                'attack'  : X('oscillator').params().envelopegenerator.attack,
+                'decay'   : X('oscillator').params().envelopegenerator.decay,
+                'sustain' : X('oscillator').params().envelopegenerator.sustain,
+                'release' : X('oscillator').params().envelopegenerator.release
             },
-            'compressor'   : {
+            'compressor'        : {
                 'state'     : X('oscillator').params().compressor.state,
                 'threshold' : X('oscillator').params().compressor.threshold,
                 'knee'      : X('oscillator').params().compressor.knee,
@@ -371,7 +370,7 @@
                 'attack'    : X('oscillator').params().compressor.attack,
                 'release'   : X('oscillator').params().compressor.release
             },
-            'distortion'    : {
+            'distortion'        : {
                 'state'   : X('oscillator').params().distortion.state,
                 'curve'   : X('oscillator').params().distortion.curve,
                 'samples' : X('oscillator').params().distortion.samples,
@@ -379,21 +378,21 @@
                 'color'   : X('oscillator').params().distortion.color,
                 'tone'    : X('oscillator').params().distortion.tone
             },
-            'wah'           : {
+            'wah'               : {
                 'state'     : X('oscillator').params().wah.state,
                 'cutoff'    : X('oscillator').params().wah.cutoff,
                 'depth'     : X('oscillator').params().wah.depth,
                 'rate'      : X('oscillator').params().wah.rate,
                 'resonance' : X('oscillator').params().wah.resonance
             },
-            'equalizer'     : {
+            'equalizer'         : {
                 'state'    : X('oscillator').params().equalizer.state,
                 'bass'     : X('oscillator').params().equalizer.bass,
                 'middle'   : X('oscillator').params().equalizer.middle,
                 'treble'   : X('oscillator').params().equalizer.treble,
                 'presence' : X('oscillator').params().equalizer.presence
             },
-            'filter'        : {
+            'filter'            : {
                 'state'     : X('oscillator').params().filter.state,
                 'type'      : X('oscillator').params().filter.type,
                 'frequency' : X('oscillator').params().filter.frequency,
@@ -404,22 +403,22 @@
                 'sustain'   : X('oscillator').params().filter.sustain,
                 'release'   : X('oscillator').params().filter.release
             },
-            'autopanner'    : {
+            'autopanner'        : {
                 'state' : X('oscillator').params().autopanner.state,
                 'depth' : X('oscillator').params().autopanner.depth,
                 'rate'  : X('oscillator').params().autopanner.rate
             },
-            'tremolo'       : {
+            'tremolo'           : {
                 'state' : X('oscillator').params().tremolo.state,
                 'depth' : X('oscillator').params().tremolo.depth,
                 'rate'  : X('oscillator').params().tremolo.rate
             },
-            'ringmodulator' : {
+            'ringmodulator'     : {
                 'state' : X('oscillator').params().ringmodulator.state,
                 'depth' : X('oscillator').params().ringmodulator.depth,
                 'rate'  : X('oscillator').params().ringmodulator.rate
             },
-            'phaser'        : {
+            'phaser'            : {
                 'state'     : X('oscillator').params().phaser.state,
                 'stage'     : X('oscillator').params().phaser.stage,
                 'frequency' : X('oscillator').params().phaser.frequency,
@@ -428,7 +427,7 @@
                 'mix'       : X('oscillator').params().phaser.mix,
                 'feedback'  : X('oscillator').params().phaser.feedback
             },
-            'chorus'        : {
+            'chorus'            : {
                 'state' : X('oscillator').params().chorus.state,
                 'time'  : X('oscillator').params().chorus.time * 1000,
                 'depth' : X('oscillator').params().chorus.depth,
@@ -436,7 +435,7 @@
                 'mix'   : X('oscillator').params().chorus.mix,
                 'tone'  : X('oscillator').params().chorus.tone
             },
-            'flanger'        : {
+            'flanger'           : {
                 'state'    : X('oscillator').params().flanger.state,
                 'time'     : X('oscillator').params().flanger.time * 1000,
                 'depth'    : X('oscillator').params().flanger.depth,
@@ -445,7 +444,7 @@
                 'tone'     : X('oscillator').params().flanger.tone,
                 'feedback' : X('oscillator').params().flanger.feedback
             },
-            'delay'        : {
+            'delay'             : {
                 'state'    : X('oscillator').params().delay.state,
                 'time'     : X('oscillator').params().delay.time * 1000,
                 'dry'      : X('oscillator').params().delay.dry,
@@ -453,7 +452,7 @@
                 'tone'     : X('oscillator').params().delay.tone,
                 'feedback' : X('oscillator').params().delay.feedback
             },
-            'reverb'        : {
+            'reverb'            : {
                 'state'    : X('oscillator').params().reverb.state,
                 'dry'      : X('oscillator').params().reverb.dry,
                 'wet'      : X('oscillator').params().reverb.wet,
@@ -689,8 +688,8 @@
                     },
                     slide   : function(event, ui) {
                         X('audio').param('currentTime', parseFloat(ui.value));
-                        X('audio').module('analyser').domain('time-all-L').update(X('audio').param('currentTime'));
-                        X('audio').module('analyser').domain('time-all-R').update(X('audio').param('currentTime'));
+                        X('audio').module('analyser').domain('time-overview-L').update(X('audio').param('currentTime'));
+                        X('audio').module('analyser').domain('time-overview-R').update(X('audio').param('currentTime'));
 
                         $timeout(function() {
                             $rootScope.currentTime.time = X('audio').param('currentTime');
@@ -753,8 +752,8 @@
                     step : parseFloat(step),
                     spin : function(event, ui) {
                         X('audio').param('currentTime', parseFloat(ui.value));
-                        X('audio').module('analyser').domain('time-all-L').update(X('audio').param('currentTime'));
-                        X('audio').module('analyser').domain('time-all-R').update(X('audio').param('currentTime'));
+                        X('audio').module('analyser').domain('time-overview-L').update(X('audio').param('currentTime'));
+                        X('audio').module('analyser').domain('time-overview-R').update(X('audio').param('currentTime'));
 
                         $timeout(function() {
                             $rootScope.currentTime.time = X('audio').param('currentTime');
@@ -1813,8 +1812,8 @@
         };
 
         var _endedCallback = function(source, currentTime) {
-            X('audio').module('analyser').domain('time-all-L').update(0);
-            X('audio').module('analyser').domain('time-all-R').update(0);
+            X('audio').module('analyser').domain('time-overview-L').update(0);
+            X('audio').module('analyser').domain('time-overview-R').update(0);
 
             $timeout(function() {
                 $scope.isActive             = false;
@@ -2066,12 +2065,13 @@
      * Controller for Visualization
      * @param {$rootScope} $rootScope This argument is service of DI (Dependency Injection).
      * @param {$scope} $scope This argument is scope of this controller.
+     * @param {$document} $document This argument is service of DI (Dependency Injection).
      * @param {$timeout} $timeout This argument is to update view.
      * @param {Array.<string>} sources readFileByDragAndDrop This argument is service of DI (Dependency Injection).
      * @param {function} drawNodeCallback This argument is service of DI (Dependency Injection).
      * @extends {XSoundController}
      */
-    xsound.controller('VisualizationController', ['$rootScope', '$scope', '$timeout', 'sources', 'drawNodeCallback', function($rootScope, $scope, $timeout, sources, drawNodeCallback) {
+    xsound.controller('VisualizationController', ['$rootScope', '$scope', '$document', '$timeout', 'sources', 'drawNodeCallback', function($rootScope, $scope, $document, $timeout, sources, drawNodeCallback) {
         $scope.api     = 'canvas';
         $scope.channel = 'left';
 
@@ -2088,49 +2088,79 @@
                 smoothingTimeConstant : 0.1
             });
 
-            X(source).module('analyser').domain('time').setup(api, (api + '-time'), 'svg-parent-time').param({
+            X(source).module('analyser').domain('time').setup($document[0].getElementById(api + '-time')).param({
                 interval : 500,
                 shape    : 'line',
                 wave     : 'rgba(0, 0, 255, 1.0)',
-                font     : '12px Times New Roman',
+                font     : {
+                    family : 'Arial',
+                    size   : '12px',
+                    style  : 'normal',
+                    weight : 'normal'
+                },
                 width    : 2,
-                right    : 0
+                right    : 15,
+                type     : 'uint'
             });
 
-            X(source).module('analyser').domain('fft').setup(api, (api + '-spectrum'), 'svg-parent-spectrum').param({
+            X(source).module('analyser').domain('fft').setup($document[0].getElementById(api + '-spectrum')).param({
                 interval : 500,
                 shape    : 'rect',
-                wave     :  (api === 'canvas') ? 'gradient' : 'rgba(0, 0, 255, 1.0)',
-                grad     : [{offset : 0, color : 'rgba(0, 128, 255, 1.0)'}, {offset : 1, color : 'rgba(0, 0, 255, 1.0)'}],
-                font     : '12px Times New Roman',
+                wave     : 'gradient',
+                grad     : [
+                    {offset : 0, color : 'rgba(0, 128, 255, 1.0)'},
+                    {offset : 1, color : 'rgba(0,   0, 255, 1.0)'}
+                ],
+                font     : {
+                    family : 'Arial',
+                    size   : '12px',
+                    style  : 'normal',
+                    weight : 'normal'
+                },
                 width    : 2,
-                right    : 0,
+                right    : 15,
                 type     : 'uint',
                 size     : 256
             });
         };
 
         /**
-         * This function initializes analyser each domain ("time-all-L" and "time-all-R").
+         * This function initializes analyser each domain ("time-overview-L" and "time-overview-R").
          * @param {string} api This argument is either 'canvas' or 'svg'.
          */
        $scope.setAnalyser = function(api) {
-            X('audio').module('analyser').domain('time-all-L').setup(api, (api + '-time-all-L'), 'svg-parent-L').state(true).param({
-                shape : (api === 'canvas') ? 'rect' : 'line',
-                wave  : (api === 'canvas') ? 'gradient' : 'rgba(0, 0, 255, 1.0)',
-                grad  : [{offset : 0, color : 'rgba(0, 128, 255, 1.0)'}, {offset : 1, color : 'rgba(0, 0, 255, 1.0)'}],
-                font  : '12px Times New Roman',
+            X('audio').module('analyser').domain('time-overview-L').setup($document[0].getElementById(api + '-time-overview-L')).state(true).param({
+                shape : 'rect',
+                wave  : (api === 'canvas') ? 'gradient' : 'rgba(0, 0, 255, 1)',
+                grad  : [
+                    {offset : 0, color : 'rgba(0, 128, 255, 1.0)'},
+                    {offset : 1, color : 'rgba(0,   0, 255, 1.0)'}
+                ],
+                font  : {
+                    family : 'Arial',
+                    size   : '12px',
+                    style  : 'normal',
+                    weight : 'normal'
+                },
                 width : 0.5,
-                right : 0
+                right : 15
             });
 
-            X('audio').module('analyser').domain('time-all-R').setup(api, (api + '-time-all-R'), 'svg-parent-R').state(true).param({
-                shape : (api === 'canvas') ? 'rect' : 'line',
-                wave  : (api === 'canvas') ? 'gradient' : 'rgba(0, 0, 255, 1.0)',
-                grad  : [{offset : 0, color : 'rgba(0, 128, 255, 1.0)'}, {offset : 1, color : 'rgba(0, 0, 255, 1.0)'}],
-                font  : '12px Times New Roman',
+            X('audio').module('analyser').domain('time-overview-R').setup($document[0].getElementById(api + '-time-overview-R')).state(true).param({
+                shape : 'rect',
+                wave  : (api === 'canvas') ? 'gradient' : 'rgba(0, 0, 255, 1)',
+                grad  : [
+                    {offset : 0, color : 'rgba(0, 128, 255, 1.0)'},
+                    {offset : 1, color : 'rgba(0,   0, 255, 1.0)'}
+                ],
+                font  : {
+                    family : 'Arial',
+                    size   : '12px',
+                    style  : 'normal',
+                    weight : 'normal'
+                },
                 width : 0.5,
-                right : 0
+                right : 15
             });
         };
 
@@ -2150,8 +2180,8 @@
             $scope.setAnalyser(api);
 
             // Set current time
-            X('audio').module('analyser').domain('time-all-L').drag(function(currentTime) {drawNodeCallback($timeout, currentTime);});
-            X('audio').module('analyser').domain('time-all-R').drag(function(currentTime) {drawNodeCallback($timeout, currentTime);});
+            X('audio').module('analyser').domain('time-overview-L').drag(function(currentTime) {drawNodeCallback($timeout, currentTime);});
+            X('audio').module('analyser').domain('time-overview-R').drag(function(currentTime) {drawNodeCallback($timeout, currentTime);});
         };
 
         /**
@@ -2476,7 +2506,7 @@
                     });
                 } else {
                     var _sessionSetups = {
-                        tls   : false,
+                        tls   : true,
                         host  : HOST,
                         port  : 8000,
                         path  : PATH,
@@ -2532,8 +2562,8 @@
                 // return 'http://localhost:3000';                                                       // Node.js + MongoDB
                 return 'http://localhost/~rilakkuma3xjapan/portfolio-x-sound-server/php/bootstrap.php';  // PHP + MySQL
             } else {
-                // return 'http://curtaincall.c.node-ninja.com:3000';                               // Node.js + MongoDB
-                return 'http://curtaincall.weblike.jp/portfolio-x-sound-server/php/bootstrap.php';  // PHP + MySQL
+                // return 'http://curtaincall.c.node-ninja.com:3000';                                            // Node.js + MongoDB
+                return 'https://weblike-curtaincall.ssl-lolipop.jp/portfolio-x-sound-server/php/bootstrap.php';  // PHP + MySQL
             }
         })();
 
@@ -2605,7 +2635,7 @@
             };
 
             if ('mastervolume' in patches) {
-                $('.slider-masterVolume:not(:first)').slider('value', patches.mastervolume);
+                $('.slider-mastervolume:not(:first)').slider('value', patches.mastervolume);
             }
 
             if ('glide' in patches) {
@@ -2616,13 +2646,13 @@
                 }
             }
 
-            if ('eg' in patches) {
-                var eg = patches.eg;
+            if ('envelopegenerator' in patches) {
+                var envelopegenerator = patches.envelopegenerator;
 
-                if ('attack'  in eg) {$('.slider-eg-attack').slider('value', eg.attack);}
-                if ('decay'   in eg) {$('.slider-eg-decay').slider('value', eg.decay);}
-                if ('sustain' in eg) {$('.slider-eg-sustain').slider('value', eg.sustain);}
-                if ('release' in eg) {$('.slider-eg-release').slider('value', eg.release);}
+                if ('attack'  in envelopegenerator) {$('.slider-envelopegenerator-attack').slider('value', envelopegenerator.attack);}
+                if ('decay'   in envelopegenerator) {$('.slider-envelopegenerator-decay').slider('value', envelopegenerator.decay);}
+                if ('sustain' in envelopegenerator) {$('.slider-envelopegenerator-sustain').slider('value', envelopegenerator.sustain);}
+                if ('release' in envelopegenerator) {$('.slider-envelopegenerator-release').slider('value', envelopegenerator.release);}
             }
 
             if ('oscillator0' in patches) {
@@ -3025,6 +3055,8 @@
          * @param {Event} event This argument is event object from ng-click directive.
          */
         $scope.signin = function(event) {
+            event.preventDefault();
+
             $scope.isDisabled = true;
 
             $http({
@@ -3073,6 +3105,8 @@
          * @param {Event} event This argument is event object from ng-click directive.
          */
         $scope.signup = function(event) {
+            event.preventDefault();
+
             $scope.isDisabled = true;
 
             $http({
