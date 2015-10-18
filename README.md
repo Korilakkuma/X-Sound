@@ -5,4 +5,4 @@ X Sound
   
 * [X Sound](http://korilakkuma.github.io/X-Sound/)
   
-Copyright 2012, 2013, 2014@Tomohiro IKEDA
+Copyright (c) 2012, 2013, 2014 Tomohiro IKEDA (Korilakkuma)
