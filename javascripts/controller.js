@@ -2432,15 +2432,18 @@
      */
     xsound.controller('SessionController', ['$scope', '$location', '$timeout', 'sources', 'openDialog', function($scope, $location, $timeout, sources, openDialog) {
         // for WebSocket
-        var HOST = '';
-        var PATH = '';
+        var IS_TLS = false;
+        var HOST   = '';
+        var PATH   = '';
 
         if ($location.host().indexOf('localhost') !== -1) {
-            HOST = 'localhost';
-            PATH = '';
-        } else if ($location.host().indexOf('korilakkuma.github.io') !== -1) {
-            HOST = '210.152.156.200';
-            PATH = '/home/node/websocket/';
+            IS_TLS = false;
+            HOST   = 'localhost';
+            PATH   = '';
+        } else {
+            IS_TLS = true;
+            HOST   = 'x-sound-server.herokuapp.com';
+            PATH   = '/app/websocket/';
         }
 
         var _openCallback = function(event, socket) {
@@ -2506,7 +2509,7 @@
                     });
                 } else {
                     var _sessionSetups = {
-                        tls   : true,
+                        tls   : IS_TLS,
                         host  : HOST,
                         port  : 8000,
                         path  : PATH,
