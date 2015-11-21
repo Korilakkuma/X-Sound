@@ -67,7 +67,7 @@
 </head>
 
 
-<body class="radial-gradient" ng-class="{'loading' : !isReady}" ui-tooltip>
+<body ng-class="{'loading' : !isReady, 'radial-gradient' : isReady}" ui-tooltip>
     <noscript>Please enable JavaScript to use this application.</noscript>
     <div id="page">
         <header ng-if="!isEndOpening" ng-class="{'fade-out' : isStart}">
