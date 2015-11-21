@@ -14,6 +14,7 @@
  
  
 (function() {
+    'use strict';
 
     var xsound = angular.module('xsound', []);
 
@@ -197,8 +198,10 @@
          * @param {object} options This argument is associative array that is defined by XSound.js.
          */
         return function(options) {
+            var file = null;
+
             try {
-                var file = X.file(options);
+                file = X.file(options);
             } catch (error) {
                 openDialog('Error', 500, 'auto', true, ('<p><b>' + error.message + '</b></p>'));
             }
@@ -543,7 +546,7 @@
      */
     xsound.directive('uiSlider', ['updateParam', function(updateParam) {
         return {
-            restrict : 'EA',
+            restrict : 'E',
             template : '<div></div>',
             link     : function(scope, iElement, iAttrs, controller, iTransclude) {
                 var value   = iAttrs.value;
@@ -612,7 +615,7 @@
      */
     xsound.directive('uiSpinner', ['updateParam', function(updateParam) {
         return {
-            restrict : 'EA',
+            restrict : 'E',
             template : '<input />',
             link     : function(scope, iElement, iAttrs, controller, iTransclude) {
                 var value   = iAttrs.value;
@@ -667,7 +670,7 @@
      */
     xsound.directive('uiSliderTime', ['$rootScope', '$timeout', 'createTimeString', function($rootScope, $timeout, createTimeString) {
         return {
-            restrict : 'EA',
+            restrict : 'E',
             template : '<div></div>',
             link     : function(scope, iElement, iAttrs, controller, iTransclude) {
                 var value   = iAttrs.value;
@@ -739,7 +742,7 @@
      */
     xsound.directive('uiSpinnerTime', ['$rootScope', '$timeout', function($rootScope, $timeout) {
         return {
-            restrict : 'EA',
+            restrict : 'E',
             template : '<input />',
             link     : function(scope, iElement, iAttrs, controller, iTransclude) {
                 var value   = iAttrs.value;
@@ -813,7 +816,7 @@
      */
     xsound.directive('uiModalProgress', [function() {
         return {
-            restrict   : 'EA',
+            restrict   : 'E',
             link       : function(scope, iElement, iAttrs, controller, iTransclude) {
                 $(iElement).css({
                     'position'         : 'fixed',
