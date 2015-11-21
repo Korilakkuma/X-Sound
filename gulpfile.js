@@ -8,7 +8,8 @@ var rename     = require('gulp-rename');
 
 gulp.task('jshint', function() {
     gulp.src('javascripts/controller.js')
-        .pipe(jshint());
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
 });
 
 gulp.task('build-js', function() {
