@@ -870,8 +870,9 @@
      * Directive for wrapping select2.js.
      * @param {$timeout} $timeout This argument is to update view.
      * @param {Array.<string>} sources This argument is service of DI (Dependency Injection).
+     * @param {function} openDialog This argument is service of DI (Dependency Injection).
      */
-    xsound.directive('uiSelect', ['$timeout', 'sources', function($timeout, sources) {
+    xsound.directive('uiSelect', ['$timeout', 'sources', 'openDialog', function($timeout, sources, openDialog) {
         return {
             restrict : 'A',
             link     : function(scope, iElement, iAttrs, controller, iTransclude) {
@@ -922,6 +923,124 @@
                                     break;
                                 case 'midi' :
                                     X('stream').stop();
+
+                                    var successCallback = function(midiAccess, inputs, outputs) {
+                                        var MAX_VELOCITY       = 127;
+                                        var NOTE_NUMBER_OFFSET = 21;
+
+                                        var indexes = [];
+                                        var volumes = [];
+
+                                        var noteOn = function(noteNumber, velocity) {
+                                            if ((noteNumber < NOTE_NUMBER_OFFSET) || (noteNumber > 127)) {
+                                                return;
+                                            }
+
+                                            if ((velocity < 1) || (velocity > MAX_VELOCITY)) {
+                                                return;
+                                            }
+
+                                            var targetIndex = noteNumber - NOTE_NUMBER_OFFSET;
+                                            var volume      = velocity / MAX_VELOCITY;
+
+                                            if (scope.currentSoundSource === 'oscillator') {
+                                                indexes.push(targetIndex);
+
+                                                volumes[0] = X('oscillator', 0).param('volume');
+                                                volumes[1] = C('oscillator', 0).param('volume');
+
+                                                for (var i = 0, len = X('oscillator').length(); i < len; i++) {
+                                                    if (i !== 0) {
+                                                        X('oscillator', i).state(true);
+                                                        C('oscillator', i).state(true);
+                                                    }
+
+                                                    X('oscillator', i).param('volume', volume);
+                                                    C('oscillator', i).param('volume', volume);
+                                                }
+
+                                                X('oscillator').ready(0, 0).start(X.toFrequencies(indexes));
+                                                C('oscillator').ready(0, 0).start(X.toFrequencies(indexes));
+
+                                                X('mixer').mix([X('oscillator'), C('oscillator')]);
+
+                                                X('mixer').module('recorder').start();
+                                                X('mixer').module('session').start();
+                                            } else {
+                                                X('oneshot').reset(targetIndex, 'volume', volume).ready(0, 0).start(targetIndex);
+
+                                                X('oneshot').module('recorder').start();
+                                                X('oneshot').module('session').start();
+                                            }
+
+                                            $timeout(function() {
+                                                scope.isSoundStops[targetIndex] = false;
+                                            });
+                                        };
+
+                                        var noteOff = function(noteNumber, velocity) {
+                                            if ((noteNumber < NOTE_NUMBER_OFFSET) || (noteNumber > 127)) {
+                                                return;
+                                            }
+
+                                            if ((velocity < 1) || (velocity > MAX_VELOCITY)) {
+                                                return;
+                                            }
+
+                                            var targetIndex = noteNumber - NOTE_NUMBER_OFFSET;
+
+                                            if (scope.currentSoundSource === 'oscillator') {
+                                                var index = indexes.indexOf(targetIndex);
+
+                                                if (index !== -1) {
+                                                    indexes.splice(index, 1);
+                                                }
+
+                                                X('oscillator').stop();
+                                                C('oscillator').stop();
+
+                                                for (var i = 0, len = X('oscillator').length(); i < len; i++) {
+                                                    if (i !== 0) {
+                                                        X('oscillator', i).state(false);
+                                                        C('oscillator', i).state(false);
+                                                    }
+
+                                                    X('oscillator', i).param('volume', volumes[0]);
+                                                    C('oscillator', i).param('volume', volumes[1]);
+                                                }
+                                            } else {
+                                                X('oneshot').stop(targetIndex).reset(targetIndex, 'volume', 1);
+                                            }
+
+                                            $timeout(function() {
+                                                scope.isSoundStops[targetIndex] = true;
+                                            });
+                                        };
+
+                                        inputs[0].onmidimessage = function(event) {
+                                            switch (event.data[0] & 0xf0) {
+                                                case 0x90 :
+                                                    noteOn(event.data[1], event.data[2]);
+                                                    break;
+                                                case 0x80 :
+                                                    noteOff(event.data[1], event.data[3]);
+                                                    break;
+                                                default :
+                                                    break;
+                                            }
+                                        };
+                                    };
+
+                                    var errorCallback = function(error) {
+                                        openDialog('Error', 400, 'auto', true, '<p><b>Cannot use Web MIDI API.</b></p>');
+                                    };
+
+                                    try {
+                                        X('midi').setup(successCallback, errorCallback);
+                                    } catch (error) {
+                                        openDialog('Error', 400, 'auto', true, '<p><b>' + error.message + '</b></p>');
+                                    }
+
                                     break;
                                 default :
                                     break;
