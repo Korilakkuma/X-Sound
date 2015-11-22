@@ -1535,13 +1535,13 @@
                     }
                 },
                 error : function(object, textStatus) {
-                    openDialog('Error', 400, 'height', true, '<p><b>The loading of audio files failed.</b></p>');
+                    openDialog('Error', 400, 'auto', true, '<p><b>The loading of audio files failed.</b></p>');
                 },
                 progress : function(event) {
                 }
             });
         } catch (error) {
-            openDialog('Error', 400, 'height', true, ('<p><b>' + error.message + '</b></p>'));
+            openDialog('Error', 400, 'auto', true, ('<p><b>' + error.message + '</b></p>'));
         }
 
         // This model is refered by other controllers.
