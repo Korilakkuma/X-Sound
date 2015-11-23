@@ -2564,7 +2564,7 @@
             PATH   = '';
         } else {
             IS_TLS = true;
-            HOST   = 'x-sound-server.herokuapp.com';
+            HOST   = 'x-sound-server.herokuapp.com/';
             PATH   = '/app/websocket/';
         }
 
