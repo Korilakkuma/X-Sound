@@ -500,7 +500,8 @@
             C('media'),
             C('fallback'),
             C('stream'),
-            C('mixer')
+            C('mixer'),
+            C('midi')
         ]);
 
         // Resize buffer of ScriptProcessorNode
@@ -1023,7 +1024,7 @@
                                                     noteOn(event.data[1], event.data[2]);
                                                     break;
                                                 case 0x80 :
-                                                    noteOff(event.data[1], event.data[3]);
+                                                    noteOff(event.data[1], event.data[2]);
                                                     break;
                                                 default :
                                                     break;
@@ -1409,7 +1410,6 @@
                 case  5 :
                 case  6 :
                     return 3;
-                    break;
                 case  7 :
                 case  8 :
                     return 4;
