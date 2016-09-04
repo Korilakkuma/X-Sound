@@ -1,6 +1,5 @@
 @charset "UTF-8";
-/*! _utility.scss Copyright (c) 2012, 2013, 2014 Tomohiro IKEDA (Korilakkuma) */
- 
+/*! _utility.scss Copyright (c) 2012, 2013, 2014 Tomohiro IKEDA (Korilakkuma) */ 
  
  
 $prefixLists      : -webkit-, -moz-, -o-, -ms-, null;
@@ -18,7 +17,7 @@ $transparent      : rgba(#000, 0);
 @if $isSimpleClearfix {
     // Simple clearfix
     .clearfix {
-        @if $isCleafixIE6 {
+        @if $isClearfixIE6 {
             zoom : 1;
         }
 
@@ -50,7 +49,7 @@ $transparent      : rgba(#000, 0);
 }
 
 //
-// border-box : border-box
+// box-sizing : border-box
 //
 // @extend %borderbox
 //
@@ -100,7 +99,7 @@ $transparent      : rgba(#000, 0);
 //
 // fade animation on hover
 //
-// @include .hover
+// @extend .hover
 //
 .hover {
     @each $prefix in $prefixLists {
@@ -109,6 +108,19 @@ $transparent      : rgba(#000, 0);
 
     &:hover {
         opacity : $hoverOpacity;
+    }
+}
+
+//
+// for image link
+//
+// @extend .image-link
+//
+.image-link {
+    &:hover,
+    &:focus,
+    &:active {
+        text-decoration:none;
     }
 }
 
