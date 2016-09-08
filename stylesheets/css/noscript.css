@@ -1,0 +1,9 @@
+/*!
+ * noscript.scss
+ *
+ * This Sass file is "X Sound" application in the case of noscript.
+ *
+ * Copyright (c) 2012, 2013, 2014 Tomohiro IKEDA (Korilakkuma)
+ */body{background-image:none !important;background-color:#000}#page{display:none}
+
+/*# sourceMappingURL=noscript.css.map */
