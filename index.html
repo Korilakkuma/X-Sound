@@ -207,7 +207,7 @@
                         <legend>AUDIO</legend>
                         <form name="form-upload-audio">
                             <input type="file" id="file-upload-audio" accept="audio/*" audio-uploader />
-                            <input type="text" id="text-mask-upload-audio" class="drag-off hover" placeholder="Audio File (wav, ogg, mp3)" readonly ng-click="triggerFileUploader($event)" />
+                            <input type="text" id="text-mask-upload-audio" class="drag-off" placeholder="Audio File (wav, ogg, mp3)" readonly ng-click="triggerFileUploader($event)" />
                             <span><a href="#"  id="audio-control" ng-click="controlAudio($event)" ng-class="{'active' : isActive}">START / PAUSE</a></span>
                         </form>
                         <dl>
@@ -296,7 +296,7 @@
                             <ul class="clearfix">
                                 <li>
                                     <input type="file" id="file-upload-mml" accept="text/plain" mml-uploader />
-                                    <input type="text" id="text-mask-upload-mml" class="drag-off hover" placeholder="MML Text File" readonly ng-click="triggerFileUploader($event)" />
+                                    <input type="text" id="text-mask-upload-mml" class="drag-off" placeholder="MML Text File" readonly ng-click="triggerFileUploader($event)" />
                                 </li>
                                 <li><a id="mml-download" ng-href="{{ dataURL }}" ng-click="downloadMML($event)" download="{{ filename }}">DOWNLOAD</a></li>
                                 <li><a href="#" id="mml-stop" ng-click="stopMML($event)">STOP</a></li>
@@ -712,7 +712,7 @@
                         </legend>
                         <form name="form-upload-impulse-response">
                             <input type="file" id="file-upload-impulse-response" accept="audio/*" rir-uploader />
-                            <input type="text" id="text-mask-upload-impulse-response" class="drag-off hover" placeholder="Impulse Response File (wav, ogg. mp3)" readonly ng-click="triggerFileUploader($event)" />
+                            <input type="text" id="text-mask-upload-impulse-response" class="drag-off" placeholder="Impulse Response File (wav, ogg. mp3)" readonly ng-click="triggerFileUploader($event)" />
                         </form>
                         <dl>
                             <dt class="invisibility"><label for="select-reverb-type">RIR</label></dt>

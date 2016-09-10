@@ -1885,8 +1885,7 @@ b.dangerous {
  * for animations
  */
 
-footer ul li a,
-.select2-container .select2-choice {
+footer ul li a {
     @extend .hover;
 }
 
