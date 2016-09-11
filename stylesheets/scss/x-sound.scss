@@ -1340,8 +1340,9 @@ ui-spinner, ui-spinner-time {
     @include boxshadow((0px 0px 0px 2px rgba(0, 0, 0, 1.0), 0px -1px 1px 5px rgba(0, 0, 0, 0.5)));
 
     &:focus {
+        border:2px solid rgba($accentColor1, 1.0);
         outline:none;
-        @include boxshadow((0px 0px 0px 2px rgba(0, 0, 0, 1.0), 0px -1px 1px 5px rgba(0, 0, 0, 0.5), 0px 0px 15px 3px rgba(255, 255, 255, 0.6) inset));
+        @include boxshadow((0px 0px 0px 2px rgba(0, 0, 0, 1.0), 0px -1px 1px 5px rgba(0, 0, 0, 0.5)));
     }
 }
 
