@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "description": "Multi Sound Application that uses XSound.js (Web Audio API Library)",
   "scripts": {
-      "jshint": "gulp jshint",
-      "build-js": "gulp build-js",
-      "build-css": "gulp build-css",
-      "build": "gulp build",
-      "watch": "gulp watch"
+    "jshint": "gulp jshint",
+    "build-js": "gulp build-js",
+    "build-css": "gulp build-css",
+    "build": "gulp build",
+    "watch": "gulp watch"
   },
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "gulp-jshint": "^1.11.2",
     "gulp-plumber": "^1.0.1",
     "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.0.4",
+    "gulp-sass": "^2.3.2",
     "gulp-sourcemaps": "^1.5.2"
   }
 }
