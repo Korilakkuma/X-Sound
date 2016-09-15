@@ -484,13 +484,19 @@ footer {
     div {
         small, span {
             display:inline-block;
-            margin-left:1rem;
+            margin-right:1rem;
             height:22px;
         }
 
         small a {
             @include setRem(12, $baseFontSize);
             vertical-align:middle;
+        }
+
+        #github-buttons {
+            display:inline-block;
+            margin-top:0.5rem;
+            vertical-align:-0.3rem;
         }
     }
 }
