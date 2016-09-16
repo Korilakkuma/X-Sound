@@ -482,6 +482,8 @@ footer {
     }
 
     div {
+        margin-top:0.5rem;
+
         small, span {
             display:inline-block;
             margin-right:1rem;
@@ -495,7 +497,6 @@ footer {
 
         #github-buttons {
             display:inline-block;
-            margin-top:0.5rem;
             vertical-align:-0.3rem;
         }
     }
