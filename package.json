@@ -4,8 +4,8 @@
   "description": "Multi Sound Application that uses XSound.js (Web Audio API Library)",
   "scripts": {
     "jshint": "gulp jshint",
-    "build-js": "gulp build-js",
-    "build-css": "gulp build-css",
+    "build:js": "gulp build:js",
+    "build:css": "gulp build:css",
     "build": "gulp build",
     "watch": "gulp watch"
   },

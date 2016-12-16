@@ -12,7 +12,7 @@ gulp.task('jshint', function() {
         .pipe(jshint.reporter('default'));
 });
 
-gulp.task('build-js', function() {
+gulp.task('build:js', function() {
     gulp.src('javascripts/controller.js')
         .pipe(plumber())
         .pipe(sourcemaps.init())
@@ -22,7 +22,7 @@ gulp.task('build-js', function() {
         .pipe(gulp.dest('javascripts/'));
 });
 
-gulp.task('build-css', function() {
+gulp.task('build:css', function() {
     gulp.src('stylesheets/scss/*.scss')
         .pipe(plumber())
         .pipe(sourcemaps.init())
@@ -33,9 +33,9 @@ gulp.task('build-css', function() {
         .pipe(gulp.dest('stylesheets/css/'));
 });
 
-gulp.task('build', ['build-js', 'build-css']);
+gulp.task('build', ['build:js', 'build:css']);
 
 gulp.task('watch', function() {
-    gulp.watch('javascripts/controller.js', ['build-js']);
-    gulp.watch('stylesheets/scss/*.scss',   ['build-css']);
+    gulp.watch('javascripts/controller.js', ['build:js']);
+    gulp.watch('stylesheets/scss/*.scss',   ['build:css']);
 });
