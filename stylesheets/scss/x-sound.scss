@@ -448,7 +448,7 @@ canvas, svg {
 footer {
     margin-top:50px;
     // border-top:1px solid rgba(0, 0, 0, 1);
-    padding:48px 15px;
+    padding:48px 15px 24px;
     height:100%;
 
     @include setRem(12, $baseFontSize);
@@ -464,7 +464,7 @@ footer {
     opacity:0;
 
     ul {
-        margin:12px 0px;
+        margin:24px 0px;
 
         li {
             display:inline-block;
