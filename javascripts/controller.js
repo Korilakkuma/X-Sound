@@ -1857,12 +1857,20 @@
          * @param {string} type This argument is one of 'sine', 'square', 'sawtooth', 'triangle'.
          */
         $scope.changeWaveType = function(event, number, type) {
+            var _oscillatorNumbers = [0, 1, 2, 3];
+
             switch (number) {
                 case 0 :
-                    X('oscillator', 0).param('type', type);
+                    angular.forEach(_oscillatorNumbers, function(number) {
+                        X('oscillator', number).param('type', type);
+                    });
+
                     break;
                 case 1 :
-                    C('oscillator', 0).param('type', type);
+                    angular.forEach(_oscillatorNumbers, function(number) {
+                        C('oscillator', number).param('type', type);
+                    });
+
                     break;
                 default :
                     break;
