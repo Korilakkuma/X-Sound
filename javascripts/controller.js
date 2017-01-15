@@ -304,7 +304,7 @@
                 X('audio').module('analyser').domain('time-overview-R').update(currentTime);
 
                 timeout(function() {
-                    $rootScope.currentTime.time = currentTime;
+                    $rootScope.currentTime = currentTime;
                 });
             }
         };
@@ -484,7 +484,7 @@
         };
 
         // for Audio
-        $rootScope.currentTime = {time : 0};
+        $rootScope.currentTime = 0;
 
         // Initialization for using XSound.js
 
@@ -696,12 +696,11 @@
                         X('audio').module('analyser').domain('time-overview-R').update(X('audio').param('currentTime'));
 
                         $timeout(function() {
-                            $rootScope.currentTime.time = X('audio').param('currentTime');
+                            $rootScope.currentTime = X('audio').param('currentTime');
                         });
                     }
                 });
 
-                // Object.observe
                 scope.$watch(function() {
                     return scope.duration;
                 }, function(newVal) {
@@ -716,22 +715,11 @@
                     scope.currentTimeText = createTimeString(currentTime);
                 };
 
-                // Object.observe
-                if (Object.observe) {
-                    Object.observe($rootScope.currentTime, function(event) {
-                        for (var i = 0, len = event.length; i < len; i++) {
-                            if (event[i]['name'] === 'time') {
-                                setCurrentTime($rootScope.currentTime.time);
-                            }
-                        }
-                    }, ['update']);
-                } else {
-                    scope.$watch(function() {
-                        return $rootScope.currentTime.time;
-                    }, function(newVal) {
-                        setCurrentTime(newVal);
-                    });
-                }
+                scope.$watch(function() {
+                    return $rootScope.currentTime;
+                }, function(newVal) {
+                    setCurrentTime(newVal);
+                });
             }
         };
     }]);
@@ -760,7 +748,7 @@
                         X('audio').module('analyser').domain('time-overview-R').update(X('audio').param('currentTime'));
 
                         $timeout(function() {
-                            $rootScope.currentTime.time = X('audio').param('currentTime');
+                            $rootScope.currentTime = X('audio').param('currentTime');
                         });
                     }
                 }).spinner('value', parseFloat(value));
@@ -1936,8 +1924,8 @@
 
         var _updateCallback = function(source, currentTime) {
             $timeout(function() {
-                $rootScope.currentTime.time = currentTime;
-                $scope.currentTimeText      = createTimeString(currentTime);
+                $rootScope.currentTime = currentTime;
+                $scope.currentTimeText = createTimeString(currentTime);
             });
         };
 
@@ -1946,9 +1934,9 @@
             X('audio').module('analyser').domain('time-overview-R').update(0);
 
             $timeout(function() {
-                $scope.isActive             = false;
-                $rootScope.currentTime.time = 0;
-                $scope.currentTimeText      = '00 : 00.00';
+                $scope.isActive        = false;
+                $rootScope.currentTime = 0;
+                $scope.currentTimeText = '00 : 00.00';
             });
         };
 
@@ -2411,7 +2399,6 @@
         $scope.filename = '';
         $scope.error    = '';
 
-        // Object.observe
         // Chnage sound source -> parse MML text
         $scope.$watch(function() {
             return $scope.$parent.currentSoundSource;
@@ -3093,7 +3080,6 @@
         $scope.dialogPatchDetailId     = 'dialog-patch-detail';
         $scope.isShowDialogPatchDetail = false;
 
-        // Object.observe
         $scope.$watch(function() {
             return $scope.isAuth;
         }, function(newVal) {
