@@ -914,22 +914,23 @@
                                     X('stream').stop();
 
                                     var successCallback = function(midiAccess, inputs, outputs) {
-                                        var MAX_VELOCITY       = 127;
-                                        var NOTE_NUMBER_OFFSET = 21;
+                                        var MIN_NOTE_NUMBER = 21;
+                                        var MAX_NOTE_NUMBER = 108;
+                                        var MAX_VELOCITY    = 127;
 
                                         var indexes = [];
                                         var volumes = [];
 
                                         var noteOn = function(noteNumber, velocity) {
-                                            if ((noteNumber < NOTE_NUMBER_OFFSET) || (noteNumber > 127)) {
+                                            if ((noteNumber < MIN_NOTE_NUMBER) || (noteNumber > MAX_NOTE_NUMBER)) {
                                                 return;
                                             }
 
-                                            if ((velocity < 1) || (velocity > MAX_VELOCITY)) {
+                                            if ((velocity < 0) || (velocity > MAX_VELOCITY)) {
                                                 return;
                                             }
 
-                                            var targetIndex = noteNumber - NOTE_NUMBER_OFFSET;
+                                            var targetIndex = noteNumber - MIN_NOTE_NUMBER;
                                             var volume      = velocity / MAX_VELOCITY;
 
                                             if (scope.currentSoundSource === 'oscillator') {
@@ -968,15 +969,15 @@
                                         };
 
                                         var noteOff = function(noteNumber, velocity) {
-                                            if ((noteNumber < NOTE_NUMBER_OFFSET) || (noteNumber > 127)) {
+                                            if ((noteNumber < MIN_NOTE_NUMBER) || (noteNumber > MAX_NOTE_NUMBER)) {
                                                 return;
                                             }
 
-                                            if ((velocity < 1) || (velocity > MAX_VELOCITY)) {
+                                            if ((velocity < 0) || (velocity > MAX_VELOCITY)) {
                                                 return;
                                             }
 
-                                            var targetIndex = noteNumber - NOTE_NUMBER_OFFSET;
+                                            var targetIndex = noteNumber - MIN_NOTE_NUMBER;
 
                                             if (scope.currentSoundSource === 'oscillator') {
                                                 var index = indexes.indexOf(targetIndex);
@@ -1006,18 +1007,20 @@
                                             });
                                         };
 
-                                        inputs[0].onmidimessage = function(event) {
-                                            switch (event.data[0] & 0xf0) {
-                                                case 0x90 :
-                                                    noteOn(event.data[1], event.data[2]);
-                                                    break;
-                                                case 0x80 :
-                                                    noteOff(event.data[1], event.data[2]);
-                                                    break;
-                                                default :
-                                                    break;
-                                            }
-                                        };
+                                        if (inputs.length > 0) {
+                                            inputs[0].onmidimessage = function(event) {
+                                                switch (event.data[0] & 0xf0) {
+                                                    case 0x90 :
+                                                        noteOn(event.data[1], event.data[2]);
+                                                        break;
+                                                    case 0x80 :
+                                                        noteOff(event.data[1], event.data[2]);
+                                                        break;
+                                                    default :
+                                                        break;
+                                                }
+                                            };
+                                        }
                                     };
 
                                     var errorCallback = function(error) {
@@ -1025,9 +1028,9 @@
                                     };
 
                                     try {
-                                        X('midi').setup(successCallback, errorCallback);
+                                        X('midi').setup(true, successCallback, errorCallback);
                                     } catch (error) {
-                                        openDialog('Error', 400, 'auto', true, '<p><b>' + error.message + '</b></p>');
+                                        openDialog('Error', 400, 'auto', true, ('<p><b>' + error.message + '</b></p>'));
                                     }
 
                                     break;
