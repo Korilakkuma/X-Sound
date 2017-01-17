@@ -494,7 +494,10 @@
         // Not used
         X.free([
             X('media'),
-            X('fallback'),
+            X('fallback')
+        ]);
+
+        C.free([
             C('oneshot'),
             C('audio'),
             C('media'),
