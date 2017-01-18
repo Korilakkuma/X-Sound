@@ -512,7 +512,7 @@
         X('oscillator').resize(4096);
         C('oscillator').resize(4096);
         X('oneshot').resize(4096);
-        X('audio').resize(8192);
+        X('audio').resize(16384);
         X('stream').resize(512);
 
         X('oscillator').setup([true, false, false, false]);
