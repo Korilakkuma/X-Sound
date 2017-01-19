@@ -1501,7 +1501,7 @@
 
                             _loadUI();
                         }
-                    }, function() {
+                    }, function(error) {
                         // Decode error
                         _loadUI();
                     });
