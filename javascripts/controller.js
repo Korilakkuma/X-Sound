@@ -2437,13 +2437,12 @@
             var mmls = $scope.mml.split(/\|+/);
 
             if ($scope.$parent.currentSoundSource === 'oscillator') {
-                if (mmls.length > 0) {
+                if (mmls.length > 1) {
+                    X('mml').ready(X('oscillator'), mmls[0]);
+                    C('mml').ready(C('oscillator'), mmls[1]);
+                } else if (mmls.length > 0) {
                     X('mml').ready(X('oscillator'), mmls[0]);
                     C('mml').ready(C('oscillator'), []);
-                }
-
-                if (mmls.length > 1) {
-                    C('mml').ready(C('oscillator'), mmls[1]);
                 }
             } else {
                 X('mml').ready(X('oneshot'), mmls);
