@@ -48,15 +48,19 @@
     xsound.value('sources', ['mixer', 'oscillator', 'oneshot', 'audio', 'stream']);
 
     /**
+     * This is the array of number in order to identify oscillator.
+     */
+    xsound.value('oscillatorNumbers', [0, 1, 2, 3]);
+
+    /**
      * This service sets parameter each oscillator.
+     * @param {Arrya.<number>} oscillatorNumbers This is the array of number in order to identify oscillator.
      * @param {number} number This argument is either 0 or 1 in this application.
      * @param {string} module This argument is module name this is defined by XSound.js.
      * @param {string} param This argument is parameter name that is defined by XSound.js.
      * @param {number|string} value This argument is parameter value.
      */
-    xsound.value('updateParamEachOscillator', function(number, module, param, value) {
-        var oscillatorNumbers = [0, 1, 2, 3];
-
+    xsound.value('updateParamEachOscillator', function(oscillatorNumbers, number, module, param, value) {
         switch (number) {
             case 0 :
                 if (module) {
@@ -129,7 +133,7 @@
         }
     });
 
-    xsound.factory('updateParam', ['updateParamEachOscillator', 'updateParamOfModule', 'updateParamOfSource', function(updateParamEachOscillator, updateParamOfModule, updateParamOfSource) {
+    xsound.factory('updateParam', ['oscillatorNumbers', 'updateParamEachOscillator', 'updateParamOfModule', 'updateParamOfSource', function(oscillatorNumbers, updateParamEachOscillator, updateParamOfModule, updateParamOfSource) {
         /*
          * This service sets parameter.
          * @param {string} source This argument is sound source name that is defined by XSound.js.
@@ -150,7 +154,7 @@
                 var matches = source.match(/oscillator(0|1)/);
 
                 if (matches !== null) {
-                    updateParamEachOscillator(parseInt(matches[1]), module, param, value);
+                    updateParamEachOscillator(oscillatorNumbers, parseInt(matches[1]), module, param, value);
                 } else {
                     if (module) {
                         updateParamOfModule(source, module, param, value);
@@ -1374,10 +1378,11 @@
      * @param {$timeout} $timeout This argument is to update view.
      * @param {string} BASE_URL This argument is service of DI (Dependency Injection).
      * @param {Array.<string>} sources readFileByDragAndDrop This argument is service of DI (Dependency Injection).
+     * @param {Arrya.<number>} oscillatorNumbers This is the array of number in order to identify oscillator.
      * @param {function} openDialog This argument is service of DI (Dependency Injection).
      * @param {function} getCurrentPatches This argument is service of DI (Dependency Injection).
      */
-    xsound.controller('XSoundController', ['$rootScope', '$scope', '$window', '$timeout', 'BASE_URL', 'sources', 'openDialog', 'getCurrentPatches', function($rootScope, $scope, $window, $timeout, BASE_URL, sources, openDialog, getCurrentPatches) {
+    xsound.controller('XSoundController', ['$rootScope', '$scope', '$window', '$timeout', 'BASE_URL', 'sources', 'oscillatorNumbers', 'openDialog', 'getCurrentPatches', function($rootScope, $scope, $window, $timeout, BASE_URL, sources, oscillatorNumbers, openDialog, getCurrentPatches) {
         var NUMBER_OF_ONESHOTS = 88;
         var AJAX_TIMEOUT       = 60000;
 
@@ -1851,17 +1856,15 @@
          * @param {string} type This argument is one of 'sine', 'square', 'sawtooth', 'triangle'.
          */
         $scope.changeWaveType = function(event, number, type) {
-            var _oscillatorNumbers = [0, 1, 2, 3];
-
             switch (number) {
                 case 0 :
-                    angular.forEach(_oscillatorNumbers, function(number) {
+                    angular.forEach(oscillatorNumbers, function(number) {
                         X('oscillator', number).param('type', type);
                     });
 
                     break;
                 case 1 :
-                    angular.forEach(_oscillatorNumbers, function(number) {
+                    angular.forEach(oscillatorNumbers, function(number) {
                         C('oscillator', number).param('type', type);
                     });
 
@@ -2329,12 +2332,11 @@
      * @param {$http} $http This argument is service of DI (Dependency Injection).
      * @param {$timeout} $timeout This argument is to update view.
      * @param {string} BASE_URL This argument is service of DI (Dependency Injection).
+     * @param {Array.<string>} oscillatorNumbers This is the array of number in order to identify oscillator.
      * @param {function} createDateTimeString This argument is service of DI (Dependency Injection).
      * @extends {XSoundController}
      */
-    xsound.controller('MMLController', ['$rootScope', '$scope', '$http', '$timeout', 'BASE_URL', 'createDateTimeString', function($rootScope, $scope, $http, $timeout, BASE_URL, createDateTimeString) {
-        var _oscillatorNumbers = [0, 1, 2, 3];
-
+    xsound.controller('MMLController', ['$rootScope', '$scope', '$http', '$timeout', 'BASE_URL', 'oscillatorNumbers', 'createDateTimeString', function($rootScope, $scope, $http, $timeout, BASE_URL, oscillatorNumbers, createDateTimeString) {
         var _startCallback =  function(sequence, index) {
             if ($scope.$parent.currentSoundSource === 'oscillator') {
                 X('mixer').mix([X('oscillator'), C('oscillator')]);
@@ -2364,7 +2366,7 @@
         };
 
         var _endedCallback = function() {
-            angular.forEach(_oscillatorNumbers, function(number) {
+            angular.forEach(oscillatorNumbers, function(number) {
                 X('oscillator', number).state(false);
                 C('oscillator', number).state(false);
             });
@@ -2465,7 +2467,7 @@
             if ($scope.paused) {
                 // Start MML
                 if ($scope.$parent.currentSoundSource === 'oscillator') {
-                    angular.forEach(_oscillatorNumbers, function(number) {
+                    angular.forEach(oscillatorNumbers, function(number) {
                         X('oscillator', number).state(true);
                         C('oscillator', number).state(true);
                     });
@@ -2498,7 +2500,7 @@
                 X('mml').stop();
                 C('mml').stop();
 
-                angular.forEach(_oscillatorNumbers, function(number) {
+                angular.forEach(oscillatorNumbers, function(number) {
                     X('oscillator', number).state(true);
                     C('oscillator', number).state(true);
                 });
