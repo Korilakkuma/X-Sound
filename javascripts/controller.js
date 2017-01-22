@@ -1565,7 +1565,8 @@
         $scope.isEndOpeing     = false;
         $scope.isStart         = false;
 
-        $scope.headerStyle = {'top' : (parseInt(($window.innerHeight) / 4) + 'px')};
+        $scope.progressWrapperStyle = {'padding' : (((Math.floor($window.innerHeight / 2) - 60) + 'px') + ' 0px')};
+        $scope.headerStyle          = {'top' : (parseInt(($window.innerHeight) / 4) + 'px')};
 
         // Models for modal window directive
         $scope.isModalProgressDecodeAudio   = false;

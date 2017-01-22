@@ -82,7 +82,7 @@
                     <nav ng-class="{'fade-in' : isReady}"><a href="#" id="button-start-application" ng-click="startApplication($event)">START</a></nav>
                 </div>
             </div>
-            <div id="page-loading" ng-if="!isReady">
+            <div id="page-loading" ng-if="!isReady" ng-style="progressWrapperStyle">
                 <p>Now Loading ... </p>
                 <!-- Progress Bar -->
                 <div class="progress-wrap">
