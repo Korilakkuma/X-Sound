@@ -809,21 +809,13 @@
 
     /**
      * Directive for progress.
+     * @param {$window} $window This argument is service of DI (Dependency Injection).
      */
-    xsound.directive('uiModalProgress', [function() {
+    xsound.directive('uiModalProgress', ['$window', function($window) {
         return {
-            restrict   : 'E',
-            link       : function(scope, iElement, iAttrs, controller, iTransclude) {
-                $(iElement).css({
-                    'position'         : 'fixed',
-                    'top'              : '0px',
-                    'left'             : '0px',
-                    'z-index'          : 999,
-                    'padding'          : '15% 0%',
-                    'width'            : '100%',
-                    'height'           : '100%',
-                    'background-color' : 'rgba(0, 0, 0, 0.6)'
-                });
+            restrict : 'E',
+            link     : function(scope, iElement, iAttrs, controller, iTransclude) {
+                $(iElement).children('section').css('margin-top', ((($window.innerHeight / 2) - 80) + 'px'));
             }
         };
     }]);
@@ -1189,14 +1181,14 @@
                         X('audio').ready.call(X('audio'), arrayBuffer);
 
                         $timeout(function() {
-                            scope.isModalProgressReadFile = false;
+                            scope.$parent.isModalProgressReadFile = false;
                         });
                     },
                     error   : function(event, error) {
                         readFileErrorCallback(error);
                     },
                     progress : function(event) {
-                        readFileProgressCallback(scope, $timeout, event);
+                        readFileProgressCallback(scope.$parent, $timeout, event);
                     }
                 };
 
@@ -1338,14 +1330,14 @@
                         }
 
                         $timeout(function() {
-                            scope.isModalProgressReadFile = false;
+                            scope.$parent.isModalProgressReadFile = false;
                         });
                     },
                     error   : function(event, error) {
                         readFileErrorCallback(error);
                     },
                     progress : function(event) {
-                        readFileProgressCallback(scope, $timeout, event);
+                        readFileProgressCallback(scope.$parent, $timeout, event);
                     }
                 };
 
