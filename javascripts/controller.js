@@ -529,6 +529,8 @@
             console.dir(error);
         });
 
+        X('stream').module('noisegate').param('level', 0.3);
+
         angular.forEach(sources, function(source) {
             X(source).module('distortion').param('color', 2000);
             X(source).module('distortion').param('tone',  4000);
