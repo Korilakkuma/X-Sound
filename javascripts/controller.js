@@ -2354,8 +2354,10 @@
 
         var _endedCallback = function() {
             angular.forEach(oscillatorNumbers, function(number) {
-                X('oscillator', number).state(false);
-                C('oscillator', number).state(false);
+                if (number !== 0) {
+                    X('oscillator', number).state(false);
+                    C('oscillator', number).state(false);
+                }
             });
 
             $scope.readyMML();
