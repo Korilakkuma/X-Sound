@@ -523,10 +523,8 @@
         C('oscillator').setup([false, false, false, false]);
 
         X('stream').setup(false, function(stream) {
-            console.dir(stream);
         }, function(error) {
             openDialog('Confirmation', 400, 'auto', true, '<p><b>Cancel Microphone.</b></p>');
-            console.dir(error);
         });
 
         X('stream').module('noisegate').param('level', 0.3);
