@@ -2201,7 +2201,7 @@
             });
 
             X(source).module('analyser').domain('time').setup($document[0].getElementById(api + '-time')).param({
-                interval : 500,
+                interval : 0,
                 shape    : 'line',
                 wave     : 'rgba(0, 0, 255, 1.0)',
                 font     : {
@@ -2216,7 +2216,7 @@
             });
 
             X(source).module('analyser').domain('fft').setup($document[0].getElementById(api + '-spectrum')).param({
-                interval : 500,
+                interval : 0,
                 shape    : 'rect',
                 wave     : 'gradient',
                 grad     : [
