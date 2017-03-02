@@ -2403,11 +2403,11 @@
 
         // Get MML tex for placeholder
         $http.get(Math.floor(Math.random() * 2) ? (BASE_URL + 'mml/mml-foreverlove.txt') : (BASE_URL + 'mml/mml-tears.txt'))
-             .success(function(data, status, headers, config) {
-                 $scope.mml = data;
+             .then(function(response) {
+                 $scope.mml = response.data;
                  $scope.typeMML();
              })
-             .error(function(data, status, headers, config) {
+             .catch(function(response) {
              });
 
         /**
@@ -2705,7 +2705,9 @@
                     // JSON -> serialize (key1=value1&key2=value2 ...)
                     return $.param(data);
                 }
-            }).success(function(data, status, headers, config) {
+            }).then(function(response) {
+                var date = response.data;
+
                 if (angular.isObject(data)) {
                     $scope.csrf           = data.csrf;
                     $scope.isAuth         = data.isAuth;
@@ -2723,7 +2725,7 @@
                 }
 
                 $scope.isDisabled = false;
-            }).error(function(data, status, headers, config) {
+            }).catch(function(response) {
                 _ajaxErrorHandler();
                 $scope.isDisabled = false;
             });
@@ -2976,8 +2978,10 @@
                     // JSON -> serialize (key1=value1&key2=value2 ...)
                     return $.param(data);
                 }
-            }).success(function(data, status, headers, config) {
+            }).then(function(response) {
                 $timeout(function() {
+                    var data = response.data;
+
                     if (angular.isObject(data)) {
                         $scope.csrf       = data.csrf;
                         $scope.isAuth     = data.isAuth;
@@ -2988,7 +2992,7 @@
                         });
                     }
                 });
-            }).error(function(data, status, headers, config) {
+            }).catch(function(response) {
                 _ajaxErrorHandler();
             });
         };
@@ -3012,7 +3016,9 @@
                     // JSON -> serialize (key1=value1&key2=value2 ...)
                     return $.param(data);
                 }
-            }).success(function(data, status, headers, config) {
+            }).then(function(response) {
+                var data = response.data;
+
                 if (angular.isObject(data)) {
                     $scope.csrf       = data.csrf;
                     $scope.isAuth     = data.isAuth;
@@ -3022,7 +3028,7 @@
                         openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 }
-            }).error(function(data, status, headers, config) {
+            }).catch(function(response) {
                 _ajaxErrorHandler();
             });
         };
@@ -3191,7 +3197,9 @@
                     // JSON -> serialize (key1=value1&key2=value2 ...)
                     return $.param(data);
                 }
-            }).success(function(data, status, headers, config) {
+            }).then(function(response) {
+                var data = response.data;
+
                 if (angular.isObject(data)) {
                     $scope.csrf           = data.csrf;
                     $scope.isAuth         = data.isAuth;
@@ -3207,7 +3215,7 @@
                 }
 
                 $scope.isDisabled = false;
-            }).error(function(data, status, headers, config) {
+            }).catch(function(response) {
                 _ajaxErrorHandler();
                 $scope.isDisabled = false;
             });
@@ -3241,7 +3249,9 @@
                     // JSON -> serialize (key1=value1&key2=value2 ...)
                     return $.param(data);
                 }
-            }).success(function(data, status, headers, config) {
+            }).then(function(response) {
+                var data = response.data;
+
                 if (angular.isObject(data)) {
                     $scope.csrf           = data.csrf;
                     $scope.isAuth         = data.isAuth;
@@ -3259,7 +3269,7 @@
                 }
 
                 $scope.isDisabled = false;
-            }).error(function(data, status, headers, config) {
+            }).catch(function(response) {
                 _ajaxErrorHandler();
                 $scope.isDisabled = false;
             });
@@ -3289,7 +3299,9 @@
                     // JSON -> serialize (key1=value1&key2=value2 ...)
                     return $.param(data);
                 }
-            }).success(function(data, status, headers, config) {
+            }).then(function(response) {
+                var data = response.data;
+
                 if (angular.isObject(data)) {
                     $scope.csrf           = data.csrf;
                     $scope.isAuth         = data.isAuth;
@@ -3297,7 +3309,7 @@
                 }
 
                 $scope.isDisabled = false;
-            }).error(function(data, status, headers, config) {
+            }).catch(function(response) {
                 _ajaxErrorHandler();
                 $scope.isDisabled = false;
             });
@@ -3371,7 +3383,9 @@
                     // JSON -> serialize (key1=value1&key2=value2 ...)
                     return $.param(data);
                 }
-            }).success(function(data, status, headers, config) {
+            }).then(function(response) {
+                var data = response.data;
+
                 if (angular.isObject(data)) {
                     $scope.csrf   = data.csrf;
                     $scope.isAuth = data.isAuth;
@@ -3386,7 +3400,7 @@
                 }
 
                 $scope.isDisabled = false;
-            }).error(function(data, status, headers, config) {
+            }).catch(function(response) {
                 _ajaxErrorHandler();
                 $scope.isDisabled = false;
             });
@@ -3521,7 +3535,9 @@
             headers         : {
                 //'X-Requested-With' : 'XMLHttpRequest'  // Unnecessary for CORS
             }
-        }).success(function(data, status, headers, config) {
+        }).then(function(response) {
+            var data = response.data;
+
             if (angular.isObject(data) && data.result) {
                 $scope.isAuth         = data.isAuth;
                 $scope.csrf           = data.csrf;
@@ -3531,7 +3547,7 @@
                     $scope.patchLists = angular.fromJson(data.patches);
                 }
             }
-        }).error(function(data, status, headers, config) {
+        }).catch(function(response) {
             _ajaxErrorHandler();
         });
     }]);
