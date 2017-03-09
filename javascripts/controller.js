@@ -2557,15 +2557,15 @@
             PATH   = '/app/websocket/';
         }
 
-        var _openCallback = function(event, socket) {
-            openDialog('Confirmation', 800, 'auto', false, ('<p><b>Connection to (' + socket.url + ') succeeded.</b></p>'));
+        var _openCallback = function(event) {
+            openDialog('Confirmation', 800, 'auto', false, ('<p><b>Connection to (' + event.currentTarget.url + ') succeeded.</b></p>'));
 
             $timeout(function() {
                 $scope.isActive = true;
             });
         };
 
-        var _closeCallback = function(event, socket) {
+        var _closeCallback = function(event) {
             openDialog('Confirmation', 400, 'auto', true, '<p><b>Connection closed.</b></p>');
 
             $timeout(function() {
@@ -2573,7 +2573,7 @@
             });
         };
 
-        var _errorCallback = function(event, socket) {
+        var _errorCallback = function(event) {
             openDialog('Error', 400, 'auto', true, '<p><b>Server Error.</b></p>');
 
             $timeout(function() {
