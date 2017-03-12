@@ -20,6 +20,11 @@ gulp.task('build:js', function() {
         .pipe(rename('controller.min.js'))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('javascripts/'));
+
+   gulp.src(['javascripts/register-service-worker.js', 'javascripts/service-worker.js'])
+       .pipe(plumber())
+       .pipe(uglify())
+       .pipe(gulp.dest('./'));
 });
 
 gulp.task('build:css', function() {
@@ -36,6 +41,8 @@ gulp.task('build:css', function() {
 gulp.task('build', ['build:js', 'build:css']);
 
 gulp.task('watch', function() {
-    gulp.watch('javascripts/controller.js', ['build:js']);
-    gulp.watch('stylesheets/scss/*.scss',   ['build:css']);
+    gulp.watch('javascripts/controller.js',              ['build:js']);
+    gulp.watch('javascripts/register-service-worker.js', ['build:js']);
+    gulp.watch('javascripts/service-worker.js',          ['build:js']);
+    gulp.watch('stylesheets/scss/*.scss',                ['build:css']);
 });
