@@ -7,7 +7,7 @@ var sass       = require('gulp-sass');
 var rename     = require('gulp-rename');
 
 gulp.task('jshint', function() {
-    gulp.src('javascripts/controller.js')
+    gulp.src(['javascripts/controller.js', 'javascripts/register-service-woker.js', 'javascripts/service-worker.js'])
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
