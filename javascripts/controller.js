@@ -1111,6 +1111,7 @@
                             });
                         });
 
+                        break;
                     case 'select-reverb-type' :
                         $(iElement).on('change', function() {
                             var value = parseInt(this.value) - 1;
@@ -1486,7 +1487,7 @@
 
                         $scope.$apply(function() {
                             $scope.progress = Math.floor((reverbs.length / $scope.rirs.length) * 100);
-                            $scope.progressStyle['width'] = $scope.progress + '%';
+                            $scope.progressStyle.width = $scope.progress + '%';
                         });
 
                         if (reverbs.length === $scope.rirs.length) {
@@ -1763,7 +1764,7 @@
          * @param {number} number This argument is either 0 or 1.
          */
         $scope.toggleOscillatorState = function(event, number) {
-            var state = !$scope.oscillators['oscillator' + number]['isActive'];
+            var state = !$scope.oscillators['oscillator' + number].isActive;
 
             switch (number) {
                 case 0 :
@@ -1776,7 +1777,7 @@
                     break;
             }
 
-            $scope.oscillators['oscillator' + number]['isActive'] = state;
+            $scope.oscillators['oscillator' + number].isActive = state;
         };
 
         /**
@@ -1858,7 +1859,7 @@
                     break;
             }
 
-            $scope.oscillators['oscillator' + number]['type'] = type;
+            $scope.oscillators['oscillator' + number].type = type;
         };
 
         /**
@@ -2372,6 +2373,7 @@
                     //$scope.error = 'Maybe, ' + note + ' is invalid.';
                     break;
                 case 'MML' :
+                    break;
                 default    :
                     //$scope.error = 'The designated MML is invalid.';
                     break;
@@ -2608,10 +2610,10 @@
             $scope.isActive = !$scope.isActive;
 
             if ($scope.isActive) {
-                if (X('mixer').module('session').isConnected()
-                    && X('oneshot').module('session').isConnected()
-                    && X('audio').module('session').isConnected()
-                    && X('stream').module('session').isConnected()) {
+                if (X('mixer').module('session').isConnected() &&
+                    X('oneshot').module('session').isConnected() &&
+                    X('audio').module('session').isConnected() &&
+                    X('stream').module('session').isConnected()) {
                     // Connection to server has existed already
                     angular.forEach(sources, function(source) {
                         if (source !== 'oscillator') {
@@ -2986,14 +2988,18 @@
                         $scope.csrf       = data.csrf;
                         $scope.isAuth     = data.isAuth;
                         $scope.patchLists = angular.fromJson(data.patches);
-
-                        angular.forEach(data.message, function(message) {
-                            openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
-                        });
                     }
                 });
             }).catch(function(response) {
-                _ajaxErrorHandler();
+                var data = response.data;
+
+                if (angular.isObject(data)) {
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
+                } else {
+                    _ajaxErrorHandler();
+                }
             });
         };
 
@@ -3019,17 +3025,19 @@
             }).then(function(response) {
                 var data = response.data;
 
-                if (angular.isObject(data)) {
-                    $scope.csrf       = data.csrf;
-                    $scope.isAuth     = data.isAuth;
-                    $scope.patchLists = angular.fromJson(data.patches);
-
-                    angular.forEach(data.message, function(message) {
-                        openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
-                    });
-                }
+                $scope.csrf       = data.csrf;
+                $scope.isAuth     = data.isAuth;
+                $scope.patchLists = angular.fromJson(data.patches);
             }).catch(function(response) {
-                _ajaxErrorHandler();
+                var data = response.data;
+
+                if (angular.isObject(data)) {
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
+                } else {
+                    _ajaxErrorHandler();
+                }
             });
         };
 
@@ -3164,6 +3172,7 @@
                     break;
                 case 'account' :
                     $scope.isAccount = true;
+                    break;
                 default :
                     break;
             }
@@ -3204,19 +3213,21 @@
                     $scope.csrf           = data.csrf;
                     $scope.isAuth         = data.isAuth;
                     $scope.authedUsername = data.username;
-
-                    if ($scope.isAuth) {
-                        $scope.patchLists = angular.fromJson(data.patches);
-                    } else {
-                        angular.forEach(data.message, function(message) {
-                            openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
-                        });
-                    }
+                    $scope.patchLists     = angular.fromJson(data.patches);
                 }
 
                 $scope.isDisabled = false;
             }).catch(function(response) {
-                _ajaxErrorHandler();
+                var data = response.data;
+
+                if (angular.isObject(data)) {
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
+                } else {
+                    _ajaxErrorHandler();
+                }
+
                 $scope.isDisabled = false;
             });
         };
@@ -3252,25 +3263,22 @@
             }).then(function(response) {
                 var data = response.data;
 
-                if (angular.isObject(data)) {
-                    $scope.csrf           = data.csrf;
-                    $scope.isAuth         = data.isAuth;
-                    $scope.authedUsername = data.username;
-
-                    if ($scope.isAuth) {
-                        angular.forEach(data.message, function(message) {
-                            openDialog('Confirmation', 600, 'auto', false, ('<p><b>' + message + '</b></p>'));
-                        });
-                    } else {
-                        angular.forEach(data.message, function(message) {
-                            openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
-                        });
-                    }
-                }
+                $scope.csrf           = data.csrf;
+                $scope.isAuth         = data.isAuth;
+                $scope.authedUsername = data.username;
 
                 $scope.isDisabled = false;
             }).catch(function(response) {
-                _ajaxErrorHandler();
+                var data = response.data;
+
+                if (angular.isObject(data)) {
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
+                } else {
+                    _ajaxErrorHandler();
+                }
+
                 $scope.isDisabled = false;
             });
         };
@@ -3302,15 +3310,22 @@
             }).then(function(response) {
                 var data = response.data;
 
-                if (angular.isObject(data)) {
-                    $scope.csrf           = data.csrf;
-                    $scope.isAuth         = data.isAuth;
-                    $scope.authedUsername = data.username;
-                }
+                $scope.csrf           = data.csrf;
+                $scope.isAuth         = data.isAuth;
+                $scope.authedUsername = data.username;
 
                 $scope.isDisabled = false;
             }).catch(function(response) {
-                _ajaxErrorHandler();
+                var data = response.data;
+
+                if (angular.isObject(data)) {
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
+                } else {
+                    _ajaxErrorHandler();
+                }
+
                 $scope.isDisabled = false;
             });
         };
@@ -3386,22 +3401,22 @@
             }).then(function(response) {
                 var data = response.data;
 
-                if (angular.isObject(data)) {
-                    $scope.csrf   = data.csrf;
-                    $scope.isAuth = data.isAuth;
-
-                    angular.forEach(data.message, function(message) {
-                        openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
-                    });
-
-                    if (data.result) {
-                        $scope.patchLists = angular.fromJson(data.patches);
-                    }
-                }
+                $scope.csrf       = data.csrf;
+                $scope.isAuth     = data.isAuth;
+                $scope.patchLists = angular.fromJson(data.patches);
 
                 $scope.isDisabled = false;
             }).catch(function(response) {
-                _ajaxErrorHandler();
+                var data = response.data;
+
+                if (angular.isObject(data)) {
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
+                } else {
+                    _ajaxErrorHandler();
+                }
+
                 $scope.isDisabled = false;
             });
         };
@@ -3418,7 +3433,7 @@
             } else if (angular.isString(patchList.patch)) {
                 // PHP + MySQL
                 var patch = patchList.patch.replace(/&quot;/g, '"')
-                                           .replace(/&apos;/g, "'")
+                                           .replace(/&apos;/g, '\'')
                                            .replace(/&amp;/g, '&');
 
                 $scope.patches = angular.fromJson(patch);
@@ -3538,14 +3553,12 @@
         }).then(function(response) {
             var data = response.data;
 
-            if (angular.isObject(data) && data.result) {
-                $scope.isAuth         = data.isAuth;
-                $scope.csrf           = data.csrf;
-                $scope.authedUsername = data.username;
+            $scope.isAuth         = data.isAuth;
+            $scope.csrf           = data.csrf;
+            $scope.authedUsername = data.username;
 
-                if ($scope.isAuth) {
-                    $scope.patchLists = angular.fromJson(data.patches);
-                }
+            if ($scope.isAuth) {
+                $scope.patchLists = angular.fromJson(data.patches);
             }
         }).catch(function(response) {
             _ajaxErrorHandler();
