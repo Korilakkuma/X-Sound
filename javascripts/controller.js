@@ -2708,7 +2708,7 @@
                     return $.param(data);
                 }
             }).then(function(response) {
-                var date = response.data;
+                var data = response.data;
 
                 if (angular.isObject(data)) {
                     $scope.csrf           = data.csrf;
@@ -2717,18 +2717,23 @@
 
                     if (!$scope.isAuth) {
                         angular.forEach(data.message, function(message) {
-                            openDialog('Confirmation', 400, 'auto', false, ('<p><b>' + message + '</b></p>'));
-                        });
-                    } else {
-                        angular.forEach(data.message, function(message) {
-                            openDialog('Error', 400, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                            openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
                         });
                     }
                 }
 
                 $scope.isDisabled = false;
             }).catch(function(response) {
-                _ajaxErrorHandler();
+                var data = response.data;
+
+                if (angular.isObject(data)) {
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
+                } else {
+                    _ajaxErrorHandler();
+                }
+
                 $scope.isDisabled = false;
             });
         };
@@ -2994,6 +2999,9 @@
                 var data = response.data;
 
                 if (angular.isObject(data)) {
+                    $scope.csrf   = data.csrf;
+                    $scope.isAuth = data.isAuth;
+
                     angular.forEach(data.message, function(message) {
                         openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
@@ -3032,6 +3040,9 @@
                 var data = response.data;
 
                 if (angular.isObject(data)) {
+                    $scope.csrf   = data.csrf;
+                    $scope.isAuth = data.isAuth;
+
                     angular.forEach(data.message, function(message) {
                         openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
@@ -3263,9 +3274,11 @@
             }).then(function(response) {
                 var data = response.data;
 
-                $scope.csrf           = data.csrf;
-                $scope.isAuth         = data.isAuth;
-                $scope.authedUsername = data.username;
+                if (angular.isObject(data)) {
+                    $scope.csrf           = data.csrf;
+                    $scope.isAuth         = data.isAuth;
+                    $scope.authedUsername = data.username;
+                }
 
                 $scope.isDisabled = false;
             }).catch(function(response) {
@@ -3308,12 +3321,6 @@
                     return $.param(data);
                 }
             }).then(function(response) {
-                var data = response.data;
-
-                $scope.csrf           = data.csrf;
-                $scope.isAuth         = data.isAuth;
-                $scope.authedUsername = data.username;
-
                 $scope.isDisabled = false;
             }).catch(function(response) {
                 var data = response.data;
@@ -3401,15 +3408,20 @@
             }).then(function(response) {
                 var data = response.data;
 
-                $scope.csrf       = data.csrf;
-                $scope.isAuth     = data.isAuth;
-                $scope.patchLists = angular.fromJson(data.patches);
+                if (angular.isObject(data)) {
+                    $scope.csrf       = data.csrf;
+                    $scope.isAuth     = data.isAuth;
+                    $scope.patchLists = angular.fromJson(data.patches);
+                }
 
                 $scope.isDisabled = false;
             }).catch(function(response) {
                 var data = response.data;
 
                 if (angular.isObject(data)) {
+                    $scope.csrf   = data.csrf;
+                    $scope.isAuth = data.isAuth;
+
                     angular.forEach(data.message, function(message) {
                         openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
@@ -3553,13 +3565,15 @@
         }).then(function(response) {
             var data = response.data;
 
-            $scope.isAuth         = data.isAuth;
-            $scope.csrf           = data.csrf;
-            $scope.authedUsername = data.username;
+           if (angular.isObject(data)) {
+                $scope.isAuth         = data.isAuth;
+                $scope.authedUsername = data.username;
 
-            if ($scope.isAuth) {
-                $scope.patchLists = angular.fromJson(data.patches);
-            }
+                if ($scope.isAuth) {
+                    $scope.csrf       = data.csrf;
+                    $scope.patchLists = angular.fromJson(data.patches);
+                }
+           }
         }).catch(function(response) {
             _ajaxErrorHandler();
         });
