@@ -2986,15 +2986,13 @@
                     return $.param(data);
                 }
             }).then(function(response) {
-                $timeout(function() {
-                    var data = response.data;
+                var data = response.data;
 
-                    if (angular.isObject(data)) {
-                        $scope.csrf       = data.csrf;
-                        $scope.isAuth     = data.isAuth;
-                        $scope.patchLists = angular.fromJson(data.patches);
-                    }
-                });
+                if (angular.isObject(data)) {
+                    $scope.csrf       = data.csrf;
+                    $scope.isAuth     = data.isAuth;
+                    $scope.patchLists = angular.fromJson(data.patches);
+                }
             }).catch(function(response) {
                 var data = response.data;
 
