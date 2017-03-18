@@ -2987,7 +2987,7 @@
                 }
             }).then(function(response) {
                 var data = response.data;
-                console.dir(data);
+
                 if (angular.isObject(data)) {
                     $scope.csrf       = data.csrf;
                     $scope.isAuth     = data.isAuth;
@@ -3030,12 +3030,10 @@
                 }
             }).then(function(response) {
                 var data = response.data;
-                console.dir(data);
-                if (angular.isObject(data)) {
-                    $scope.csrf       = data.csrf;
-                    $scope.isAuth     = data.isAuth;
-                    $scope.patchLists = angular.fromJson(data.patches);
-                }
+
+                $scope.csrf       = data.csrf;
+                $scope.isAuth     = data.isAuth;
+                $scope.patchLists = angular.fromJson(data.patches);
             }).catch(function(response) {
                 var data = response.data;
 
@@ -3407,7 +3405,7 @@
                 }
             }).then(function(response) {
                 var data = response.data;
-                console.dir(data);
+
                 if (angular.isObject(data)) {
                     $scope.csrf       = data.csrf;
                     $scope.isAuth     = data.isAuth;
