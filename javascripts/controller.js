@@ -2992,6 +2992,10 @@
                     $scope.csrf       = data.csrf;
                     $scope.isAuth     = data.isAuth;
                     $scope.patchLists = angular.fromJson(data.patches);
+
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
                 }
             }).catch(function(response) {
                 var data = response.data;
@@ -3001,7 +3005,7 @@
                     $scope.isAuth = data.isAuth;
 
                     angular.forEach(data.message, function(message) {
-                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 } else {
                     _ajaxErrorHandler();
@@ -3035,6 +3039,10 @@
                     $scope.csrf       = data.csrf;
                     $scope.isAuth     = data.isAuth;
                     $scope.patchLists = angular.fromJson(data.patches);
+
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
                 }
             }).catch(function(response) {
                 var data = response.data;
@@ -3044,7 +3052,7 @@
                     $scope.isAuth = data.isAuth;
 
                     angular.forEach(data.message, function(message) {
-                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 } else {
                     _ajaxErrorHandler();
@@ -3278,6 +3286,10 @@
                     $scope.csrf           = data.csrf;
                     $scope.isAuth         = data.isAuth;
                     $scope.authedUsername = data.username;
+
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
                 }
 
                 $scope.isDisabled = false;
@@ -3321,6 +3333,14 @@
                     return $.param(data);
                 }
             }).then(function(response) {
+                var data = response.data;
+
+                if (angular.isObject(data)) {
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
+                }
+
                 $scope.isDisabled = false;
             }).catch(function(response) {
                 var data = response.data;
@@ -3342,7 +3362,7 @@
          * @param {Event} event This argument is event object from ng-click directive.
          */
         $scope.deleteAccount = function(event) {
-            // Delet OK ?
+            // Delete OK ?
             $('<div />').html('<p><b>Delete your account. OK ?<br /> <b class="dangerous">If you delete account, the all of patches that you saved are also deleted.</b></b></p>').dialog({
                 title     : 'Confirmation',
                 autoOpen  : true,
@@ -3412,6 +3432,10 @@
                     $scope.csrf       = data.csrf;
                     $scope.isAuth     = data.isAuth;
                     $scope.patchLists = angular.fromJson(data.patches);
+
+                    angular.forEach(data.message, function(message) {
+                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                    });
                 }
 
                 $scope.isDisabled = false;
@@ -3423,7 +3447,7 @@
                     $scope.isAuth = data.isAuth;
 
                     angular.forEach(data.message, function(message) {
-                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 } else {
                     _ajaxErrorHandler();
