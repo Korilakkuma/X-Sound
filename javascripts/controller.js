@@ -2717,7 +2717,7 @@
 
                     if (!$scope.isAuth) {
                         angular.forEach(data.message, function(message) {
-                            openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                            openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                         });
                     }
                 }
@@ -2728,7 +2728,7 @@
 
                 if (angular.isObject(data)) {
                     angular.forEach(data.message, function(message) {
-                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 } else {
                     _ajaxErrorHandler();
@@ -2994,7 +2994,7 @@
                     $scope.patchLists = angular.fromJson(data.patches);
 
                     angular.forEach(data.message, function(message) {
-                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 }
             }).catch(function(response) {
@@ -3005,7 +3005,7 @@
                     $scope.isAuth = data.isAuth;
 
                     angular.forEach(data.message, function(message) {
-                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 } else {
                     _ajaxErrorHandler();
@@ -3041,7 +3041,7 @@
                     $scope.patchLists = angular.fromJson(data.patches);
 
                     angular.forEach(data.message, function(message) {
-                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 }
             }).catch(function(response) {
@@ -3052,7 +3052,7 @@
                     $scope.isAuth = data.isAuth;
 
                     angular.forEach(data.message, function(message) {
-                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 } else {
                     _ajaxErrorHandler();
@@ -3241,7 +3241,7 @@
 
                 if (angular.isObject(data)) {
                     angular.forEach(data.message, function(message) {
-                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 } else {
                     _ajaxErrorHandler();
@@ -3288,7 +3288,7 @@
                     $scope.authedUsername = data.username;
 
                     angular.forEach(data.message, function(message) {
-                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 }
 
@@ -3298,7 +3298,7 @@
 
                 if (angular.isObject(data)) {
                     angular.forEach(data.message, function(message) {
-                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 } else {
                     _ajaxErrorHandler();
@@ -3337,7 +3337,7 @@
 
                 if (angular.isObject(data)) {
                     angular.forEach(data.message, function(message) {
-                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 }
 
@@ -3347,7 +3347,7 @@
 
                 if (angular.isObject(data)) {
                     angular.forEach(data.message, function(message) {
-                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 } else {
                     _ajaxErrorHandler();
@@ -3434,7 +3434,7 @@
                     $scope.patchLists = angular.fromJson(data.patches);
 
                     angular.forEach(data.message, function(message) {
-                        openDialog('Confirmation', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 }
 
@@ -3447,7 +3447,7 @@
                     $scope.isAuth = data.isAuth;
 
                     angular.forEach(data.message, function(message) {
-                        openDialog('Error', data.code, 'auto', false, ('<p><b>' + message + '</b></p>'));
+                        openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
                 } else {
                     _ajaxErrorHandler();
