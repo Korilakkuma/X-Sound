@@ -2727,6 +2727,8 @@
                 var data = response.data;
 
                 if (angular.isObject(data)) {
+                    $scope.csrf = data.csrf;
+
                     angular.forEach(data.message, function(message) {
                         openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
@@ -3163,7 +3165,6 @@
          * This event handler changes flag for Tab-Panel menu.
          * @param {Event} event This argument is event object from ng-click directive.
          * @param {string} action This argument is one of 'signin', 'signup', 'patchList', 'savePatch', 'account'
-         * @returns {undefined}
          */
         $scope.toggleAction = function(event, action) {
             if (event !== null) {
@@ -3240,6 +3241,8 @@
                 var data = response.data;
 
                 if (angular.isObject(data)) {
+                    $scope.csrf = data.csrf;
+
                     angular.forEach(data.message, function(message) {
                         openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
@@ -3297,6 +3300,8 @@
                 var data = response.data;
 
                 if (angular.isObject(data)) {
+                    $scope.csrf = data.csrf;
+
                     angular.forEach(data.message, function(message) {
                         openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
@@ -3336,6 +3341,8 @@
                 var data = response.data;
 
                 if (angular.isObject(data)) {
+                    $scope.csrf = data.csrf;
+
                     angular.forEach(data.message, function(message) {
                         openDialog('Confirmation', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
@@ -3346,6 +3353,8 @@
                 var data = response.data;
 
                 if (angular.isObject(data)) {
+                    $scope.csrf = data.csrf;
+
                     angular.forEach(data.message, function(message) {
                         openDialog('Error', 500, 'auto', false, ('<p><b>' + message + '</b></p>'));
                     });
