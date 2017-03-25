@@ -21,6 +21,9 @@
       "$"       : true,
       "X"       : true,
       "C"       : true,
-      "data"    : true
+      "Promise" : true,
+      "data"    : true,
+      "self"    : true,
+      "caches"  : true
   }
 }
