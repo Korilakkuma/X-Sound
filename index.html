@@ -243,12 +243,12 @@
                 <div id="visualization-of-sound">  <!-- for Slide Panel -->
                     <div class="clearfix">
                         <dl id="wave-time-overview-L" ng-show="channel === 'left'">
-                            <dt><a href="#wave-time-overview-R" ng-click="toggleAnalyserChannel($event, 'right')" ng-class="{'selected' : channel === 'left'}">RIGHT</a> TIME DOMAIN [ LEFT ]</dt>
+                            <dt><a href="#wave-time-overview-R" ng-click="toggleAnalyserChannel($event, 'right')" ng-class="{'selected' : channel === 'left'}">RIGHT</a> TIME OVERVIEW [ LEFT ]</dt>
                             <dd ng-show="api === 'canvas'"><canvas id="canvas-time-overview-L" width="360" height="120"></canvas></dd>
                             <dd ng-show="api === 'svg'"><svg id="svg-time-overview-L" width="360" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg></dd>
                         </dl>
                         <dl id="wave-time-overview-R" ng-show="channel === 'right'">
-                            <dt><a href="#wave-time-overview-L" ng-click="toggleAnalyserChannel($event, 'left')" ng-class="{'selected' : channel === 'right'}">LEFT</a> TIME DOMAIN [ RIGHT ]</dt>
+                            <dt><a href="#wave-time-overview-L" ng-click="toggleAnalyserChannel($event, 'left')" ng-class="{'selected' : channel === 'right'}">LEFT</a> TIME OVERVIEW [ RIGHT ]</dt>
                             <dd ng-show="api === 'canvas'"><canvas id="canvas-time-overview-R" width="360" height="120"></canvas></dd>
                             <dd ng-show="api === 'svg'"><svg id="svg-time-overview-R" width="360" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg></dd>
                         </dl>
