@@ -6,6 +6,7 @@
  *     XSound.js (https://github.com/Korilakkuma/XSound)
  *     jQuery / jQuery UI
  *     select2.js
+ *     jquery.socialbutton
  *
  * Copyright (c) 2012, 2013, 2014 Tomohiro IKEDA (Korilakkuma)
  * Released under the MIT license
@@ -546,6 +547,11 @@
         C('oscillator').module('delay').param('tone', 4000);
         C('oscillator').module('reverb').param('tone', 4000);
         C('oscillator').module('filter').param('frequency', 8000);
+
+        $('#twitter').socialbutton('twitter', {lang : 'en_US'});
+        $('#facebook').socialbutton('facebook_like', {button : 'button_count'});
+        $('#hatena').socialbutton('hatena');
+        $('#google').socialbutton('google_plusone', {size : 'medium'}).width(72);
     }]);
 
     /**

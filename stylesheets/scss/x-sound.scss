@@ -456,7 +456,7 @@ canvas, svg {
 footer {
     margin-top:50px;
     // border-top:1px solid rgba(0, 0, 0, 1);
-    padding:48px 15px 24px;
+    padding:24px 15px;
     height:100%;
 
     @include setRem(12, $baseFontSize);
@@ -472,20 +472,18 @@ footer {
     opacity:0;
 
     ul {
-        margin:24px 0px;
-
         li {
             display:inline-block;
             margin-left:6px;
 
-            a {
-                display:inline-block;
-                width:32px;
-                height:32px;
+            // a {
+            //     display:inline-block;
+            //     width:32px;
+            //     height:32px;
 
-                @include borderradius(16px);
-                @include boxshadow((0px 0px 0px 3px rgba(0, 0, 0, 1.0) inset, 0px -1px 1px 3px rgba(0, 0, 0, 0.5)));
-            }
+            //     @include borderradius(16px);
+            //     @include boxshadow((0px 0px 0px 3px rgba(0, 0, 0, 1.0) inset, 0px -1px 1px 3px rgba(0, 0, 0, 0.5)));
+            // }
         }
     }
 
@@ -502,13 +500,21 @@ footer {
             @include setRem(12, $baseFontSize);
             vertical-align:middle;
         }
-
-        #github-buttons {
-            display:inline-block;
-            vertical-align:-0.3rem;
-        }
     }
 }
+
+#twitter {}
+
+#facebook {
+    > iframe {
+        width:60px !important;
+        height:20px !important;
+    }
+}
+
+#hatena {}
+
+#google {}
 
 .clear-margin {
     margin:0px !important;
