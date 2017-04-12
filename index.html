@@ -65,7 +65,7 @@
 </head>
 
 
-<body ng-class="{'loading' : !isReady, 'radial-gradient' : isReady}" ui-tooltip>
+<body ng-class="{'loading' : !isReady, 'radial-gradient' : isReady}">
     <noscript>Please enable JavaScript to use this application.</noscript>
     <div id="page">
         <header ng-if="!isEndOpening" ng-class="{'fade-out' : isStart}">
@@ -1220,7 +1220,7 @@
             <li id="hatena"></li>
             <li id="google"></li>
          </ul>
-         <div>
+         <div ui-tooltip>
             <small>Copyright &copy; 2012 - 2014 <strong>Tomohiro IKEDA</strong> &gt;&gt; <a href="http://curtaincall.weblike.jp/" target="_blank" title="Author's Website">Website</a></small>
             <small><a href="http://maoudamashii.jokersounds.com/" title="音楽素材/魔王魂" target="_blank">音楽素材/魔王魂</a></small>
         </div>
