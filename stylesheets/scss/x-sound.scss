@@ -461,7 +461,7 @@ footer {
 
     @include setRem(12, $baseFontSize);
     color:rgba($white, 1.0);
-    text-align:right;
+    text-align:center;
     // text-shadow:-1px -1px 0px rgba($black, 1.0), 1px 1px 0px rgba($black, 1.0);
 
     background-color:rgba($white, 0.05);
