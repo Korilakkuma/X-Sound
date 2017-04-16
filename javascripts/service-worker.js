@@ -60,11 +60,8 @@
             caches.keys().then(function(cacheNames) {
                 return Promise.all(
                     cacheNames.filter(function(cacheName) {
-                        console.log(cacheName);
-                        console.log(cacheName !== CACHE_NAME);
                         return cacheName !== CACHE_NAME;
                     }).map(function(cacheName) {
-                        console.log(cacheName);
                         return caches.delete(cacheName);
                     })
                 );
