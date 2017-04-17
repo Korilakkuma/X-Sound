@@ -13,6 +13,7 @@
         'lib/js/jquery-ui/jquery-ui-1.9.2.custom.min.js',
         'lib/js/colorbox/jquery.colorbox-min.js',
         'lib/js/select2/select2.min.js',
+        'lib/js/jquery-socialbutton/jquery.socialbutton-1.9.1.min.js',
         'javascripts/xsound.min.js'
     ];
 
