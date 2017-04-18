@@ -549,7 +549,7 @@
         C('oscillator').module('filter').param('frequency', 8000);
 
         $('#twitter').socialbutton('twitter', {lang : 'en_US'});
-        $('#facebook').socialbutton('facebook_like', {button : 'button_count'});
+        $('#facebook').socialbutton('facebook_like', {button : 'button_count', locale : 'en_US'});
         $('#hatena').socialbutton('hatena');
         $('#google').socialbutton('google_plusone', {size : 'medium'}).width(72);
     }]);
