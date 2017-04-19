@@ -14,6 +14,9 @@
         'lib/js/colorbox/jquery.colorbox-min.js',
         'lib/js/select2/select2.min.js',
         'lib/js/jquery-socialbutton/jquery.socialbutton-1.9.1.min.js',
+        'stylesheets/css/mac.css',
+        'stylesheets/css/noscript.css',
+        'stylesheets/css/ie.css',
         'javascripts/xsound.min.js'
     ];
 
