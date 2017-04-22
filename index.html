@@ -217,7 +217,7 @@
                         <form name="form-upload-audio">
                             <input type="file" id="file-upload-audio" accept="audio/*" audio-uploader />
                             <input type="text" id="text-mask-upload-audio" class="drag-off" placeholder="Audio File (wav, ogg, mp3)" readonly ng-click="triggerFileUploader($event)" />
-                            <span><a href="#"  id="audio-control" ng-click="controlAudio($event)" ng-class="{'active' : isActive}">START / PAUSE</a></span>
+                            <span><a href="#" id="audio-control" role="button" ng-click="controlAudio($event)" ng-class="{'active' : isActive}">START / PAUSE</a></span>
                         </form>
                         <dl>
                             <dt>
