@@ -548,6 +548,11 @@
         C('oscillator').module('reverb').param('tone', 4000);
         C('oscillator').module('filter').param('frequency', 8000);
 
+        for (var i = 0, len = X('oscillator').length(); i < len; i++) {
+            X('oscillator', i).param('type', 'sawtooth');
+            C('oscillator', i).param('type', 'sawtooth');
+        }
+
         $('#twitter').socialbutton('twitter', {lang : 'en_US'});
         $('#facebook').socialbutton('facebook_like', {button : 'button_count', locale : 'en_US'});
         $('#hatena').socialbutton('hatena');
@@ -1576,10 +1581,10 @@
         $scope.oscillators                      = {};
         $scope.oscillators.oscillator0          = {};
         $scope.oscillators.oscillator0.isActive = true;
-        $scope.oscillators.oscillator0.type     = 'sine';
+        $scope.oscillators.oscillator0.type     = 'sawtooth';
         $scope.oscillators.oscillator1          = {};
         $scope.oscillators.oscillator1.isActive = false;
-        $scope.oscillators.oscillator1.type     = 'sine';
+        $scope.oscillators.oscillator1.type     = 'sawtooth';
 
         $scope.readFileProgress = '';
 
