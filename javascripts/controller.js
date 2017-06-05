@@ -520,7 +520,7 @@
         X('audio').resize(16384);
         X('stream').resize(512);
 
-        X('oscillator').setup([true, false, false, false]);
+        X('oscillator').setup([true, true, true, true]);
         C('oscillator').setup([false, false, false, false]);
 
         X('stream').setup(false, function(stream) {
@@ -1779,10 +1779,16 @@
 
             switch (number) {
                 case 0 :
-                    X('oscillator', 0).state(state);
+                    angular.forEach([0, 1, 2, 3], function(index) {
+                        X('oscillator').get(index).state(state);
+                    });
+
                     break;
                 case 1 :
-                    C('oscillator', 0).state(state);
+                    angular.forEach([0, 1, 2, 3], function(index) {
+                        C('oscillator').get(index).state(state);
+                    });
+
                     break;
                 default :
                     break;
