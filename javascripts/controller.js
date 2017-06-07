@@ -2364,7 +2364,7 @@
             var pianoIndex = sequence.indexes[index];
 
             $timeout(function() {
-                $scope.isSoundStops[pianoIndex] = true;
+                $scope.$parent.isSoundStops[pianoIndex] = true;
             });
         };
 
