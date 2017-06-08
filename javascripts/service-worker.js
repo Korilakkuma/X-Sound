@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var CACHE_VERSION = '1.0.2';
+    var CACHE_VERSION = '1.0.3';
     var CACHE_NAME    = 'x-sound-cache-v' + CACHE_VERSION;
 
     var cacheFiles = [
