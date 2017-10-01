@@ -1,23 +1,29 @@
 (function() {
     'use strict';
 
-    var CACHE_VERSION = '1.0.4';
+    var CACHE_VERSION = '1.0.6';
     var CACHE_NAME    = 'x-sound-cache-v' + CACHE_VERSION;
 
+    var BASE_URL = '/X-Sound/';
     var cacheFiles = [
-        'lib/css/jquery-ui/jquery-ui-1.10.3.custom.min.css',
-        'lib/css/colorbox/colorbox.css',
-        'lib/js/select2/select2.css',
-        'lib/js/angularjs/angular.min.js',
-        'lib/js/jquery/jquery-2.1.1.min.js',
-        'lib/js/jquery-ui/jquery-ui-1.9.2.custom.min.js',
-        'lib/js/colorbox/jquery.colorbox-min.js',
-        'lib/js/select2/select2.min.js',
-        'lib/js/jquery-socialbutton/jquery.socialbutton-1.9.1.min.js',
-        'stylesheets/css/mac.css',
-        'stylesheets/css/noscript.css',
-        'stylesheets/css/ie.css',
-        'javascripts/xsound.min.js'
+        BASE_URL,
+        BASE_URL + 'index.html',
+        BASE_URL + 'favicon.ico',
+        BASE_URL + 'lib/css/jquery-ui/jquery-ui-1.10.3.custom.min.css',
+        BASE_URL + 'lib/css/colorbox/colorbox.css',
+        BASE_URL + 'lib/js/select2/select2.css',
+        BASE_URL + 'lib/js/angularjs/angular.min.js',
+        BASE_URL + 'lib/js/jquery/jquery-2.1.1.min.js',
+        BASE_URL + 'lib/js/jquery-ui/jquery-ui-1.9.2.custom.min.js',
+        BASE_URL + 'lib/js/colorbox/jquery.colorbox-min.js',
+        BASE_URL + 'lib/js/select2/select2.min.js',
+        BASE_URL + 'lib/js/jquery-socialbutton/jquery.socialbutton-1.9.1.min.js',
+        BASE_URL + 'stylesheets/css/mac.css',
+        BASE_URL + 'stylesheets/css/noscript.css',
+        BASE_URL + 'stylesheets/css/ie.css',
+        BASE_URL + 'javascripts/xsound.min.js',
+        BASE_URL + 'javascripts/controller.min.js',
+        BASE_URL + 'register-service-worker.js'
     ];
 
     self.addEventListener('install', function(event) {
