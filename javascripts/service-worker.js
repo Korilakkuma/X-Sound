@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var CACHE_VERSION = '1.0.6';
+    var CACHE_VERSION = '1.0.7';
     var CACHE_NAME    = 'x-sound-cache-v' + CACHE_VERSION;
 
     var BASE_URL = '/X-Sound/';
@@ -27,16 +27,20 @@
     ];
 
     self.addEventListener('install', function(event) {
-        event.waitUntil(
-          caches.open(CACHE_NAME)
-                .then(function(cache) {
-                    return cache.addAll(cacheFiles);
-                })
-        );
+        event.waitUntil(self.skipWaiting());
+        // event.waitUntil(
+        //   caches.open(CACHE_NAME)
+        //         .then(function(cache) {
+        //             return cache.addAll(cacheFiles);
+        //         })
+        // );
     }, false);
 
     self.addEventListener('fetch', function(event) {
-        if (!event.request.url.endsWith('.wav') &&
+        if (!cacheFiles.some(function(cacheFile) {
+              return event.request.url.indexOf(cacheFile) !== -1;
+            }) &&
+            !event.request.url.endsWith('.wav') &&
             !event.request.url.endsWith('.mp3') &&
             !event.request.url.endsWith('.png')) {
             return;
