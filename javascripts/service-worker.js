@@ -42,7 +42,8 @@
             }) &&
             !event.request.url.endsWith('.wav') &&
             !event.request.url.endsWith('.mp3') &&
-            !event.request.url.endsWith('.png')) {
+            !event.request.url.endsWith('.png') &&
+            !event.request.url.endsWith('.txt')) {
             return;
         }
 
