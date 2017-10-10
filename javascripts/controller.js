@@ -523,12 +523,17 @@
         X('oscillator').setup([true, true, true, true]);
         C('oscillator').setup([false, false, false, false]);
 
-        X('stream').setup(false, function(stream) {
+        var constraints = {
+            audio : {
+                echoCancellation : false
+            },
+            video : false
+        };
+
+        X('stream').setup(constraints, function(stream) {
         }, function(error) {
             openDialog('Confirmation', 400, 'auto', true, '<p><b>Cancel Microphone.</b></p>');
         });
-
-        X('stream').module('noisegate').param('level', 0.3);
 
         angular.forEach(sources, function(source) {
             X(source).module('distortion').param('color', 2000);
