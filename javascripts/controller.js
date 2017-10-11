@@ -513,9 +513,9 @@
         ]);
 
         // Resize buffer of ScriptProcessorNode
-        X('mixer').resize(4096);
-        X('oscillator').resize(4096);
-        C('oscillator').resize(4096);
+        X('mixer').resize(1024);
+        X('oscillator').resize(1024);
+        C('oscillator').resize(1024);
         X('oneshot').resize(4096);
         X('audio').resize(16384);
         X('stream').resize(512);
