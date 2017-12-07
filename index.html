@@ -396,10 +396,10 @@
                 </div>
                 <!-- /#patch-controllers -->
                 <ul id="white" class="clearfix">
-                    <li ng-repeat="keyboard in pianoKeyboards.whites" ng-mousedown="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseup="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-class="{'keyboard-off' : isSoundStops[pianoKeyboards.keyboards[keyboard]], 'keyboard-on' : !isSoundStops[pianoKeyboards.keyboards[keyboard]]}"></li>
+                    <li ng-repeat="keyboard in pianoKeyboards.whites" ng-mousedown="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseup="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseover="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseout="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-class="{'keyboard-off' : isSoundStops[pianoKeyboards.keyboards[keyboard]], 'keyboard-on' : !isSoundStops[pianoKeyboards.keyboards[keyboard]]}"></li>
                 </ul>
                 <ul id="black" class="clearfix">
-                    <li ng-repeat="keyboard in pianoKeyboards.blacks track by $index" ng-mousedown="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseup="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-class="{'keyboard-off' : isSoundStops[pianoKeyboards.keyboards[keyboard]], 'keyboard-on' : !isSoundStops[pianoKeyboards.keyboards[keyboard]], 'skip' : (keyboard === 'skip')}"></li>
+                    <li ng-repeat="keyboard in pianoKeyboards.blacks track by $index" ng-mousedown="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseup="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseover="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseout="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-class="{'keyboard-off' : isSoundStops[pianoKeyboards.keyboards[keyboard]], 'keyboard-on' : !isSoundStops[pianoKeyboards.keyboards[keyboard]], 'skip' : (keyboard === 'skip')}"></li>
                 </ul>
             </div>
             <!-- /#piano -->
