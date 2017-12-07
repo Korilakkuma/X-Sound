@@ -1395,6 +1395,8 @@
         var NUMBER_OF_ONESHOTS = 88;
         var AJAX_TIMEOUT       = 60000;
 
+        var _isDown = false;
+
         var _oneshots = [
             (BASE_URL + 'one-shot/piano-2/C.wav'),
             (BASE_URL + 'one-shot/piano-2/D.wav'),
@@ -1723,6 +1725,10 @@
                 return;  // .skip
             }
 
+            if ((event.type === 'mouseover') && !_isDown) {
+                return;
+            }
+
             if ($scope.currentSoundSource === 'oscillator') {
                 X('oscillator').ready(0, 0).start(X.toFrequencies(index));
                 C('oscillator').ready(0, 0).start(X.toFrequencies(index));
@@ -1739,6 +1745,8 @@
             }
 
             $scope.isSoundStops[index] = false;
+
+            _isDown = true;
         };
 
         /**
@@ -1763,6 +1771,10 @@
             }
 
             $scope.isSoundStops[index] = true;
+
+           if (event.type === 'mouseup') {
+               _isDown = false;
+           }
         };
 
         /**
