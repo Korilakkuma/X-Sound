@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var CACHE_VERSION = '2.0.0';
+    var CACHE_VERSION = '2.0.1';
     var CACHE_NAME    = 'x-sound-cache-v' + CACHE_VERSION;
 
     var BASE_URL = '/X-Sound/';
@@ -21,7 +21,8 @@
         BASE_URL + 'stylesheets/css/mac.css',
         BASE_URL + 'stylesheets/css/noscript.css',
         BASE_URL + 'stylesheets/css/ie.css',
-        BASE_URL + 'javascripts/xsound.min.js',
+        BASE_URL + 'javascripts/xsound.js',
+        BASE_URL + 'javascripts/xsound.js.map',
         BASE_URL + 'javascripts/controller.min.js',
         BASE_URL + 'register-service-worker.js'
     ];
