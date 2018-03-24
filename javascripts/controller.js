@@ -1707,6 +1707,8 @@
         $scope.startApplication = function(event) {
             event.preventDefault();
 
+            X.setup();
+
             $scope.isStart = true;
 
             // This timeout is for animation.
