@@ -385,7 +385,6 @@
                     </fieldset>
                 </div>
                 <!-- /#session-controllers -->
-                <!--
                 <div id="patch-controllers">
                     <fieldset>
                         <legend class="invisibility">PATCH</legend>
@@ -395,7 +394,6 @@
                         </dl>
                     </fieldset>
                 </div>
-                -->
                 <!-- /#patch-controllers -->
                 <ul id="white" class="clearfix">
                     <li ng-repeat="keyboard in pianoKeyboards.whites" ng-mousedown="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseup="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseover="startSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-mouseout="stopSound($event, pianoKeyboards.keyboards[keyboard], keyboard)" ng-class="{'keyboard-off' : isSoundStops[pianoKeyboards.keyboards[keyboard]], 'keyboard-on' : !isSoundStops[pianoKeyboards.keyboards[keyboard]]}"></li>
@@ -768,7 +766,7 @@
                 <li><a href="#signin" ng-click="toggleAction($event, 'signin')" ng-class="{'selected' : isSignin}">SIGN IN</a></li>
                 <li><a href="#signup" ng-click="toggleAction($event, 'signup')" ng-class="{'selected' : isSignup}">SIGN UP</a></li>
             </ul>
-            <div class="patch-form-area" ng-if="!isAuth">
+            <div class="patch-form-area" ng-if="!isAuth" ng-submit="signin($event)">
                 <div id="signin" ng-show="isSignin">
                     <form>
                         <fieldset>
@@ -787,7 +785,7 @@
                     </form>
                 </div>
                 <!--/ signin-->
-                <div id="signup" ng-show="isSignup">
+                <div id="signup" ng-show="isSignup" ng-submit="signup($event)">
                     <form>
                         <fieldset>
                             <legend class="invisibility">ACCOUNT</legend>
