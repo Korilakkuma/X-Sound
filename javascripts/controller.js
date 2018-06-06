@@ -3637,9 +3637,9 @@
            if (angular.isObject(data)) {
                 $scope.isAuth         = data.isAuth;
                 $scope.authedUsername = data.username;
+                $scope.csrf           = data.csrf;
 
                 if ($scope.isAuth) {
-                    $scope.csrf       = data.csrf;
                     $scope.patchLists = angular.fromJson(data.patches);
                 }
            }
