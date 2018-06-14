@@ -77,9 +77,9 @@ $viewportUserZoom : zoom !default;  // or fixed
 
 // Common Reset Style
 html {
-    overflow   : scroll;
-    overflow   : -moz-scrollbars-vertical;
-    overflow-x : scroll;
+    // overflow   : scroll;
+    // overflow   : -moz-scrollbars-vertical;
+    // overflow-x : scroll;
 }
 
 ul, ol {
