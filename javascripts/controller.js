@@ -1707,7 +1707,7 @@
         $scope.startApplication = function(event) {
             event.preventDefault();
 
-            X.setup();
+            // X.setup();
 
             $scope.isStart = true;
 
