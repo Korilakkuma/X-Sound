@@ -2128,9 +2128,11 @@
 
             angular.forEach(sources, function(source) {
                 if (source !== 'oscillator') {
-                    $scope.objectURL = X(source).module('recorder').create('all', BIT, CHANNEL, TYPE);
+                    var objectURL = X(source).module('recorder').create('all', BIT, CHANNEL, TYPE);
 
-                    if ($scope.objectURL) {
+                    if (objectURL) {
+                        $scope.objectURL = objectURL;
+
                         var audio = new Audio($scope.objectURL);
 
                         audio.setAttribute('controls', false);
