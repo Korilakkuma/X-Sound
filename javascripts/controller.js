@@ -1070,7 +1070,7 @@
                             });
 
                             angular.forEach(sources, function(source) {
-                                if ((source !== 'oscillator') && (source !== 'audio')) {
+                                if (source !== 'oscillator') {
                                     X(source).module('recorder').ready(value);
 
                                     if (source === 'stream') {
@@ -1941,6 +1941,7 @@
         };
 
         var _startCallback = function(source, currentTime) {
+            X('audio').module('recorder').start();
             X('audio').module('session').start();
             $timeout(function() {
                 $scope.isActive = true;
@@ -2020,7 +2021,7 @@
                 buttons   : {
                     'START' : function() {
                         angular.forEach(sources, function(source) {
-                            if ((source !== 'oscillator') && (source !== 'audio')) {
+                            if (source !== 'oscillator') {
                                 X(source).module('recorder').ready($scope.activeTrack);
 
                                 if (source === 'stream') {
@@ -2061,7 +2062,7 @@
                 buttons   : {
                     'STOP'  : function() {
                         angular.forEach(sources, function(source) {
-                            if ((source !== 'oscillator') && (source !== 'audio')) {
+                            if (source !== 'oscillator') {
                                 X(source).module('recorder').stop();
                             }
                         });
@@ -2090,7 +2091,7 @@
         $scope.finename    = '';
 
         angular.forEach(sources, function(source) {
-            if ((source !== 'oscillator') && (source !== 'audio')) {
+            if (source !== 'oscillator') {
                 X(source).module('recorder').setup($scope.tracks.length);
             }
         });
@@ -2125,20 +2126,18 @@
             var BIT     = 16;  // 16 bit
             var TYPE    = 'blob';  // or 'dataURL'
 
-            var source = $scope.$parent.selectedSoundSource;
+            angular.forEach(sources, function(source) {
+                if (source !== 'oscillator') {
+                    $scope.objectURL = X(source).module('recorder').create('all', BIT, CHANNEL, TYPE);
 
-            if (source === 'oscillator') {
-                source = 'mixer';
-            }
+                    if ($scope.objectURL) {
+                        var audio = new Audio($scope.objectURL);
 
-            $scope.objectURL = X(source).module('recorder').create('all', BIT, CHANNEL, TYPE);
-
-            if ($scope.objectURL) {
-                var audio = new Audio($scope.objectURL);
-
-                audio.setAttribute('controls', false);
-                audio.play();
-            }
+                        audio.setAttribute('controls', false);
+                        audio.play();
+                    }
+                }
+            });
         };
 
         /**
@@ -2191,7 +2190,7 @@
                 buttons   : {
                     'CLEAR' : function() {
                         angular.forEach(sources, function(source) {
-                            if ((source !== 'oscillator') && (source !== 'audio')) {
+                            if (source !== 'oscillator') {
                                 X(source).module('recorder').clear($scope.activeTrack);
                             }
                         });
