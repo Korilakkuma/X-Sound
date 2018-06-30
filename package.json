@@ -1,7 +1,7 @@
 {
-  "name": "x-sound",
+  "name": "xsound-app",
   "version": "0.0.0",
-  "description": "Multi Sound Application that uses XSound.js (Web Audio API Library)",
+  "description": "Multifunctional Synthesizer by XSound (Web Audio API Library)",
   "scripts": {
     "jshint": "gulp jshint",
     "build:js": "gulp build:js",
@@ -16,7 +16,6 @@
   "keywords": [
     "X Sound",
     "X-Sound",
-    "XSound.js",
     "XSound",
     "JavaScript",
     "HTML5",
@@ -30,6 +29,9 @@
     "url": "https://github.com/Korilakkuma/X-Sound/issues"
   },
   "homepage": "https://korilakkuma.github.io/X-Sound/",
+  "dependencies": {
+    "xsound": "^2.3.2"
+  },
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-jshint": "^1.11.2",
