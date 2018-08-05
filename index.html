@@ -248,22 +248,22 @@
                         <dl id="wave-time-overview-L" ng-show="channel === 'left'">
                             <dt><a href="#wave-time-overview-R" ng-click="toggleAnalyserChannel($event, 'right')" ng-class="{'selected' : channel === 'left'}">RIGHT</a> TIME OVERVIEW [ LEFT ]</dt>
                             <dd ng-show="api === 'canvas'"><canvas id="canvas-time-overview-L" width="360" height="120"></canvas></dd>
-                            <dd ng-show="api === 'svg'"><svg id="svg-time-overview-L" width="360" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg></dd>
+                            <dd ng-show="api === 'svg'"><svg id="svg-time-overview-L" width="360" height="120"></svg></dd>
                         </dl>
                         <dl id="wave-time-overview-R" ng-show="channel === 'right'">
                             <dt><a href="#wave-time-overview-L" ng-click="toggleAnalyserChannel($event, 'left')" ng-class="{'selected' : channel === 'right'}">LEFT</a> TIME OVERVIEW [ RIGHT ]</dt>
                             <dd ng-show="api === 'canvas'"><canvas id="canvas-time-overview-R" width="360" height="120"></canvas></dd>
-                            <dd ng-show="api === 'svg'"><svg id="svg-time-overview-R" width="360" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg></dd>
+                            <dd ng-show="api === 'svg'"><svg id="svg-time-overview-R" width="360" height="120"></svg></dd>
                         </dl>
                         <dl id="wave-time">
                             <dt>TIME DOMAIN</dt>
                             <dd ng-show="api === 'canvas'"><canvas id="canvas-time" width="360" height="120"></canvas></dd>
-                            <dd ng-show="api === 'svg'"><svg id="svg-time" width="360" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg></dd>
+                            <dd ng-show="api === 'svg'"><svg id="svg-time" width="360" height="120"></svg></dd>
                         </dl>
                         <dl id="wave-spectrum">
                             <dt>FREQUENCY DOMAIN</dt>
                             <dd ng-show="api === 'canvas'"><canvas id="canvas-spectrum" width="360" height="120"></canvas></dd>
-                            <dd ng-show="api === 'svg'"><svg id="svg-spectrum" width="360" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg></dd>
+                            <dd ng-show="api === 'svg'"><svg id="svg-spectrum" width="360" height="120"></svg></dd>
                         </dl>
                     </div>
                     <div class="clearfix">
