@@ -46,7 +46,7 @@
     /**
      * This is the sound sources that this application uses.
      */
-    xsound.value('sources', ['mixer', 'oscillator', 'oneshot', 'audio', 'stream']);
+    xsound.value('sources', ['mixer', 'oscillator', 'oneshot', 'audio', 'stream', 'noise']);
 
     /**
      * This is the array of number in order to identify oscillator.
@@ -148,7 +148,7 @@
             if (source) {
                 sources = source.split(' ');
             } else {
-                sources = ['mixer', 'oscillator', 'oneshot', 'audio', 'stream'];
+                sources = ['mixer', 'oscillator', 'oneshot', 'audio', 'stream', 'noise'];
             }
 
             angular.forEach(sources, function(source) {
@@ -498,15 +498,14 @@
 
         // Not used
         X.free([
-            X('media'),
-            X('fallback')
+            X('media')
         ]);
 
         C.free([
             C('oneshot'),
+            C('noise'),
             C('audio'),
             C('media'),
-            C('fallback'),
             C('stream'),
             C('mixer'),
             C('midi')
@@ -899,7 +898,7 @@
                                     });
 
                                     break;
-                                case 'one-shot'   :
+                                case 'one-shot' :
                                     if (scope.isEnableOneshot) {
                                         $timeout(function() {
                                             // This is scope of XSoundController
@@ -909,6 +908,16 @@
                                     }
 
                                     X('stream').stop();
+
+                                    break;
+                                case 'noise' :
+                                    X('stream').stop();
+
+                                    $timeout(function() {
+                                        // This is scope of XSoundController
+                                        scope.currentSoundSource  = value;
+                                        scope.selectedSoundSource = value;
+                                    });
 
                                     break;
                                 case 'stream' :
@@ -1739,11 +1748,16 @@
 
                 X('mixer').module('recorder').start();
                 X('mixer').module('session').start();
-            } else {
+            } else if ($scope.currentSoundSource === 'one-shot') {
                 X('oneshot').ready(0, 0).start(index);
 
                 X('oneshot').module('recorder').start();
                 X('oneshot').module('session').start();
+            } else if ($scope.currentSoundSource === 'noise') {
+                X('noise').start();
+
+                X('noise').module('recorder').start();
+                X('noise').module('session').start();
             }
 
             $scope.isSoundStops[index] = false;
@@ -1768,8 +1782,10 @@
                 C('oscillator').stop();
 
                 // X('mixer').stop();
-            } else {
+            } else if ($scope.currentSoundSource === 'one-shot') {
                 X('oneshot').stop(index);
+            } else if ($scope.currentSoundSource === 'noise') {
+                X('noise').stop();
             }
 
             $scope.isSoundStops[index] = true;
