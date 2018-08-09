@@ -167,14 +167,14 @@
                     <fieldset>
                          <legend>ENVELOPE GENERATOR</legend>
                          <dl>
-                             <dt>ATTACK<ui-spinner source="mixer oscillator oneshot" module="envelopegenerator" param="attack" value="0.01" min="0" max="1" step="0.01"></ui-spinner></dt>
-                             <dd><ui-slider source="mixer oscillator oneshot" module="envelopegenerator" param="attack" value="0.01" min="0" max="1" step="0.01"></ui-slider></dd>
-                             <dt>DECAY<ui-spinner source="mixer oscillator oneshot" module="envelopegenerator" param="decay" value="0.3" min="0.01" max="1" step="0.01"></ui-spinner></dt>
-                             <dd><ui-slider source="mixer oscillator oneshot" module="envelopegenerator" param="decay" value="0.3" min="0.01" max="1" step="0.01"></ui-slider></dd>
-                             <dt>SUSTAIN<ui-spinner source="mixer oscillator oneshot" module="envelopegenerator" param="sustain" value="0.5" min="0" max="1" step="0.01"></ui-spinner></dt>
-                             <dd><ui-slider source="mixer oscillator oneshot" module="envelopegenerator" param="sustain" value="0.5" min="0" max="1" step="0.01"></ui-slider></dd>
-                             <dt>RELEASE<ui-spinner source="mixer oscillator oneshot" module="envelopegenerator" param="release" value="1" min="0.01" max="1" step="0.01"></ui-spinner></dt>
-                             <dd><ui-slider source="mixer oscillator oneshot" module="envelopegenerator" param="release" value=1 min="0.01" max="1" step="0.01"></ui-slider></dd>
+                             <dt>ATTACK<ui-spinner source="mixer oscillator oneshot noise" module="envelopegenerator" param="attack" value="0.01" min="0" max="1" step="0.01"></ui-spinner></dt>
+                             <dd><ui-slider source="mixer oscillator oneshot noise" module="envelopegenerator" param="attack" value="0.01" min="0" max="1" step="0.01"></ui-slider></dd>
+                             <dt>DECAY<ui-spinner source="mixer oscillator oneshot noise" module="envelopegenerator" param="decay" value="0.3" min="0.01" max="1" step="0.01"></ui-spinner></dt>
+                             <dd><ui-slider source="mixer oscillator oneshot noise" module="envelopegenerator" param="decay" value="0.3" min="0.01" max="1" step="0.01"></ui-slider></dd>
+                             <dt>SUSTAIN<ui-spinner source="mixer oscillator oneshot noise" module="envelopegenerator" param="sustain" value="0.5" min="0" max="1" step="0.01"></ui-spinner></dt>
+                             <dd><ui-slider source="mixer oscillator oneshot noise" module="envelopegenerator" param="sustain" value="0.5" min="0" max="1" step="0.01"></ui-slider></dd>
+                             <dt>RELEASE<ui-spinner source="mixer oscillator oneshot noise" module="envelopegenerator" param="release" value="1" min="0.01" max="1" step="0.01"></ui-spinner></dt>
+                             <dd><ui-slider source="mixer oscillator oneshot noise" module="envelopegenerator" param="release" value=1 min="0.01" max="1" step="0.01"></ui-slider></dd>
                          </dl>
                      </fieldset>
                  </div>
@@ -327,8 +327,8 @@
                     <fieldset>
                         <legend class="invisibility">MASTER VOLUME</legend>
                         <dl>
-                            <dt>MASTER VOLUME<ui-spinner source="mixer oscillator oneshot stream" module="" param="mastervolume" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
-                            <dd><ui-slider source="mixer oscillator oneshot stream" module="" param="mastervolume" value="1" min="0" max="1" step="0.05"></ui-slider></dd>
+                            <dt>MASTER VOLUME<ui-spinner source="mixer oscillator oneshot stream noise" module="" param="mastervolume" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
+                            <dd><ui-slider source="mixer oscillator oneshot stream noise" module="" param="mastervolume" value="1" min="0" max="1" step="0.05"></ui-slider></dd>
                         </dl>
                      </fieldset>
                 </div>
@@ -349,6 +349,7 @@
                         <select id="select-sound-source" name="select-sound-source" ui-select>
                             <option value="oscillator" selected>OSCILLATOR</option>
                             <option value="one-shot" ng-if="isEnableOneshot">PIANO</option>
+                            <option value="noise">NOISE</option>
                             <option value="stream">MICROPHONE</option>
                             <option value="midi">MIDI</option>
                         </select>
