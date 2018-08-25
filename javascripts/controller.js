@@ -910,7 +910,8 @@
                                     X('stream').stop();
 
                                     break;
-                                case 'noise' :
+                                case 'whitenoise' :
+                                case 'pinknoise'  :
                                     X('stream').stop();
 
                                     $timeout(function() {
@@ -1753,8 +1754,13 @@
 
                 X('oneshot').module('recorder').start();
                 X('oneshot').module('session').start();
-            } else if ($scope.currentSoundSource === 'noise') {
-                X('noise').start();
+            } else if ($scope.currentSoundSource === 'whitenoise') {
+                X('noise').param('type', 'whitenoise').start();
+
+                X('noise').module('recorder').start();
+                X('noise').module('session').start();
+            } else if ($scope.currentSoundSource === 'pinknoise') {
+                X('noise').param('type', 'pinknoise').start();
 
                 X('noise').module('recorder').start();
                 X('noise').module('session').start();
@@ -1784,7 +1790,7 @@
                 // X('mixer').stop();
             } else if ($scope.currentSoundSource === 'one-shot') {
                 X('oneshot').stop(index);
-            } else if ($scope.currentSoundSource === 'noise') {
+            } else {
                 X('noise').stop();
             }
 
