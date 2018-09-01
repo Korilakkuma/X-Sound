@@ -910,8 +910,9 @@
                                     X('stream').stop();
 
                                     break;
-                                case 'whitenoise' :
-                                case 'pinknoise'  :
+                                case 'whitenoise'   :
+                                case 'pinknoise'    :
+                                case 'browniannoise':
                                     X('stream').stop();
 
                                     $timeout(function() {
@@ -1761,6 +1762,11 @@
                 X('noise').module('session').start();
             } else if ($scope.currentSoundSource === 'pinknoise') {
                 X('noise').param('type', 'pinknoise').start();
+
+                X('noise').module('recorder').start();
+                X('noise').module('session').start();
+            } else if ($scope.currentSoundSource === 'browniannoise') {
+                X('noise').param('type', 'browniannoise').start();
 
                 X('noise').module('recorder').start();
                 X('noise').module('session').start();
