@@ -1,6 +1,6 @@
 {
   "name": "xsound-app",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Multifunctional Synthesizer by XSound (Web Audio API Library)",
   "scripts": {
     "jshint": "gulp jshint",
@@ -30,7 +30,7 @@
   },
   "homepage": "https://korilakkuma.github.io/X-Sound/",
   "dependencies": {
-    "xsound": "^2.4.3"
+    "xsound": "^2.5.0"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
@@ -40,6 +40,7 @@
     "gulp-sass": "^4.0.1",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.1",
+    "jshint": "^2.9.6",
     "node-sass": "^4.9.3"
   }
 }
