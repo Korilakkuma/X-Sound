@@ -2589,7 +2589,7 @@
                 return;
             }
 
-            $scope.dataURL  = X('mml').create($scope.mml);
+            $scope.dataURL  = X.toTextFile($scope.mml);
             $scope.filename = 'mml-' + createDateTimeString() + '.txt';
 
             //
