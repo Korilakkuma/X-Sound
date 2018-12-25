@@ -30,7 +30,7 @@
   },
   "homepage": "https://korilakkuma.github.io/X-Sound/",
   "dependencies": {
-    "xsound": "^2.7.3"
+    "xsound": "^2.7.4"
   },
   "devDependencies": {
     "gulp": "^4.0.0",
