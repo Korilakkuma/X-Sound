@@ -1983,6 +1983,13 @@
         };
 
         var _updateCallback = function(source, currentTime) {
+            var index = Math.floor(currentTime * source.buffer.sampleRate);
+            var n100msec = 0.100 * source.buffer.sampleRate;
+
+            if ((index % n100msec) !== 0) {
+                return;
+            }
+
             $timeout(function() {
                 $rootScope.currentTime = currentTime;
                 $scope.currentTimeText = createTimeString(currentTime);
