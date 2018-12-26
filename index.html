@@ -348,7 +348,8 @@
                         <legend class="invisibility">SELECT SOUND SOURCE</legend>
                         <select id="select-sound-source" name="select-sound-source" ui-select>
                             <option value="oscillator" selected>OSCILLATOR</option>
-                            <option value="one-shot" ng-if="isEnableOneshot">PIANO</option>
+                            <option value="piano" ng-if="isEnableOneshot">PIANO</option>
+                            <option value="guitar" ng-if="isEnableOneshot">GUITAR</option>
                             <option value="whitenoise">WHITE NOISE</option>
                             <option value="pinknoise">PINK NOISE</option>
                             <option value="browniannoise">BROWNIAN NOISE</option>
