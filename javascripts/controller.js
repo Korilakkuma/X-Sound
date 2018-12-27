@@ -515,8 +515,8 @@
         X('mixer').resize(1024);
         X('oscillator').resize(1024);
         C('oscillator').resize(1024);
-        X('oneshot').resize(4096);
-        X('audio').resize(16384);
+        X('oneshot').resize(1024);
+        X('audio').resize(8192);
         X('stream').resize(512);
 
         X('oscillator').setup([true, true, true, true]);
@@ -2256,6 +2256,7 @@
         var _startCallback = function(source, currentTime) {
             X('audio').module('recorder').start();
             X('audio').module('session').start();
+
             $timeout(function() {
                 $scope.isActive = true;
             });
