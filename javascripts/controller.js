@@ -2588,7 +2588,7 @@
                     style  : 'normal',
                     weight : 'normal'
                 },
-                width    : 2,
+                width    : 1,
                 right    : 15,
                 type     : 'uint',
                 size     : 256
