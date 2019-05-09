@@ -2445,7 +2445,7 @@
 
             var CHANNEL = 2;
             var BIT     = 16;  // 16 bit
-            var TYPE    = 'blob';  // or 'dataURL'
+            var TYPE    = 'objectURL';
 
             angular.forEach(sources, function(source) {
                 if (source !== 'oscillator') {
