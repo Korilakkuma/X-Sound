@@ -1345,7 +1345,7 @@ ui-spinner, ui-spinner-time {
     margin-left:12px;
 }
 
-#textarea-mml {
+[contentEditable] {
     @extend %borderbox;
 
     resize:none;
@@ -1369,6 +1369,20 @@ ui-spinner, ui-spinner-time {
         @include boxshadow((0px 0px 0px 2px rgba(0, 0, 0, 1.0), 0px -1px 1px 5px rgba(0, 0, 0, 0.5)));
     }
 }
+
+[contentEditable] > span.highlight {
+    color:$accentColor1;
+    // @include setAnimation(highlight-animation 0.2s ease 1 normal 0s forwards);
+}
+
+[contentEditable] > span.done {
+    color:rgba($white, 1.0);
+}
+
+// @include defineKeyframes(highlight-animation) {
+//       0% {color:rgba($white, 1.0)}
+//     100% {color:$accentColor1}
+// }
 
 ///--- for Controllers ---///
 
