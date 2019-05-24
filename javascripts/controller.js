@@ -17,7 +17,7 @@
 (function() {
     'use strict';
 
-    var xsound = angular.module('xsound', []);
+    var xsound = angular.module('xsound', ['ngSanitize']);
 
     /**
      * This configuration for set Data URL and Object URL  (except "unsafe:").
@@ -37,7 +37,7 @@
         if ($location.host() === 'localhost') {
             baseURL = $location.protocol() + '://' + $location.host() + '/~rilakkuma3xjapan/GitHub/X-Sound/resources/';
         } else {
-            baseURL = $location.protocol() + '://' + $location.host() + '/X-Sound/resources/';
+            baseURL = $location.protocol() + '://' + $location.host() + '/resources/';
         }
 
         return baseURL;
@@ -2675,37 +2675,70 @@
      * @param {$scope} $scope This argument is scope of this controller.
      * @param {$http} $http This argument is service of DI (Dependency Injection).
      * @param {$timeout} $timeout This argument is to update view.
+     * @param {$sce} $timeout This argument is to render HTML.
      * @param {string} BASE_URL This argument is service of DI (Dependency Injection).
      * @param {Array.<string>} oscillatorNumbers This is the array of number in order to identify oscillator.
      * @param {function} createDateTimeString This argument is service of DI (Dependency Injection).
      * @extends {XSoundController}
      */
-    xsound.controller('MMLController', ['$rootScope', '$scope', '$http', '$timeout', 'BASE_URL', 'oscillatorNumbers', 'createDateTimeString', function($rootScope, $scope, $http, $timeout, BASE_URL, oscillatorNumbers, createDateTimeString) {
-        var _startCallback =  function(sequence, index) {
+    xsound.controller('MMLController', ['$rootScope', '$scope', '$http', '$timeout', '$sce', 'BASE_URL', 'oscillatorNumbers', 'createDateTimeString', function($rootScope, $scope, $http, $timeout, $sce, BASE_URL, oscillatorNumbers, createDateTimeString) {
+        var _startCallbackMelody =  function(sequence) {
             if ($scope.$parent.currentSoundSource === 'oscillator') {
                 X('mixer').mix([X('oscillator'), C('oscillator')]);
             }
 
-            if (sequence.indexes[index] === 'R') {
-                return;
+            var mmls = $scope.mml.split(/\|+/);
+
+            if (mmls.length === 2) {
+                var mml1 = mmls[0].replace(' ' + sequence.note,  ' <span class="highlight">' + sequence.note + '</span>');
+
+                $scope.mml = mml1 + '|||||' + mmls[1];
+            } else if (mmls.length === 1) {
+                var mml1 = mmls[0].replace(' ' + sequence.note,  ' <span class="highlight">' + sequence.note + '</span>');
+
+                $scope.mml = mml1;
             }
 
-            var pianoIndex = sequence.indexes[index];
+            angular.forEach(sequence.indexes, function(index) {
+                if (index === 'R') {
+                    return;
+                }
 
-            $timeout(function() {
-                $scope.$parent.isSoundStops[pianoIndex] = false;
+                $timeout(function() {
+                    $scope.$parent.isSoundStops[index] = false;
+                });
             });
         };
 
-        var _stopCallback = function(sequence, index) {
-            if (sequence.indexes[index] === 'R') {
-                return;
+        var _startCallbackBass =  function(sequence) {
+            var mmls = $scope.mml.split(/\|+/);
+
+            if (mmls.length === 2) {
+                var mml2 = mmls[1].replace(' ' + sequence.note,  ' <span class="highlight">' + sequence.note + '</span>');
+
+                $scope.mml = mmls[0] + '|||||' + mml2;
             }
 
-            var pianoIndex = sequence.indexes[index];
+            angular.forEach(sequence.indexes, function(index) {
+                if (index === 'R') {
+                    return;
+                }
 
-            $timeout(function() {
-                $scope.$parent.isSoundStops[pianoIndex] = true;
+                $timeout(function() {
+                    $scope.$parent.isSoundStops[index] = false;
+                });
+            });
+        };
+
+        var _stopCallback = function(sequence) {
+            sequence.indexes.forEach(function(index) {
+                if (index === 'R') {
+                    return;
+                }
+
+                $timeout(function() {
+                    $scope.$parent.isSoundStops[index] = true;
+                });
             });
         };
 
@@ -2738,21 +2771,29 @@
             }
         };
 
-        var _mmlSetups = {
-            start : _startCallback,
+        X('mml').setup({
+            start : _startCallbackMelody,
             stop  : _stopCallback,
             ended : _endedCallback,
             error : _errorCallback
-        };
+        });
 
-        X('mml').setup(_mmlSetups);
-        C('mml').setup(_mmlSetups);
+        C('mml').setup({
+            start : _startCallbackBass,
+            stop  : _stopCallback,
+            ended : _endedCallback,
+            error : _errorCallback
+        });
 
         $scope.paused   = true;
         $scope.mml      = '';
         $scope.dataURL  = '';
         $scope.filename = '';
         $scope.error    = '';
+
+        $scope.trustAsHtml = function(string) {
+            return $sce.trustAsHtml(string);
+        };
 
         // Chnage sound source -> parse MML text
         $scope.$watch(function() {
@@ -2765,7 +2806,8 @@
         $http.get(Math.floor(Math.random() * 2) ? (BASE_URL + 'mml/mml-foreverlove.txt') : (BASE_URL + 'mml/mml-tears.txt'))
              .then(function(response) {
                  $scope.mml = response.data;
-                 $scope.typeMML();
+                 $scope.readyMML();
+                 $scope.paused = true;
              })
              .catch(function(response) {
              });
@@ -2775,6 +2817,7 @@
          * @param {Event} event This argument is event object from ng-keyup directive.
          */
         $scope.typeMML = function(event) {
+            $scope.mml = event.currentTarget.textContent;
             $scope.readyMML();
             $scope.paused = true;
         };
@@ -2794,9 +2837,21 @@
                     C('mml').ready(C('oscillator'), []);
                 }
             } else if ($scope.$parent.currentSoundSource === 'piano') {
-                X('mml').ready(X('oneshot'), mmls, 0);
+                if (mmls.length > 1) {
+                    X('mml').ready(X('oneshot'), mmls[0], 0);
+                    C('mml').ready(X('oneshot'), mmls[1], 0);
+                } else if (mmls.length > 0) {
+                    X('mml').ready(X('oneshot'), mmls[0], 0);
+                    C('mml').ready(X('oneshot'), [], 0);
+                }
             } else if ($scope.$parent.currentSoundSource === 'guitar') {
-                X('mml').ready(X('oneshot'), mmls, 88);
+                if (mmls.length > 1) {
+                    X('mml').ready(X('oneshot'), mmls[0], 88);
+                    C('mml').ready(X('oneshot'), mmls[1], 88);
+                } else if (mmls.length > 0) {
+                    X('mml').ready(X('oneshot'), mmls[0], 88);
+                    C('mml').ready(X('oneshot'), [], 88);
+                }
             }
         };
 
@@ -2835,9 +2890,13 @@
                     X('mixer').module('recorder').start();
                     X('mixer').module('session').start();
                 } else {
-                    angular.forEach(parts, function(part, index) {
-                        X('mml').start(index);
-                    });
+                    if (X('mml').get().length > 0) {
+                        X('mml').start(0);
+                    }
+
+                    if (C('mml').get().length > 0) {
+                        C('mml').start(0);
+                    }
 
                     X('oneshot').module('recorder').start();
                     X('oneshot').module('session').start();
