@@ -1,10 +1,10 @@
 (function() {
     'use strict';
 
-    var CACHE_VERSION = '2.1.36';
+    var CACHE_VERSION = '2.1.39';
     var CACHE_NAME    = 'x-sound-cache-v' + CACHE_VERSION;
 
-    var BASE_URL = '/X-Sound/';
+    var BASE_URL = '/';
     var cacheFiles = [
         BASE_URL,
         BASE_URL + 'index.html',
