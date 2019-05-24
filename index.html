@@ -13,12 +13,12 @@
 <meta name="theme-color" content="#800080" />
 <meta property="og:title" content="X Sound" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://korilakkuma.github.io/X-Sound/" />
-<meta property="og:image" content="https://korilakkuma.github.io/X-Sound/images/illust/png/icon.png" />
+<meta property="og:url" content="https://xsound.app/" />
+<meta property="og:image" content="https://xsound.app/images/illust/png/icon.png" />
 <meta property="og:description" content="Multifunctional Synthesizer by XSound" />
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@xsoundjs">
-<link rel="canonical" href="https://korilakkuma.github.io/X-Sound/" />
+<link rel="canonical" href="https://xsound.app/" />
 <link rel="icon" href="favicon.ico" type="image/x-icon" />
 <link rel="manifest" href="manifest.json" />
 <link rel="apple-touch-icon-precomposed" href="images/illust/png/icon.png" />
@@ -33,17 +33,9 @@
 <!--[if IE]>
 <link rel="stylesheet" href="stylesheets/css/ie.css" type="text/css" media="all" />
 <![endif]-->
-<script type="text/javascript">
-<!--
-    (function() {
-        if ((location.hostname === 'korilakkuma.github.io') && (location.protocol !== 'https:')) {
-            location.href = 'https://korilakkuma.github.io/X-Sound/';
-        }
-    })();
-//-->
-</script>
 <script type="text/javascript" src="register-service-worker.js"></script>
 <script type="text/javascript" src="lib/js/angularjs/angular.min.js"></script>
+<script type="text/javascript" src="lib/js/angularjs/angular-sanitize.min.js"></script>
 <script type="text/javascript" src="lib/js/jquery/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="lib/js/jquery-ui/jquery-ui-1.9.2.custom.min.js"></script>
 <script type="text/javascript" src="lib/js/colorbox/jquery.colorbox-min.js"></script>
@@ -295,9 +287,7 @@
                     <dl>
                         <dt>MML TEXT <span><b ng-bind="error"></b></span></dt>
                         <dd>
-                            <form name="form-input-mml">
-                                <textarea id="textarea-mml" name="textarea-mml" placeholder="Type MML Text" ng-model="mml" ng-keyup="typeMML($event)"></textarea>
-                            </form>
+                            <div contentEditable ng-bind-html="trustAsHtml(mml)" ng-keyup="typeMML($event)"></div>
                         </dd>
                     </dl>
                     <dl>
