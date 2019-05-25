@@ -3,6 +3,6 @@ X Sound
   
 *X Sound* is Multifunctional Synthesizer by [XSound](https://github.com/Korilakkuma/XSound) (Web Audio API Library).
   
-* [X Sound](https://korilakkuma.github.io/X-Sound/)
+* [X Sound](https://xsound.app/)
   
-Copyright (c) 2012 - 2018 Tomohiro IKEDA (Korilakkuma)
+Copyright (c) 2012 Tomohiro IKEDA (Korilakkuma)
