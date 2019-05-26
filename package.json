@@ -28,7 +28,7 @@
   "bugs": {
     "url": "https://github.com/Korilakkuma/X-Sound/issues"
   },
-  "homepage": "https://korilakkuma.github.io/X-Sound/",
+  "homepage": "https://xsound.app/",
   "dependencies": {
     "xsound": "^2.10.3"
   },
