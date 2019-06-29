@@ -1788,7 +1788,7 @@
             var reverbs = [];
 
             angular.forEach($scope.rirs, function(rir, index) {
-                X.ajax(rir.url, AJAX_TIMEOUT, function(event, arrayBuffer) {
+                X.ajax(rir.url, 'arraybuffer', AJAX_TIMEOUT, function(event, arrayBuffer) {
                     X.decode(X.get(), arrayBuffer, function(audioBuffer) {
                         reverbs.push(audioBuffer);
 
