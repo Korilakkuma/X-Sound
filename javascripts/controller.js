@@ -2651,8 +2651,8 @@
             $scope.setAnalyser(api);
 
             // Set current time
-            X('audio').module('analyser').domain('time-overview-L').drag(function(currentTime) {drawNodeCallback($timeout, currentTime);});
-            X('audio').module('analyser').domain('time-overview-R').drag(function(currentTime) {drawNodeCallback($timeout, currentTime);});
+            X('audio').module('analyser').domain('time-overview-L').drag(function(event, currentTime) {drawNodeCallback($timeout, currentTime);});
+            X('audio').module('analyser').domain('time-overview-R').drag(function(event, currentTime) {drawNodeCallback($timeout, currentTime);});
         };
 
         /**
