@@ -35,7 +35,7 @@
         var baseURL = '';
 
         if ($location.host() === 'localhost') {
-            baseURL = $location.protocol() + '://' + $location.host() + '/~rilakkuma3xjapan/GitHub/X-Sound/resources/';
+            baseURL = $location.protocol() + '://' + $location.host() + '/~korilakkuma/GitHub/X-Sound/resources/';
         } else {
             baseURL = $location.protocol() + '://' + $location.host() + '/resources/';
         }
@@ -302,15 +302,19 @@
          * @param {$timeout} timeout This argument is in order to update view.
          * @param {number} currentTime This argument is current time of audio.
          */
-        return function(timeout, currentTime) {
-            if ((currentTime >= 0) && (currentTime <= X('audio').param('duration'))) {
-                X('audio').param('currentTime', currentTime);
-                X('audio').module('analyser').domain('time-overview-L').update(currentTime);
-                X('audio').module('analyser').domain('time-overview-R').update(currentTime);
+        return function(timeout, mode, startTime, endTime) {
+            if (mode === 'update') {
+                if ((startTime >= 0) && (startTime <= X('audio').param('duration'))) {
+                    X('audio').param('currentTime', startTime);
+                    X('audio').module('analyser').domain('time-overview-L').update(startTime);
+                    X('audio').module('analyser').domain('time-overview-R').update(startTime);
 
-                timeout(function() {
-                    $rootScope.currentTime = currentTime;
-                });
+                    timeout(function() {
+                        $rootScope.currentTime = startTime;
+                    });
+                }
+            } else if (mode === 'sprite') {
+                X('audio').stop().start(startTime, endTime);
             }
         };
     }]);
@@ -484,6 +488,7 @@
 
         $rootScope.isActives = {
             visualization : false,
+            sprite        : false,
             mml           : false,
             patch         : false
         };
@@ -2636,6 +2641,27 @@
         };
 
         /**
+         * This event handler is to change `update` mode or `sprite` mode
+         */
+        $scope.toggleSpriteMode = function() {
+            if ($rootScope.isActives.sprite) {
+                $rootScope.isActives.sprite = false;
+
+                $timeout(function() {
+                    X('audio').module('analyser').domain('time-overview-L').param('mode', 'update');
+                    X('audio').module('analyser').domain('time-overview-R').param('mode', 'update');
+                });
+            } else {
+                $rootScope.isActives.sprite = true;
+
+                $timeout(function() {
+                    X('audio').module('analyser').domain('time-overview-L').param('mode', 'sprite');
+                    X('audio').module('analyser').domain('time-overview-R').param('mode', 'sprite');
+                });
+            }
+        }
+
+        /**
          * This function sets API for drawing.
          * @param {string} api This argument is either 'canvas' or 'svg'.
          */
@@ -2651,8 +2677,13 @@
             $scope.setAnalyser(api);
 
             // Set current time
-            X('audio').module('analyser').domain('time-overview-L').drag(function(event, currentTime) {drawNodeCallback($timeout, currentTime);});
-            X('audio').module('analyser').domain('time-overview-R').drag(function(event, currentTime) {drawNodeCallback($timeout, currentTime);});
+            X('audio').module('analyser').domain('time-overview-L').drag(function(event, startTime, endTime) {
+                drawNodeCallback($timeout, X('audio').module('analyser').domain('time-overview-L').param('mode'), startTime, endTime);
+            });
+
+            X('audio').module('analyser').domain('time-overview-R').drag(function(event, startTime, endTime) {
+                drawNodeCallback($timeout, X('audio').module('analyser').domain('time-overview-R').param('mode'), startTime, endTime);
+            });
         };
 
         /**
@@ -3095,7 +3126,7 @@
         var POST_ORIGIN = (function() {
             if ($location.host().indexOf('localhost') !== -1) {
                 // return 'http://localhost:3000';                                                       // Node.js + MongoDB
-                return 'http://localhost/~rilakkuma3xjapan/portfolio-x-sound-server/php/bootstrap.php';  // PHP + MySQL
+                return 'http://localhost/~korilakkuma/portfolio-x-sound-server/php/bootstrap.php';  // PHP + MySQL
             } else {
                 // return 'http://curtaincall.c.node-ninja.com:3000';                                            // Node.js + MongoDB
                 return 'https://weblike-curtaincall.ssl-lolipop.jp/portfolio-x-sound-server/php/bootstrap.php';  // PHP + MySQL
