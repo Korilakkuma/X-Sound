@@ -302,7 +302,7 @@
          * @param {$timeout} timeout This argument is in order to update view.
          * @param {number} currentTime This argument is current time of audio.
          */
-        return function(timeout, mode, startTime, endTime) {
+        return function(timeout, mode, event, startTime, endTime) {
             if (mode === 'update') {
                 if ((startTime >= 0) && (startTime <= X('audio').param('duration'))) {
                     X('audio').param('currentTime', startTime);
@@ -313,7 +313,7 @@
                         $rootScope.currentTime = startTime;
                     });
                 }
-            } else if (mode === 'sprite') {
+            } else if ((mode === 'sprite') && ((event.type === 'mouseup') || (event.type === 'touchend'))) {
                 X('audio').stop().start(startTime, endTime);
             }
         };
@@ -2678,11 +2678,11 @@
 
             // Set current time
             X('audio').module('analyser').domain('time-overview-L').drag(function(event, startTime, endTime) {
-                drawNodeCallback($timeout, X('audio').module('analyser').domain('time-overview-L').param('mode'), startTime, endTime);
+                drawNodeCallback($timeout, X('audio').module('analyser').domain('time-overview-L').param('mode'), event, startTime, endTime);
             });
 
             X('audio').module('analyser').domain('time-overview-R').drag(function(event, startTime, endTime) {
-                drawNodeCallback($timeout, X('audio').module('analyser').domain('time-overview-R').param('mode'), startTime, endTime);
+                drawNodeCallback($timeout, X('audio').module('analyser').domain('time-overview-R').param('mode'), event, startTime, endTime);
             });
         };
 
