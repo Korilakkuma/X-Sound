@@ -903,8 +903,9 @@
                                     });
 
                                     break;
-                                case 'piano' :
-                                case 'guitar':
+                                case 'piano'          :
+                                case 'guitar'         :
+                                case 'electric-guitar':
                                     if (scope.isEnableOneshot) {
                                         $timeout(function() {
                                             // This is scope of XSoundController
@@ -1422,7 +1423,8 @@
             (BASE_URL + 'one-shot/piano-2/G.wav'),
             (BASE_URL + 'one-shot/piano-2/A.wav'),
             (BASE_URL + 'one-shot/piano-2/B.wav'),
-            (BASE_URL + 'one-shot/guitar/C.mp3')
+            (BASE_URL + 'one-shot/guitar/C.mp3'),
+            (BASE_URL + 'one-shot/e-guitar/C.mp3')
         ];
 
         var _getBufferIndex = function(pianoIndex) {
@@ -1745,6 +1747,267 @@
             return rate;
         };
 
+        var _calculateElectricGuitarRate = function(guitarIndex) {
+            var rate = 0;
+
+            switch (guitarIndex - NUMBER_OF_ONESHOTS - NUMBER_OF_ONESHOTS) {
+                case 0:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -39);
+                  break;
+                case 1:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -38);
+                  break;
+                case 2:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -37);
+                  break;
+                case 3:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -36);
+                  break;
+                case 4:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -35);
+                  break;
+                case 5:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -34);
+                  break;
+                case 6:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -33);
+                  break;
+                case 7:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -32);
+                  break;
+                case 8:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -31);
+                  break;
+                case 9:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -30)
+                  break;
+                case 10:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -29);
+                  break;
+                case 11:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -28);
+                  break;
+                case 12:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -27);
+                  break;
+                case 13:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -26);
+                  break;
+                case 14:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -25);
+                  break;
+                case 15:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -24);
+                  break;
+                case 16:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -23);
+                  break;
+                case 17:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -22);
+                  break;
+                case 18:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -21);
+                  break;
+                case 19:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -20);
+                  break;
+                case 20:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -19)
+                  break;
+                case 21:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -18);
+                  break;
+                case 22:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -17);
+                  break;
+                case 23:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -16);
+                  break;
+                case 24:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -15);
+                  break;
+                case 25:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -14);
+                  break;
+                case 26:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -13);
+                  break;
+                case 27:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -12);
+                  break;
+                case 28:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -11);
+                  break;
+                case 29:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -10);
+                  break;
+                case 30:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -9);
+                  break;
+                case 31:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -8);
+                  break;
+                case 32:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -7);
+                  break;
+                case 33:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -6)
+                  break;
+                case 34:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -5);
+                  break;
+                case 35:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -4);
+                  break;
+                case 36:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -3);
+                  break;
+                case 37:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -2);
+                  break;
+                case 38:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), -1);
+                  break;
+                case 39:
+                  rate = 1;
+                  break;
+                case 40:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 1);
+                  break;
+                case 41:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 2);
+                  break;
+                case 42:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 3);
+                  break;
+                case 43:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 4);
+                  break;
+                case 44:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 5);
+                  break;
+                case 45:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 6);
+                  break;
+                case 46:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 7);
+                  break;
+                case 47:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 8);
+                  break;
+                case 48:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 9);
+                  break;
+                case 49:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 10);
+                  break;
+                case 50:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 11);
+                  break;
+                case 51:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 12);
+                  break;
+                case 52:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 13);
+                  break;
+                case 53:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 14);
+                  break;
+                case 54:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 15);
+                  break;
+                case 55:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 16);
+                  break;
+                case 56:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 17);
+                  break;
+                case 57:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 18);
+                  break;
+                case 58:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 19);
+                  break;
+                case 59:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 20);
+                  break;
+                case 60:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 21);
+                  break;
+                case 61:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 22);
+                  break;
+                case 62:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 23);
+                  break;
+                case 63:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 24);
+                  break;
+                case 64:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 25);
+                  break;
+                case 65:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 26);
+                  break;
+                case 66:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 27);
+                  break;
+                case 67:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 28);
+                  break;
+                case 68:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 29);
+                  break;
+                case 69:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 30);
+                  break;
+                case 70:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 31);
+                  break;
+                case 71:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 33);
+                  break;
+                case 77:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 34);
+                  break;
+                case 78:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 35);
+                  break;
+                case 79:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 36);
+                  break;
+                case 80:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 37);
+                  break;
+                case 81:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 38);
+                  break;
+                case 82:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 39);
+                  break;
+                case 83:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 40);
+                  break;
+                case 84:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 41);
+                  break;
+                case 85:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 42);
+                  break;
+                case 86:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 43);
+                  break;
+                case 87:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 44);
+                  break;
+                case 88:
+                  rate = 1 * Math.pow(Math.pow(2, (1 / 12)), 45);
+                  break;
+            }
+
+            return rate;
+        };
+
         var _createOneshotSettings = function() {
             var settings = new Array(NUMBER_OF_ONESHOTS);
 
@@ -1775,6 +2038,21 @@
                 };
 
                 setting.rate = _calculateGuitarRate(i);
+
+                settings[i] = setting;
+            }
+
+            for (var i = (NUMBER_OF_ONESHOTS + NUMBER_OF_ONESHOTS); i < (NUMBER_OF_ONESHOTS + NUMBER_OF_ONESHOTS + NUMBER_OF_ONESHOTS); i++) {
+                var setting = {
+                    buffer : 8,
+                    rate   : 1,
+                    loop   : false,
+                    start  : 0,
+                    end    : 0,
+                    volume : 1
+                };
+
+                setting.rate = _calculateElectricGuitarRate(i);
 
                 settings[i] = setting;
             }
@@ -2043,6 +2321,11 @@
 
                 X('oneshot').module('recorder').start();
                 X('oneshot').module('session').start();
+            } else if ($scope.currentSoundSource === 'electric-guitar') {
+                X('oneshot').ready(0, 0).start(index + 88 + 88);
+
+                X('oneshot').module('recorder').start();
+                X('oneshot').module('session').start();
             } else if ($scope.currentSoundSource === 'whitenoise') {
                 X('noise').param('type', 'whitenoise').start();
 
@@ -2086,6 +2369,8 @@
                 X('oneshot').stop(index);
             } else if ($scope.currentSoundSource === 'guitar') {
                 X('oneshot').stop(index + 88);
+            } else if ($scope.currentSoundSource === 'electric-guitar') {
+                X('oneshot').stop(index + 88 + 88);
             } else {
                 X('noise').stop();
             }
@@ -2882,6 +3167,14 @@
                 } else if (mmls.length > 0) {
                     X('mml').ready(X('oneshot'), mmls[0], 88);
                     C('mml').ready(X('oneshot'), [], 88);
+                }
+            } else if ($scope.$parent.currentSoundSource === 'electric-guitar') {
+                if (mmls.length > 1) {
+                    X('mml').ready(X('oneshot'), mmls[0], 88 + 88);
+                    C('mml').ready(X('oneshot'), mmls[1], 88 + 88);
+                } else if (mmls.length > 0) {
+                    X('mml').ready(X('oneshot'), mmls[0], 88 + 88);
+                    C('mml').ready(X('oneshot'), [], 88 + 88);
                 }
             }
         };
