@@ -3267,7 +3267,10 @@
                 return;
             }
 
-            $scope.dataURL  = X.toTextFile($scope.mml);
+            var plainMML = $scope.mml.replace(/<span class="highlight">/g, '')
+                                     .replace(/<\/span>/g, '');
+
+            $scope.dataURL  = X.toTextFile(plainMML);
             $scope.filename = 'mml-' + createDateTimeString() + '.txt';
 
             //
