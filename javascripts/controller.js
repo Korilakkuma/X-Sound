@@ -2989,6 +2989,7 @@
      * Controller for MML
      * @param {$rootScope} $rootScope This argument is service of DI (Dependency Injection).
      * @param {$scope} $scope This argument is scope of this controller.
+     * @param {$document} $document This argument is service of DI (Dependency Injection).
      * @param {$http} $http This argument is service of DI (Dependency Injection).
      * @param {$timeout} $timeout This argument is to update view.
      * @param {$sce} $timeout This argument is to render HTML.
@@ -2997,7 +2998,7 @@
      * @param {function} createDateTimeString This argument is service of DI (Dependency Injection).
      * @extends {XSoundController}
      */
-    xsound.controller('MMLController', ['$rootScope', '$scope', '$http', '$timeout', '$sce', 'BASE_URL', 'oscillatorNumbers', 'createDateTimeString', function($rootScope, $scope, $http, $timeout, $sce, BASE_URL, oscillatorNumbers, createDateTimeString) {
+    xsound.controller('MMLController', ['$rootScope', '$scope', '$document', '$http', '$timeout', '$sce', 'BASE_URL', 'oscillatorNumbers', 'createDateTimeString', function($rootScope, $scope, $document, $http, $timeout, $sce, BASE_URL, oscillatorNumbers, createDateTimeString) {
         var _startCallbackMelody =  function(sequence) {
             if ($scope.$parent.currentSoundSource === 'oscillator') {
                 X('mixer').mix([X('oscillator'), C('oscillator')]);
@@ -3014,6 +3015,8 @@
 
                 $scope.mml = mml1;
             }
+
+            $document[0].querySelector('[contentEditable]').innerHTML = $scope.mml;
 
             angular.forEach(sequence.indexes, function(index) {
                 if (index === 'R') {
@@ -3033,6 +3036,7 @@
                 var mml2 = mmls[1].replace(' ' + sequence.note,  ' <span class="highlight">' + sequence.note + '</span>');
 
                 $scope.mml = mmls[0] + '|||||' + mml2;
+                $document[0].querySelector('[contentEditable]').innerHTML = $scope.mml;
             }
 
             angular.forEach(sequence.indexes, function(index) {
@@ -3122,6 +3126,8 @@
         $http.get(Math.floor(Math.random() * 2) ? (BASE_URL + 'mml/mml-foreverlove.txt') : (BASE_URL + 'mml/mml-tears.txt'))
              .then(function(response) {
                  $scope.mml = response.data;
+                 $document[0].querySelector('[contentEditable]').textContent = $scope.mml;
+
                  $scope.readyMML();
                  $scope.paused = true;
              })
@@ -3134,6 +3140,8 @@
          */
         $scope.typeMML = function(event) {
             $scope.mml = event.currentTarget.textContent;
+            $document[0].querySelector('[contentEditable]').textContent = $scope.mml;
+
             $scope.readyMML();
             $scope.paused = true;
         };
@@ -3249,6 +3257,10 @@
             // Stop MML
             X('mml').stop();
             C('mml').stop();
+
+            $scope.mml = $scope.mml.replace(/<span class="highlight">/g, '')
+                                   .replace(/<\/span>/g, '');
+            $document[0].querySelector('[contentEditable]').textContent = $scope.mml;
 
             // Rewind
             $scope.readyMML();
