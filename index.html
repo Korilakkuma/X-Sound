@@ -17,7 +17,7 @@
         <meta property="og:image" content="https://xsound.app/images/illust/png/icon.png" />
         <meta property="og:description" content="Multifunctional Synthesizer by XSound" />
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:site" content="@forever120527" />
+        <meta name="twitter:site" content="@xmusicjp" />
         <link rel="canonical" href="https://xsound.app/" />
         <link rel="icon" href="favicon.ico" type="image/x-icon" />
         <link rel="manifest" href="manifest.json" />
@@ -438,9 +438,7 @@
                                         <option value="clean" selected>CLEAN</option>
                                         <option value="crunch">CRUNCH</option>
                                         <option value="overdrive">OVERDRIVE</option>
-                                        <option value="turbooverdrive">TURBO OVERDRIVE</option>
                                         <option value="distortion">DISTORTION</option>
-                                        <option value="turbodistortion">TURBO DISTORTION</option>
                                         <option value="fuzz">FUZZ</option>
                                     </select>
                                 </dd>
@@ -462,6 +460,8 @@
                                         <option value="65536">65536</option>
                                     </select>
                                 </dd>
+                                <dt>AMOUNT<ui-spinner module="distortion" param="amount" value="0.5" min="0.05" max="0.95" step="0.05"></ui-spinner></dt>
+                                <dd><ui-slider module="distortion" param="amount" value="0.5" min="0.05" max="0.95" step="0.05"></ui-slider></dd>
                                 <dt>DRIVE<ui-spinner module="distortion" param="drive" value="1" min="0" max="100" step="1"></ui-spinner></dt>
                                 <dd><ui-slider module="distortion" param="drive" value="1" min="0" max="100" step="1"></ui-slider></dd>
                                 <dt>COLOR<ui-spinner module="distortion" param="color" value="2000" min="20" max="2000" step="1"></ui-spinner></dt>
