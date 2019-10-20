@@ -527,6 +527,8 @@
         X('oscillator').setup([true, true, true, true]);
         C('oscillator').setup([false, false, false, false]);
 
+        X('audio').module('wah').param('auto', true);
+
         var constraints = {
             audio : {
                 echoCancellation : false
