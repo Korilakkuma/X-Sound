@@ -1,6 +1,6 @@
 {
   "name": "xsound-app",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "description": "Multifunctional Synthesizer by XSound (Web Audio API Library)",
   "scripts": {
     "jshint": "gulp jshint",
@@ -30,7 +30,7 @@
   },
   "homepage": "https://xsound.app/",
   "dependencies": {
-    "xsound": "^2.16.0"
+    "xsound": "^2.16.1"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
