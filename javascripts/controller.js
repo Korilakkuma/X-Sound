@@ -3186,6 +3186,14 @@
                     X('mml').ready(X('oneshot'), mmls[0], 88 + 88);
                     C('mml').ready(X('oneshot'), [], 88 + 88);
                 }
+            } else if ($scope.$parent.currentSoundSource.indexOf('noise') !== -1) {
+                if (mmls.length > 1) {
+                    X('mml').ready(X('noise'), mmls[0]);
+                    C('mml').ready(C('noise'), mmls[1]);
+                } else if (mmls.length > 0) {
+                    X('mml').ready(X('noise'), mmls[0]);
+                    C('mml').ready(C('noise'), []);
+                }
             }
         };
 
