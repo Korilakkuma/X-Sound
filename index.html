@@ -219,8 +219,12 @@
                                 <dd><ui-slider-time value="0" max="{{ duration }}" step="1"></ui-slider-time></dd>
                                 <dt>VOLUME<ui-spinner source="audio" module="" param="mastervolume" value="1" min="0" max="1" step="0.05"></ui-spinner></dt>
                                 <dd><ui-slider source="audio" module="" param="mastervolume" value="1" min="0" max="1" step="0.05"></ui-slider></dd>
+                                <!--
                                 <dt>PLAYBACK RATE<ui-spinner source="audio oneshot" module="" param="playbackRate" value="1" min="0.05" max="2" step="0.05"></ui-spinner></dt>
                                 <dd><ui-slider source="audio oneshot" module="" param="playbackRate" value="1" min="0.05" max="2" step="0.05"></ui-slider></dd>
+                                -->
+                                <dt>PITCH SHIFTER<ui-spinner source="audio" module="pitchshifter" param="pitch" value="1" min="0.05" max="4" step="0.05"></ui-spinner></dt>
+                                <dd><ui-slider source="audio" module="pitchshifter" param="pitch" value="1" min="0.05" max="4" step="0.05"></ui-slider></dd>
                                 <dt>VOCAL CANCELER <ui-spinner source="audio" module="vocalcanceler" param="depth" value="0" min="0" max="1" step="0.05"></ui-spinner></dt>
                                 <dd><ui-slider source="audio" module="vocalcanceler" param="depth" value="0" min="0" max="1" step="0.05"></ui-slider></dd>
                             </dl>
