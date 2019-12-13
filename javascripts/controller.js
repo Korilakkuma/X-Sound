@@ -528,6 +528,7 @@
         C('oscillator').setup([false, false, false, false]);
 
         X('audio').module('wah').param('auto', true);
+        X('audio').module('pitchshifter').state(true);
 
         var constraints = {
             audio : {
