@@ -534,7 +534,10 @@
 
         var constraints = {
             audio : {
-                echoCancellation : false
+                autoGainControl      : true,
+                echoCancellation     : true,
+                echoCancellationType : 'system',
+                noiseSuppression     : false
             },
             video : false
         };
