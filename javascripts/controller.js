@@ -530,6 +530,8 @@
         X('audio').module('wah').param('auto', true);
         X('audio').module('pitchshifter').state(true);
 
+        X('stream').module('pitchshifter').state(true);
+
         var constraints = {
             audio : {
                 echoCancellation : false
