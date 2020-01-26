@@ -2943,6 +2943,7 @@
                 $timeout(function() {
                     X('audio').module('analyser').domain('time-overview-L').param('mode', 'update');
                     X('audio').module('analyser').domain('time-overview-R').param('mode', 'update');
+                    X('audio').param('loop', false);
                 });
             } else {
                 $rootScope.isActives.sprite = true;
@@ -2950,6 +2951,7 @@
                 $timeout(function() {
                     X('audio').module('analyser').domain('time-overview-L').param('mode', 'sprite');
                     X('audio').module('analyser').domain('time-overview-R').param('mode', 'sprite');
+                    X('audio').param('loop', true);
                 });
             }
         }
