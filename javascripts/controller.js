@@ -3017,16 +3017,10 @@
             var mmls = $scope.mml.split(/\|+/);
 
             if (mmls.length === 2) {
-                var mml1 = mmls[0].replace(' ' + sequence.note,  ' <span class="highlight">' + sequence.note + '</span>');
-
-                $scope.mml = mml1 + '|||||' + mmls[1];
+                $scope.mml = mmls[0] + '|||||' + mmls[1];
             } else if (mmls.length === 1) {
-                var mml1 = mmls[0].replace(' ' + sequence.note,  ' <span class="highlight">' + sequence.note + '</span>');
-
-                $scope.mml = mml1;
+                $scope.mml = mmls[0];
             }
-
-            $document[0].querySelector('[contentEditable]').innerHTML = $scope.mml;
 
             angular.forEach(sequence.indexes, function(index) {
                 if (index === 'R') {
@@ -3043,10 +3037,7 @@
             var mmls = $scope.mml.split(/\|+/);
 
             if (mmls.length === 2) {
-                var mml2 = mmls[1].replace(' ' + sequence.note,  ' <span class="highlight">' + sequence.note + '</span>');
-
-                $scope.mml = mmls[0] + '|||||' + mml2;
-                $document[0].querySelector('[contentEditable]').innerHTML = $scope.mml;
+                $scope.mml = mmls[0] + '|||||' + mmls[1];
             }
 
             angular.forEach(sequence.indexes, function(index) {
@@ -3136,7 +3127,6 @@
         $http.get(Math.floor(Math.random() * 2) ? (BASE_URL + 'mml/mml-foreverlove.txt') : (BASE_URL + 'mml/mml-tears.txt'))
              .then(function(response) {
                  $scope.mml = response.data;
-                 $document[0].querySelector('[contentEditable]').textContent = $scope.mml;
 
                  $scope.readyMML();
                  $scope.paused = true;
@@ -3150,7 +3140,6 @@
          */
         $scope.typeMML = function(event) {
             $scope.mml = event.currentTarget.textContent;
-            $document[0].querySelector('[contentEditable]').textContent = $scope.mml;
 
             $scope.readyMML();
             $scope.paused = true;
@@ -3276,10 +3265,6 @@
             X('mml').stop();
             C('mml').stop();
 
-            $scope.mml = $scope.mml.replace(/<span class="highlight">/g, '')
-                                   .replace(/<\/span>/g, '');
-            $document[0].querySelector('[contentEditable]').textContent = $scope.mml;
-
             // Rewind
             $scope.readyMML();
 
@@ -3297,10 +3282,7 @@
                 return;
             }
 
-            var plainMML = $scope.mml.replace(/<span class="highlight">/g, '')
-                                     .replace(/<\/span>/g, '');
-
-            $scope.dataURL  = X.toTextFile(plainMML);
+            $scope.dataURL  = X.toTextFile($scope.mml);
             $scope.filename = 'mml-' + createDateTimeString() + '.txt';
 
             //
